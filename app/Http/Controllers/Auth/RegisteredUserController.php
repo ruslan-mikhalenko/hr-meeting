@@ -42,16 +42,16 @@ class RegisteredUserController extends Controller
     {
 
         // Проверяем роль и переопределяем unp
-        if (!$request->role) {
+        /* if (!$request->role) {
             $request->merge(['role' => 'client']);
-        }
+        } */
 
 
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
 
-            'role' => 'required',
+
         ]);
 
 
@@ -89,7 +89,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => $hashedPassword,
-            'role' => $request->role,
+            'role' => 'super_admin',
             'is_active' => 1,
         ]);
 
