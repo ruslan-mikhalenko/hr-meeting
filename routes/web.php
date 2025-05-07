@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RequestController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
@@ -50,6 +51,10 @@ Route::middleware('auth')->group(function () {
 
 /* my routes */
 Route::get('/test', [TestController::class, 'test']);
+
+
+/** Роут для отправки писем с главной */
+Route::post('/submit-form', [RequestController::class, 'submitForm'])->name('submit.form');
 
 
 
