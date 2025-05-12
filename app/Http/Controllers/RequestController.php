@@ -30,7 +30,7 @@ class RequestController extends Controller
         ];
 
         Mail::send('emails.request', $emailData, function ($message) use ($validatedData) {
-            $message->to('ruslan-mikhalenko@mail.ru') // Ваш получатель
+            $message->to(['ruslan-mikhalenko@mail.ru', 'kronadew@gmail.com']) // Массив получателей
                 ->subject('Новая заявка с сайта');
         });
 

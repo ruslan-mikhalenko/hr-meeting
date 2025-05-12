@@ -12,8 +12,8 @@ class TestController extends Controller
     {
 
         // Проверяем аутентификацию и роли через middleware
-        $this->middleware('auth');
-        $this->middleware('checkRole:super-admin,admin,moderator');
+        /*  $this->middleware('auth');
+        $this->middleware('checkRole:super-admin,admin,moderator'); */
     }
 
 
@@ -21,14 +21,9 @@ class TestController extends Controller
     public function test()
     {
 
-        $user_auth = Auth::user();
+        /* $user_auth = Auth::user(); */
 
         // Возвращаем представление для всех ролей, так как проверка уже проведена на уровне middleware
-        return Inertia::render('Dashboard', [
-
-            'user_auth' => $user_auth,
-
-            // Другие данные, если необходимо
-        ]);
+        return Inertia::render('Dashboard');
     }
 }

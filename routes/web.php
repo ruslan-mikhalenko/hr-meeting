@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RequestController;
+use App\Http\Controllers\SubscriberController;
+use App\Http\Controllers\TelegramController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
@@ -52,11 +54,16 @@ Route::middleware('auth')->group(function () {
 /* my routes */
 Route::get('/test', [TestController::class, 'test']);
 
+Route::get('/test-token', function () {
+    return env('TELEGRAM_BOT_TOKEN', 'Токен не задан');
+});
+
 
 /** Роут для отправки писем с главной */
 Route::post('/submit-form', [RequestController::class, 'submitForm'])->name('submit.form');
 
 
+Route::get('/subscribers', [SubscriberController::class, 'index']);
 
 Route::get('/clear', function () {
 

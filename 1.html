@@ -1,0 +1,139 @@
+<section>
+            <p>Если вы хотите пользоваться MySQL-сервером, установленным на WSL (Windows Subsystem for Linux), 
+               и подключаться к нему через графический клиент, например, <strong>Navicat</strong>, 
+               вы можете столкнуться с ошибкой:</p>
+            <blockquote>
+                <p><em>"1251 - Client does not support authentication protocol requested by server; consider upgrading MySQL client".</em></p>
+            </blockquote>
+            <p>Этот гайд поможет вам настроить MySQL-сервер и устранить ошибку, чтобы соединение с Navicat работало корректно.</p>
+        </section>
+
+        <section>
+            <h2>Шаг 1: Настройка MySQL на WSL</h2>
+            <p><strong>Убедитесь, что MySQL установлен и запущен</strong></p>
+            <p>Если MySQL ещё не установлен, выполните следующие команды в WSL для его установки и запуска:</p>
+            <pre>
+                <code>
+sudo apt update
+sudo apt install mysql-server
+sudo service mysql start
+                </code>
+            </pre>
+            <p>После запуска проверьте его работу:</p>
+            <pre>
+                <code>
+sudo service mysql status
+                </code>
+            </pre>
+        </section>
+
+        <section>
+            <h2>Шаг 2: Разрешение подключений с других устройств</h2>
+            <p>По умолчанию MySQL-сервер слушает только локальные соединения (через <code>127.0.0.1</code>). 
+               Для подключения из Navicat (или других программ на Windows) нужно изменить это поведение:</p>
+
+            <ul>
+                <li><strong>Откройте файл конфигурации MySQL:</strong></li>
+                <pre>
+                    <code>sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf</code>
+                </pre>
+                <li><strong>Найдите настройку <code>bind-address</code></strong>:</li>
+                <p>Она будет выглядеть примерно так:</p>
+                <pre>
+                    <code>bind-address = 127.0.0.1</code>
+                </pre>
+                <li><strong>Измените её на следующее:</strong></li>
+                <pre>
+                    <code>bind-address = 0.0.0.0</code>
+                </pre>
+                <li><strong>Сохраните файл и перезапустите MySQL:</strong></li>
+                <pre>
+                    <code>sudo service mysql restart</code>
+                </pre>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Шаг 3: Настройка пользователя MySQL для удалённых подключений</h2>
+            <p>По умолчанию в MySQL пользователь <code>root</code> может подключаться только локально. 
+               Чтобы разрешить подключение из Navicat, нужно выполнить следующие шаги:</p>
+
+            <ul>
+                <li><strong>Войдите в MySQL:</strong></li>
+                <pre>
+                    <code>sudo mysql -u root</code>
+                </pre>
+                <li><strong>Проверьте методы аутентификации и существующих пользователей:</strong></li>
+                <pre>
+                    <code>SELECT host, user, plugin FROM mysql.user;</code>
+                </pre>
+                <li><strong>Измените метод аутентификации пользователя <code>root</code> на совместимый:</strong></li>
+                <pre>
+                    <code>
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY '';
+FLUSH PRIVILEGES;
+                    </code>
+                </pre>
+                <li><strong>Убедитесь, что изменения применились:</strong></li>
+                <pre>
+                    <code>SELECT host, user, plugin FROM mysql.user WHERE user = 'root';</code>
+                </pre>
+                <li><strong>Выйдите из MySQL:</strong></li>
+                <pre>
+                    <code>EXIT;</code>
+                </pre>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Шаг 4: Найдите IP-адрес WSL</h2>
+            <p>Для подключения по TCP/IP из Windows нам нужен IP-адрес, назначенный WSL.</p>
+            <pre>
+                <code>ip addr show</code>
+            </pre>
+            <p>Найдите IP-адрес интерфейса <code>eth0</code>. Пример:</p>
+            <pre>
+                <code>inet 172.24.239.136/20 brd 172.24.255.255 scope global eth0</code>
+            </pre>
+            <p>Здесь IP-адрес WSL — <strong>172.24.239.136</strong>.</p>
+        </section>
+
+        <section>
+            <h2>Шаг 5: Разрешите порт 3306</h2>
+            <p>Для подключения снаружи нужно разрешить доступ к порту MySQL (<code>3306</code>).</p>
+            <ul>
+                <li><strong>Если включён брандмауэр WSL (<code>ufw</code>), выполните:</strong></li>
+                <pre>
+                    <code>sudo ufw allow 3306</code>
+                </pre>
+                <li><strong>Проверьте доступность порта:</strong></li>
+                <pre>
+                    <code>Test-NetConnection -ComputerName 172.24.239.136 -Port 3306</code>
+                </pre>
+                <p>Если <code>TcpTestSucceeded</code> равен <strong>True</strong>, доступ разрешён.</p>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Шаг 6: Настройка подключения в Navicat</h2>
+            <p>Теперь вы можете настроить подключение в Navicat:</p>
+            <ul>
+                <li><strong>Откройте Navicat.</strong></li>
+                <li><strong>Создайте новое соединение, выбрав <em>Connection</em> → <em>MySQL</em>.</strong></li>
+                <li><strong>В настройках соединения укажите:</strong></li>
+                <ul>
+                    <li><strong>Connection Name:</strong> любое имя, например, <code>MySQL WSL</code>.</li>
+                    <li><strong>Host Name/IP Address:</strong> IP-адрес вашего WSL (например, <code>172.24.239.136</code>).</li>
+                    <li><strong>Port:</strong> <code>3306</code>.</li>
+                    <li><strong>User Name:</strong> <code>root</code>.</li>
+                    <li><strong>Password:</strong> оставьте пустым (или укажите пароль, если он установлен).</li>
+                </ul>
+                <li><strong>Нажмите <em>Test Connection</em>.</strong></li>
+            </ul>
+            <img src="path/to/your/image.png" alt="Navicat Connection Settings">
+        </section>
+
+        <section>
+            <h2>Итог</h2>
+            <p>Теперь вы можете управлять вашими базами данных на MySQL, установленном в WSL, через удобный интерфейс Navicat!</p>
+        </section>

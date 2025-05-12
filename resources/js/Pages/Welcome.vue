@@ -102,7 +102,7 @@ const handleScrollTo = (id) => {
 <template>
   <Head>
     <!-- Установите нужное название вкладки -->
-    <title>Раскрутка Telegram</title>
+    <title>!Раскрутка Telegram</title>
   </Head>
   <!-- Предзагрузчик -->
   <div v-if="isSubmitting" class="loading-overlay">
@@ -366,7 +366,9 @@ const handleScrollTo = (id) => {
               Заполните форму, и мы свяжемся с вами в ближайшее время!
             </p>
             <form @submit.prevent="handleSubmit">
-              <div class="grid grid-cols-1 gap-6 md:grid-cols-2 my-16 py-0">
+              <div
+                class="grid grid-cols-1 gap-6 md:grid-cols-2 my-16 p-0 md:p-10"
+              >
                 <!-- Поле "Ваше имя" -->
                 <div>
                   <label
@@ -682,6 +684,14 @@ section#features ul {
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  /* Стили для мобильных устройств */
+  section#features ul {
+    text-align: center; /* Выравнивание внутри списка по левому краю */
+    font-weight: normal;
   }
 }
 </style>
