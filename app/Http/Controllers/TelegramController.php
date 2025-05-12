@@ -9,11 +9,16 @@ use App\Services\TelegramService;
 class TelegramController extends Controller
 {
     private $telegramService;
+    private $botId; // Хранение ID бота
 
     public function __construct(TelegramService $telegramService)
     {
         // Внедрим TelegramService через конструктор
         $this->telegramService = $telegramService;
+
+        // Получаем ID бота при инициализации контроллера
+        $this->botId = $this->telegramService->getBotId();
+        Log::info("Идентификатор бота: {$this->botId}");
     }
 
     // Обработка входящих обновлений от Telegram
@@ -38,6 +43,12 @@ class TelegramController extends Controller
                 $userId = $newMember['id'];
                 $firstName = $newMember['first_name'] ?? 'Пользователь';
 
+                // Игнорируем события, если это бот
+                if ($userId == $this->botId) {
+                    Log::info("Игнорируем событие, так как это бот: {$userId}");
+                    continue;
+                }
+
                 Log::info("Новый подписчик с ID: {$userId}");
 
                 // Ваши действия (например, отправка в Яндекс Метрику)
@@ -49,7 +60,17 @@ class TelegramController extends Controller
         return response()->json(['status' => 'ok']); // Возвращаем успешный ответ
     }
 
-
+    // Метод для отправки сообщений через TelegramService
+    private function sendMessage($chatId, $text)
+    {
+        try {
+            // Используем TelegramService для отправки сообщения
+            $this->telegramService->sendMessage($chatId, $text);
+            Log::info("Сообщение отправлено успешно: ChatID {$chatId}");
+        } catch (\Exception $e) {
+            Log::error("Ошибка отправки сообщения: {$e->getMessage()}");
+        }
+    }
 
     // Метод для отправки данных в Яндекс Метрику
     private function sendToYandexMetrica($userId, $userName)
