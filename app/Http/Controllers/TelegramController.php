@@ -49,17 +49,7 @@ class TelegramController extends Controller
         return response()->json(['status' => 'ok']); // Возвращаем успешный ответ
     }
 
-    // Метод для отправки сообщений через TelegramService
-    private function sendMessage($chatId, $text)
-    {
-        try {
-            // Используем TelegramService для отправки сообщения
-            $this->telegramService->sendMessage($chatId, $text);
-            Log::info("Сообщение отправлено успешно: ChatID {$chatId}");
-        } catch (\Exception $e) {
-            Log::error("Ошибка отправки сообщения: {$e->getMessage()}");
-        }
-    }
+
 
     // Метод для отправки данных в Яндекс Метрику
     private function sendToYandexMetrica($userId, $userName)
