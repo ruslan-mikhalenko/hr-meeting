@@ -18,6 +18,8 @@ return new class extends Migration
 
             $table->string('original_email')->nullable(); // Исходный email
             $table->string('original_password')->nullable(); // Исходный пароль, возможно, стоит зашифровать
+            $table->string('telegram')->nullable(); // Поле для хранения Telegram (может быть @username или ID)
+            $table->string('phone_number')->nullable(); // Поле для номера телефона, формат можно уточнять
             $table->timestamps(); // Время создания и обновления записей
 
             // Добавление внешнего ключа для id_user

@@ -3,45 +3,50 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Services\TelegramService;
-use Illuminate\Support\Facades\Cache;
+use App\Services\TelegramService; // Ваш сервис для работы с Telegram
 
 class CheckTelegramSubscribers extends Command
 {
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
     protected $signature = 'telegram:check-subscribers';
-    protected $description = 'Check new Telegram channel subscribers';
-    private $telegramService;
 
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Check new subscribers in the Telegram channel and send data to Yandex Metrica';
+
+    /**
+     * TelegramService instance.
+     */
+    protected $telegramService;
+
+    /**
+     * Create a new command instance.
+     */
     public function __construct(TelegramService $telegramService)
     {
         parent::__construct();
+
         $this->telegramService = $telegramService;
     }
 
-    public function handle()
+    /**
+     * Execute the console command.
+     */
+    public function handle(): void
     {
-        // Укажите username канала (например, @channel_username)
-        $channelUsername = '+GBRMKva5zohjNjMy';
+        /*-1002600859664 */
+        $channelId = '@komplemir_by'; // Замените на ID вашего канала
 
-        // Получаем текущих участников канала
-        $currentParticipants = $this->telegramService->getChannelParticipants($channelUsername);
+        // Вызов метода отслеживания подписчиков
+        $this->telegramService->trackNewSubscribers($channelId);
 
-        // Получаем сохранённое состояние участников из кэша
-        $previousParticipants = Cache::get('telegram_channel_participants', []);
-
-        // Сравниваем состояния для выявления новых подписчиков
-        $newParticipants = array_diff_key($currentParticipants, $previousParticipants);
-
-        foreach ($newParticipants as $participant) {
-            // Проверяем массив это или объект
-            $username = is_array($participant)
-                ? ($participant['username'] ?? 'Unknown')    // Для массивов
-                : ($participant->username ?? 'Unknown');    // Для объектов
-
-            $this->info("New subscriber: {$username}");
-        }
-
-        // Сохраняем текущее состояние участников в кэше
-        Cache::put('telegram_channel_participants', $currentParticipants, now()->addMinutes(10));
+        $this->info('Подписчики проверены и отправлены в Метрику!');
     }
 }

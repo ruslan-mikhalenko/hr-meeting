@@ -19,11 +19,11 @@ const props = defineProps({
   rights: {
     type: Boolean,
   },
-  user_auth: {
+  project_auth: {
     type: Array,
     required: true,
   },
-  users: {
+  projects: {
     type: Array,
     required: true,
   },
@@ -33,7 +33,7 @@ const props = defineProps({
   },
 });
 
-const localUsers = ref([...props.users]); // Локальная копия массива пользователей
+const localProjects = ref([...props.projects]); // Локальная копия массива пользователей
 const pagination = ref({ ...props.pagination }); // Инициализация локальной пагинации
 const searchTerm = ref(""); // Переменная для хранения текста поиска
 const searchCompletely = ref(); // Для сохранения значения состоаяния поиска при фильтрах
@@ -41,8 +41,8 @@ const searchCompletely = ref(); // Для сохранения значения 
 const sortField = ref("created_at"); // Сортировка по умолчанию
 const sortOrder = ref("desc"); // Порядок по умолчанию
 
-//Загрузка текущего состояния таблицы Users при изменении пагинации, поиска, сортировки
-const fetchUsers = (
+//Загрузка текущего состояния таблицы Projects при изменении пагинации, поиска, сортировки
+const fetchProjects = (
   page,
   searchTerm = null,
   sortField = null,
@@ -52,14 +52,14 @@ const fetchUsers = (
   /*  alert(page); */
 
   axios
-    .post(route("filtering_user"), {
+    .post(route("filtering_project"), {
       page: page,
       search: searchTerm,
       sortField: sortField,
       sortOrder: sortOrder,
     })
     .then(function (response) {
-      localUsers.value = response.data.users; // Обновляем список пользователей
+      localProjects.value = response.data.projects; // Обновляем список пользователей
       pagination.value = {
         current_page: response.data.pagination.current_page,
         per_page: response.data.pagination.per_page,
@@ -68,12 +68,15 @@ const fetchUsers = (
       }; // Обновляем данные пагинации
 
       // Проверка на случай, если текущая страница пустая
-      if (localUsers.value.length === 0 && pagination.value.current_page > 1) {
+      if (
+        localProjects.value.length === 0 &&
+        pagination.value.current_page > 1
+      ) {
         // Если текущая страница пустая, уменьшаем её на 1
         pagination.value.current_page--; // Переход на предыдущую страницу
 
         // Заново загружаем пользователей с новой текущей страницы
-        return fetchUsers(
+        return fetchProjects(
           pagination.value.current_page,
           searchTerm,
           sortField,
@@ -112,7 +115,7 @@ const handlePageChange = (page, current_search, sorter = {}) => {
   current_search = searchCompletely.value;
 
   // Загружаем пользователей с учетом текущей страницы и сортировки
-  fetchUsers(page, current_search, currentSortField, currentSortOrder);
+  fetchProjects(page, current_search, currentSortField, currentSortOrder);
 };
 
 //Метод поиска
@@ -122,7 +125,7 @@ const onSearch = () => {
   /* alert(pagination.value.current_page); */
   searchCompletely.value = searchTerm.value;
   pagination.value.current_page = 1; // Сбрасываем на первую страницу
-  fetchUsers(pagination.value.current_page, searchTerm.value); // Передаем новый поиск
+  fetchProjects(pagination.value.current_page, searchTerm.value); // Передаем новый поиск
 };
 
 //Метод сотрировки
@@ -132,7 +135,7 @@ const handleTableChange = (current_page, current_search, sorter) => {
   current_page = pagination.value.current_page;
   current_search = searchCompletely.value;
   /* alert(searchCompletely.value); */
-  fetchUsers(
+  fetchProjects(
     current_page,
     current_search,
     sorter.columnKey,
@@ -142,7 +145,7 @@ const handleTableChange = (current_page, current_search, sorter) => {
 
 // Первичная загрузка пользователей при монтировании компонента (если нужно)
 onMounted(() => {
-  fetchUsers(
+  fetchProjects(
     pagination.value.current_page,
     "",
     sortField.value,
@@ -156,19 +159,19 @@ const handleActivationChange = (id, checked) => {
   form.isActive[id] = checked; // Обновляем состояние активизации
   /*  alert(form.isActive[id]); */
   axios
-    .post(route("axios_active_user", { id: id, checked: checked }))
+    .post(route("axios_active_project", { id: id, checked: checked }))
     .then((response) => {
       /* // Если необходимо обновить вакансию работодателя, когда он становится активным
-      const user = response.data.user; // Ответ содержит обновлённую вакансию работодателя
-      const updatedUser = {
-        ...localUsers.value.find((emp) => emp.id === id),
-        ...user,
+      const project = response.data.project; // Ответ содержит обновлённую вакансию работодателя
+      const updatedProject = {
+        ...localProjects.value.find((emp) => emp.id === id),
+        ...project,
       }; // Объединяем старые поля и новые
 
-      localUsers.value = localUsers.value.map((emp) =>
-        emp.id === id ? updatedUser : emp
+      localProjects.value = localProjects.value.map((emp) =>
+        emp.id === id ? updatedProject : emp
       ); */
-      updateUsers();
+      updateProjects();
     })
     .catch((error) => {
       errDublMessage.value = "Не удалось активировать участника";
@@ -180,40 +183,39 @@ const handleActivationChange = (id, checked) => {
 };
 
 // Метод обновления списка пользователей
-const updateUsers = () => {
-  fetchUsers(pagination.value.current_page); // Загружаем данные текущей страницы
+const updateProjects = () => {
+  fetchProjects(pagination.value.current_page); // Загружаем данные текущей страницы
 };
 
 // Наблюдатель для обновления локального массива пользователей при изменении props
 /* watch(
-  () => props.users,
-  (newUsers) => {
-    localUsers.value = [...newUsers];
+  () => props.projects,
+  (newProjects) => {
+    localProjects.value = [...newProjects];
   }
 ); */
 
 //Исходные колонки вывода в таблице Ant Desing
+// Колонки для таблицы Ant Design
 const columns = ref([
   {
-    title: "id",
+    title: "ID",
     dataIndex: "id",
     key: "id",
   },
   {
-    title: "Наименование",
+    title: "Название проекта",
     dataIndex: "name",
     key: "name",
     sorter: true,
-    /*  width: "300px", */
+    /* width: "300px", */
   },
-
   {
-    title: "Телеграм аккаунт",
-    dataIndex: "telegram",
-    key: "telegram",
+    title: "Ссылка на проект",
+    dataIndex: "link",
+    key: "link",
     className: "text-center",
   },
-
   {
     title: "Дата создания",
     dataIndex: "created_at",
@@ -221,57 +223,60 @@ const columns = ref([
     sorter: true,
   },
   {
-    title: "Электронная почта",
-    dataIndex: "original_email",
-    key: "original_email",
+    title: "Метрика",
+    dataIndex: "yandex_metric_id",
+    key: "yandex_metric_id",
   },
   {
-    title: "Пароль входа",
-    dataIndex: "original_password",
-    key: "original_password",
+    title: "Целевая метрика",
+    dataIndex: "goal_id",
+    key: "goal_id",
   },
-
+  {
+    title: "URL лендинга",
+    dataIndex: "landing_url",
+    key: "landing_url",
+  },
   {
     title: "Действие",
     key: "action",
-  },
-  {
-    title: "Активация",
-    key: "activation",
+    // Настройте рендеринг столбцов действия
   },
 ]);
 
-//Сброс полей формы и вспомогательных выражений при выполенных событиях
-const resetForm = () => {
-  form.name = "";
-  form.telegram = "";
-  form.email = "";
-  form.phone_number = "";
-
-  form.role = "";
-  /* form.password = ""; */
-  errors.value = {}; // Очищаем ошибки
-  successMessage.value = "";
-  errDublMessage.value = ""; // Очищаем сообщение об успехе
-};
-
-//Поля формы
+// Поля формы
 const form = useForm({
-  name: "",
-  telegram: "",
-  email: "",
-  phone_number: "",
-  role: "",
-  isActive: {},
-  /* password: "", */ // Инициализация поля
+  user_id: "",
+  client: "",
+  name: "", // Название проекта
+  link: "", // Ссылка на проект
+  yandex_metric_id: "", // ID Яндекс Метрики
+  goal_id: "", // Целевой идентификатор
+  landing_url: "", // URL лендинга
+  measurement_protocol_token: "",
 });
+
+// Сброс полей формы
+const resetForm = () => {
+  form.user_id = "";
+  form.client = "";
+  form.name = ""; // Сбрасываем название проекта
+  form.link = ""; // Сбрасываем ссылку на проект
+  form.yandex_metric_id = ""; // Сбрасываем ID Яндекс Метрики
+  form.goal_id = ""; // Сбрасываем ID цели
+  form.landing_url = ""; // Сбрасываем URL лендинга
+  form.measurement_protocol_token = "";
+  errors.value = {}; // Очищаем ошибки
+  successMessage.value = ""; // Очищаем сообщение об успехе
+  errDublMessage.value = ""; // Очищаем сообщение о дубликате
+};
 
 const errors = ref({});
 const successMessage = ref("");
 const errDublMessage = ref("");
 
-const editUserId = ref(null); // Для хранения id редактируемого пользователя
-const deletUserId = ref(null); // Для хранения id удаляемого пользователя
+const editProjectId = ref(null); // Для хранения id редактируемого пользователя
+const deletProjectId = ref(null); // Для хранения id удаляемого пользователя
 
 //Модальные окна в положении false - скрыты
 const isModalOpen = ref(false);
@@ -299,7 +304,7 @@ function closeModal() {
 
 //Вызов модального окна Удаления сущности
 function openModalDeleted(id) {
-  deletUserId.value = id;
+  deletProjectId.value = id;
   isModalDeleted.value = true;
 }
 
@@ -311,35 +316,36 @@ const submitAddForm = () => {
   errDublMessage.value = ""; // Сбрасываем предыдущие сообщения об ошибке
 
   axios
-    .post(route("axios_add_user"), {
-      name: form.name,
-      telegram: form.telegram, // Отправляем Telegram
-      phone_number: form.phone_number, // Отправляем телефон
-      email: form.email,
-      role: form.role,
+    .post(route("axios_add_project"), {
+      user_id: form.user_id,
+      name: form.name, // Название проекта
+      link: form.link, // Ссылка на проект
+      yandex_metric_id: form.yandex_metric_id, // Идентификатор Яндекс Метрики
+      measurement_protocol_token: form.measurement_protocol_token, // Идентификатор цели
+      goal_id: form.goal_id, // Идентификатор цели
+      landing_url: form.landing_url, // URL лендинга
     })
     .then((response) => {
       console.log(response.data);
-      // Добавляем нового пользователя в локальное состояние
-      localUsers.value.unshift(response.data.user);
+      // Добавляем новый проект в локальное состояние
+      localProjects.value.unshift(response.data.project);
 
-      successMessage.value =
-        "Клиент успешно добавлен! Данные доступа отправлены ему на email.";
+      successMessage.value = "Проект успешно добавлен!";
 
       // Обновление данных на странице
-      updateUsers();
+      updateProjects();
 
-      const usersPerPage = pagination.value.per_page; // Количество пользователей на странице
-      const totalUsersAfterAdd = pagination.value.total + 1;
+      const projectsPerPage = pagination.value.per_page; // Количество проектов на странице
+      const totalProjectsAfterAdd = pagination.value.total + 1;
 
-      // Увеличиваем общее количество пользователей
-      pagination.value.total = totalUsersAfterAdd;
+      // Обновляем общее количество проектов
+      pagination.value.total = totalProjectsAfterAdd;
 
       // Проверяем состояние пагинации
-      const maxPage = Math.ceil(totalUsersAfterAdd / usersPerPage); // Вычисляем новую последнюю страницу
+      const maxPage = Math.ceil(totalProjectsAfterAdd / projectsPerPage);
 
       if (
-        totalUsersAfterAdd % usersPerPage === 1 &&
+        totalProjectsAfterAdd % projectsPerPage === 1 &&
         pagination.value.last_page < maxPage
       ) {
         pagination.value.last_page = maxPage; // Обновляем значение last_page
@@ -352,10 +358,8 @@ const submitAddForm = () => {
           console.error("Ошибки валидации:", error.response.data.errors);
           errors.value = error.response.data.errors;
         } else {
-          // Обработка основного сообщения об ошибке
           errDublMessage.value =
-            error.response.data.message ||
-            "Произошла ошибка при добавлении клиента.";
+            error.response.data.message || "Ошибка при добавлении проекта.";
         }
       } else if (error.request) {
         // Обработка случая, если сервер не отвечает
@@ -380,35 +384,32 @@ function openModalEdit(id) {
   errors.value = {}; // Сброс предыдущих ошибок
 
   axios
-    .post(route("axios_edit_user"), {
-      id: id,
-    })
-    .then(function (response) {
-      const user = response.data.user;
+    .post(route("axios_edit_project"), { id: id })
+    .then((response) => {
+      const project = response.data.project;
 
-      if (user) {
-        form.name = user.name || ""; // Имя пользователя
-        form.email = user.email || ""; // Email пользователя
-        form.telegram = user.telegram || ""; // Telegram пользователя
-        form.phone_number = user.phone_number || ""; // Номер телефона пользователя
-        form.role = user.role || ""; // Роль пользователя
-        editUserId.value = user.id; // Сохраняем ID пользователя для дальнейшего обновления
-        isModalEdit.value = true;
+      if (project) {
+        form.name = project.name || ""; // Название проекта
+        form.link = project.link || ""; // Ссылка на проект
+        form.yandex_metric_id = project.yandex_metric_id || ""; // Яндекс Метрика
+        form.goal_id = project.goal_id || ""; // Целевая метрика
+        form.landing_url = project.landing_url || ""; // URL лендинга
+        form.measurement_protocol_token =
+          project.measurement_protocol_token || "";
+        editProjectId.value = project.id; // Сохраняем ID проекта для дальнейшего обновления
+        isModalEdit.value = true; // Открываем модальное окно
       } else {
-        console.error("Данные пользователя не найдены.");
+        console.error("Проект не найден.");
       }
     })
     .catch((error) => {
       if (error.response && error.response.data.errors) {
-        errors.value = error.response.data.errors; // Сохраняем ошибки
+        errors.value = error.response.data.errors;
         console.error("Ошибки валидации:", error.response.data.errors);
       } else if (error.request) {
         console.error("Ошибка с запросом:", error.request);
       } else {
-        console.error(
-          "Ошибка при отправке данных:",
-          error.response ? error.response.data : error
-        );
+        console.error("Ошибка при отправке данных:", error);
       }
     })
     .finally(() => {
@@ -418,8 +419,8 @@ function openModalEdit(id) {
 
 //Функция по обновлению текущих значений сущности
 const submitEditForm = () => {
-  if (!editUserId.value) {
-    console.error("ID пользователя не установлен!");
+  if (!editProjectId.value) {
+    console.error("ID проекта не установлен!");
     return;
   }
 
@@ -428,27 +429,28 @@ const submitEditForm = () => {
   successMessage.value = ""; // Сбрасываем успешное сообщение
 
   axios
-    .put(route("axios_update_user", { id: editUserId.value }), {
-      name: form.name, // Имя
-      email: form.email, // Email
-      telegram: form.telegram, // Telegram
-      phone_number: form.phone_number, // Номер телефона
-      role: form.role, // Роль
+    .put(route("axios_update_project", { id: editProjectId.value }), {
+      name: form.name, // Название проекта
+      link: form.link, // Ссылка на проект
+      yandex_metric_id: form.yandex_metric_id, // Идентификатор метрики
+      goal_id: form.goal_id, // Идентификатор цели
+      landing_url: form.landing_url, // URL лендинга
+      measurement_protocol_token: form.measurement_protocol_token,
     })
-    .then(function (response) {
-      const updatedUser = response.data.user;
+    .then((response) => {
+      const updatedProject = response.data.project;
 
-      if (updatedUser) {
-        successMessage.value = "Клиент успешно обновлен!";
+      if (updatedProject) {
+        successMessage.value = "Проект успешно обновлен!";
 
-        // Обновление локального состояния пользователей
-        localUsers.value = localUsers.value.map((user) =>
-          user.id === updatedUser.id ? updatedUser : user
+        // Обновляем локальное состояние проектов
+        localProjects.value = localProjects.value.map((project) =>
+          project.id === updatedProject.id ? updatedProject : project
         );
 
-        updateUsers(); // Перезагрузка списка пользователей
+        updateProjects(); // Перезагрузка списка проектов
       } else {
-        console.error("Обновленные данные пользователя не получены.");
+        console.error("Обновленные данные проекта не получены.");
       }
     })
     .catch((error) => {
@@ -456,14 +458,10 @@ const submitEditForm = () => {
         errors.value = error.response.data.errors; // Сохраняем ошибки
         console.error("Ошибки валидации:", error.response.data.errors);
       } else if (error.request) {
-        errDublMessage.value =
-          "Позиция с таким email, номером телефона или Telegram уже существует.";
+        errDublMessage.value = "Проект с таким названием уже существует.";
         console.error("Ошибка с запросом:", error.request);
       } else {
-        console.error(
-          "Ошибка при отправке данных:",
-          error.response ? error.response.data : error
-        );
+        console.error("Ошибка при отправке данных:", error);
       }
     })
     .finally(() => {
@@ -472,17 +470,17 @@ const submitEditForm = () => {
 };
 
 //Функция по удалению сущности
-const deleteUser = () => {
+const deleteProject = () => {
   isLoading.value = true; // Устанавливаем состояние загрузки
   axios
-    .delete(route("axios_delete_user", { id: deletUserId.value }))
+    .delete(route("axios_delete_project", { id: deletProjectId.value }))
     .then((response) => {
       // Удаляем пользователя из локального массива
-      localUsers.value = localUsers.value.filter(
-        (user) => user.id !== deletUserId.value
+      localProjects.value = localProjects.value.filter(
+        (project) => project.id !== deletProjectId.value
       );
 
-      updateUsers();
+      updateProjects();
 
       successMessage.value = "Пользователь успешно удалён!";
     })
@@ -499,7 +497,7 @@ const deleteUser = () => {
     });
 };
 
-//Переменная блокировки выводимых id users в таблице
+//Переменная блокировки выводимых id projects в таблице
 const disallowedIds = [1]; // Массив запрещённых ID
 
 //Функционал вылеление гурппы строк  - check
@@ -534,16 +532,16 @@ const deleteSelected = () => {
 
   // Используем route для создания полноценных URL для удаления
   Promise.all(
-    idsToDelete.map((id) => axios.delete(route("axios_delete_user", { id })))
+    idsToDelete.map((id) => axios.delete(route("axios_delete_project", { id })))
   )
     .then(() => {
       // После успешного удаления обновляем список пользователей
-      localUsers.value = localUsers.value.filter(
-        (user) => !idsToDelete.includes(user.id)
+      localProjects.value = localProjects.value.filter(
+        (project) => !idsToDelete.includes(project.id)
       );
       selectedRowKeys.value = []; // Очищаем выбранные ключи
       successMessage.value = "Пользователи успешно удалены"; // уведомление об успехе
-      fetchUsers(pagination.value.current_page); // Заносим обновленный список пользователей
+      fetchProjects(pagination.value.current_page); // Заносим обновленный список пользователей
     })
     .catch((error) => {
       handleError(error); // Обработка ошибки
@@ -569,31 +567,42 @@ const formatDate = (dateString) => {
 /*----------- Модалка по клику по строке в вытягиваением данных и Скрытие и закрытие доп. полей------- */
 
 // Состояние для видимости колонок
+// Состояние для видимости колонок
 const visibleColumns = ref({
-  id: true,
-  name: true,
-  rating: true,
-  unp: true,
-  role: true,
-  created_at: true,
-  original_email: true,
-  original_password: true,
-  action: true,
-  activation: true,
+  id: true, // ID проекта
+  name: true, // Название проекта
+  link: true, // Ссылка на проект
+  yandex_metric_id: false, // ID Яндекс Метрики
+  goal_id: false, // Идентификатор цели
+  landing_url: false, // URL лендинга
+  measurement_protocol_token: false, // Protocol Token
+  created_at: true, // Дата создания
+  actions: true, // Колонка с действиями
 });
 
 // Переменная для отслеживания общей видимости колонок
-const areColumnsVisible = ref(false);
-// Функция для показа нескольких колонок сразу
+const areColumnsVisible = ref(false); // Изначально - показывать только минимальный набор колонок
+
 // Функция для переключения видимости нескольких колонок
 const toggleMultipleColumns = () => {
   areColumnsVisible.value = !areColumnsVisible.value;
 
   // Устанавливаем состояние видимости колонок
-  /*   visibleColumns.value.unp = areColumnsVisible.value; // ИНН
-  visibleColumns.value.created_at = areColumnsVisible.value; // Электронная почта
-  visibleColumns.value.original_email = areColumnsVisible.value; // Электронная почта
-  visibleColumns.value.original_password = areColumnsVisible.value; // Пароль входа */
+  // Если переключаем на отображение всех колонок
+  if (areColumnsVisible.value) {
+    visibleColumns.value.link = true;
+    visibleColumns.value.yandex_metric_id = true;
+    visibleColumns.value.goal_id = true;
+    visibleColumns.value.landing_url = true;
+    visibleColumns.value.measurement_protocol_token = true;
+  } else {
+    // Если переключаем на отображение минимального набора
+    visibleColumns.value.link = false;
+    visibleColumns.value.yandex_metric_id = false;
+    visibleColumns.value.goal_id = false;
+    visibleColumns.value.landing_url = false;
+    visibleColumns.value.measurement_protocol_token = false;
+  }
 };
 
 // Фильтрация колонок на основе видимости
@@ -619,12 +628,73 @@ function openModalDetails(record, index) {
     },
   };
 }
+
+/*  */
+
+const searchPeople = ref("");
+const resultsPeople = ref([]); // Храним все результаты поиска
+const selectedIdPeople = ref(null);
+
+let issetMediaFile = false;
+
+// Фильтруем результаты для отображения при вводе
+const filteredResultsPeople = computed(() => {
+  return resultsPeople.value.filter((item) => {
+    const searchTerm = searchPeople.value.toLowerCase();
+
+    // Поиск по id (сравнение строчных и числовых значений)
+    const idMatches = item.user_id.toString().includes(searchTerm); // id может быть числом
+    const firstNameMatches = item.name.toLowerCase().includes(searchTerm);
+    /* const lastNameMatches = item.last_name.toLowerCase().includes(searchTerm); */
+
+    // Возвращаем true, если совпадение найдено в любом из полей
+    return idMatches || firstNameMatches;
+  });
+});
+
+/* Выводим список в select по совпадению */
+const onSearchPeople = async () => {
+  if (searchPeople.value.length === 0) {
+    resultsPeople.value = []; // Если поле поиска пустое, очищаем результаты
+    return;
+  }
+  /* alert(searchPeople.value); */
+
+  try {
+    const response = await axios.get("/clients", {
+      params: {
+        query: searchPeople.value,
+      },
+    });
+    resultsPeople.value = response.data; // Обновляем результаты поиска
+  } catch (error) {
+    console.error("Error while searching:", error);
+    resultsPeople.value = []; // Очищаем результаты в случае ошибки
+  }
+};
+
+/* Выбранный элемент устанавливаем в поле */
+const selectItemPeople = (item) => {
+  selectedIdPeople.value = item.id; // Устанавливаем ID выбранного элемента
+  searchPeople.value = item.name; // Устанавливаем значение поискового поля на имя элемента
+  resultsPeople.value = []; // Очищаем список результатов
+  console.log("Selected ID:", selectedIdPeople.value);
+
+  issetMediaFile = true;
+
+  // Очистите список результатов после выбора
+  filteredResultsPeople.value = [];
+  searchPeople.value = ""; // Очищаем строку поиска
+
+  form.client = item.name;
+  form.user_id = item.id; // Передача ID
+};
 </script>
 
 <template>
   <Head title="Клиенты" />
 
-  <AuthenticatedLayout :user_auth="props.user_auth">
+  <AuthenticatedLayout :project_auth="props.project_auth">
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
         <SelectOutlined :style="{ fontSize: '20px', verticalAlign: '0' }" />
@@ -668,7 +738,7 @@ function openModalDetails(record, index) {
 
             <a-table
               :row-key="(record) => record.id"
-              :data-source="localUsers"
+              :data-source="localProjects"
               :columns="filteredColumns"
               :pagination="false"
               :row-selection="rowSelection"
@@ -680,7 +750,7 @@ function openModalDetails(record, index) {
                 <template v-if="column.key === 'rating'">
                   <a-rate
                     v-model:value="record.rating"
-                    @change="(value) => onRateChange(value, record.id_user)"
+                    @change="(value) => onRateChange(value, record.id_project)"
                     :disabled="true"
                     class="custom-rate"
                   />
@@ -805,7 +875,7 @@ function openModalDetails(record, index) {
 
             <Modal
               :isOpen="isModalDeleted"
-              title="Удаление клиента"
+              title="Удаление проекта"
               @close="closeModal"
               class="z-10"
             >
@@ -816,7 +886,7 @@ function openModalDetails(record, index) {
               <div v-if="successMessage">
                 <p class="text-green-500 text-center">{{ successMessage }}</p>
               </div>
-              <form @submit.prevent="deleteUser" autocomplete="off">
+              <form @submit.prevent="deleteProject" autocomplete="off">
                 <div class="flex mt-10">
                   <button
                     v-if="!successMessage"
@@ -840,7 +910,7 @@ function openModalDetails(record, index) {
 
             <Modal
               :isOpen="isModalEdit"
-              title="Форма редактирования клиента"
+              title="Форма редактирования проекта"
               @close="closeModal"
               class="z-10"
             >
@@ -853,22 +923,49 @@ function openModalDetails(record, index) {
               </div>
               <div v-else>
                 <form @submit.prevent="submitEditForm" autocomplete="off">
-                  <div v-if="errDublMessage">
-                    <p class="text-red-500 text-center">{{ errDublMessage }}</p>
+                  <!-- Клиент -->
+                  <div class="mb-4">
+                    <input
+                      type="text"
+                      v-model="searchPeople"
+                      @input="onSearchPeople"
+                      placeholder="Поиск получателя платежа по id или Названию ..."
+                      class="bg-yellow-100 border p-2 w-[100%] rounded-md"
+                    />
+                    <div
+                      v-if="filteredResultsPeople.length > 0"
+                      class="border mt-2 max-h-60 overflow-auto"
+                    >
+                      <ul>
+                        <li
+                          v-for="item in filteredResultsPeople"
+                          :key="item.id"
+                          @click="selectItemPeople(item)"
+                          class="cursor-pointer p-2 hover:bg-gray-200"
+                        >
+                          {{ item.name }}
+                        </li>
+                      </ul>
+                    </div>
+
+                    <span v-if="errors.recipient_id" class="text-red-500">{{
+                      errors.recipient_id[0]
+                    }}</span>
                   </div>
 
-                  <!-- Имя -->
+                  <!-- Название проекта -->
                   <div class="mb-4">
                     <label
                       for="name"
                       class="block text-sm font-medium text-gray-700"
-                      >Имя:</label
                     >
+                      Название проекта:
+                    </label>
                     <input
                       type="text"
                       id="name"
                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
-                      placeholder="Наименование клиента"
+                      placeholder="Введите название проекта"
                       v-model="form.name"
                       :class="{ 'border-red-500': errors.name }"
                     />
@@ -877,95 +974,126 @@ function openModalDetails(record, index) {
                     }}</span>
                   </div>
 
-                  <!-- Телеграм -->
+                  <!-- Ссылка на проект -->
                   <div class="mb-4">
                     <label
-                      for="telegram"
+                      for="link"
                       class="block text-sm font-medium text-gray-700"
-                      >Телеграмм аккаунт:</label
                     >
+                      Ссылка на проект:
+                    </label>
                     <input
                       type="text"
-                      id="telegram"
+                      id="link"
                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
-                      placeholder="Телеграмм аккаунт"
-                      v-model="form.telegram"
-                      :class="{ 'border-red-500': errors.telegram }"
+                      placeholder="Введите ссылку на проект"
+                      v-model="form.link"
+                      :class="{ 'border-red-500': errors.link }"
                     />
-                    <span v-if="errors.telegram" class="text-red-500 err">{{
-                      errors.telegram[0]
+                    <span v-if="errors.link" class="text-red-500 err">{{
+                      errors.link[0]
                     }}</span>
                   </div>
 
-                  <!-- Номер телефона -->
+                  <!-- ID Яндекс Метрики -->
                   <div class="mb-4">
                     <label
-                      for="phone_number"
+                      for="yandex_metric_id"
                       class="block text-sm font-medium text-gray-700"
-                      >Номер телефона:</label
                     >
+                      ID Яндекс Метрики:
+                    </label>
                     <input
                       type="text"
-                      id="phone_number"
+                      id="yandex_metric_id"
                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
-                      placeholder="Номер телефона"
-                      v-model="form.phone_number"
-                      :class="{ 'border-red-500': errors.phone_number }"
+                      placeholder="Введите идентификатор метрики"
+                      v-model="form.yandex_metric_id"
+                      :class="{ 'border-red-500': errors.yandex_metric_id }"
                     />
-                    <span v-if="errors.phone_number" class="text-red-500 err">{{
-                      errors.phone_number[0]
-                    }}</span>
+                    <span
+                      v-if="errors.yandex_metric_id"
+                      class="text-red-500 err"
+                    >
+                      {{ errors.yandex_metric_id[0] }}
+                    </span>
                   </div>
 
-                  <!-- Email -->
+                  <!-- Идентификатор цели -->
                   <div class="mb-4">
                     <label
-                      for="email"
+                      for="goal_id"
                       class="block text-sm font-medium text-gray-700"
-                      >Email:</label
                     >
+                      ID Цели:
+                    </label>
                     <input
-                      type="email"
-                      id="email"
+                      type="text"
+                      id="goal_id"
                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
-                      placeholder="Email"
-                      v-model="form.email"
-                      :class="{ 'border-red-500': errors.email }"
+                      placeholder="Введите идентификатор цели"
+                      v-model="form.goal_id"
+                      :class="{ 'border-red-500': errors.goal_id }"
                     />
-                    <span v-if="errors.email" class="text-red-500 err">{{
-                      errors.email[0]
+                    <span v-if="errors.goal_id" class="text-red-500 err">{{
+                      errors.goal_id[0]
                     }}</span>
                   </div>
 
-                  <!-- Роль -->
+                  <!-- URL лендинга -->
                   <div class="mb-4">
                     <label
-                      for="role"
+                      for="landing_url"
                       class="block text-sm font-medium text-gray-700"
-                      >Роль:</label
                     >
-                    <select
-                      id="role"
+                      URL лендинга:
+                    </label>
+                    <input
+                      type="text"
+                      id="landing_url"
                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
-                      v-model="form.role"
-                      :class="{ 'border-red-500': errors.role }"
-                    >
-                      <option value="" disabled selected>Выберите роль</option>
-                      <option value="client">Клиент</option>
-                      <option value="admin">Админ</option>
-                    </select>
-                    <span v-if="errors.role" class="text-red-500 err">{{
-                      errors.role[0]
-                    }}</span>
+                      placeholder="Введите URL лендинга"
+                      v-model="form.landing_url"
+                      :class="{ 'border-red-500': errors.landing_url }"
+                    />
+                    <span v-if="errors.landing_url" class="text-red-500 err">
+                      {{ errors.landing_url[0] }}
+                    </span>
                   </div>
 
-                  <div class="flex mt-10">
+                  <!-- Measurement Protocol Token -->
+                  <div class="mb-4">
+                    <label
+                      for="measurement_protocol_token"
+                      class="block text-sm font-medium text-gray-700"
+                    >
+                      Measurement Protocol Token:
+                    </label>
+                    <input
+                      type="text"
+                      id="measurement_protocol_token"
+                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+                      placeholder="Введите токен Measurement Protocol"
+                      v-model="form.measurement_protocol_token"
+                      :class="{
+                        'border-red-500': errors.measurement_protocol_token,
+                      }"
+                    />
+                    <span
+                      v-if="errors.measurement_protocol_token"
+                      class="text-red-500 err"
+                    >
+                      {{ errors.measurement_protocol_token[0] }}
+                    </span>
+                  </div>
+
+                  <div class="flex mt-6">
                     <button
                       type="submit"
                       class="flex-grow inline-flex justify-center py-2 mx-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-700 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                       :disabled="isLoading"
                     >
-                      Сохранить
+                      Добавить
                     </button>
                     <button
                       type="button"
@@ -977,21 +1105,11 @@ function openModalDetails(record, index) {
                   </div>
                 </form>
               </div>
-
-              <div v-if="successMessage" class="flex justify-center">
-                <button
-                  type="button"
-                  class="flex-grow inline-flex justify-center py-2 mx-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                  @click="closeModal"
-                >
-                  Закрыть
-                </button>
-              </div>
             </Modal>
 
             <Modal
               :isOpen="isModalOpen"
-              title="Форма добавления клиента"
+              title="Форма добавления проекта"
               @close="closeModal"
               class="z-10"
             >
@@ -1005,22 +1123,70 @@ function openModalDetails(record, index) {
               </div>
               <div v-else>
                 <form @submit.prevent="submitAddForm" autocomplete="off">
-                  <div v-if="errDublMessage">
-                    <p class="text-red-500 text-center">{{ errDublMessage }}</p>
+                  <!-- Клиент -->
+                  <div class="mb-4">
+                    <input
+                      type="text"
+                      v-model="searchPeople"
+                      @input="onSearchPeople"
+                      placeholder="Поиск получателя платежа по id или Названию ..."
+                      class="bg-yellow-100 border p-2 w-[100%] rounded-md"
+                    />
+                    <div
+                      v-if="filteredResultsPeople.length > 0"
+                      class="border mt-2 max-h-60 overflow-auto"
+                    >
+                      <ul>
+                        <li
+                          v-for="item in filteredResultsPeople"
+                          :key="item.id"
+                          @click="selectItemPeople(item)"
+                          class="cursor-pointer p-2 hover:bg-gray-200"
+                        >
+                          {{ item.name }}
+                        </li>
+                      </ul>
+                    </div>
+
+                    <span v-if="errors.recipient_id" class="text-red-500">{{
+                      errors.recipient_id[0]
+                    }}</span>
                   </div>
 
-                  <!-- Имя -->
+                  <div class="mb-4">
+                    <label
+                      for="client"
+                      class="block text-sm font-medium text-gray-700"
+                    >
+                      Клиент:</label
+                    >
+                    <input
+                      type="text"
+                      id="client"
+                      class="bg-gray-100 mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+                      placeholder=""
+                      v-model="form.client"
+                      :class="{ 'border-red-500': errors.client }"
+                      readonly
+                    />
+                    <span v-if="errors.client" class="text-red-500 err">{{
+                      errors.client[0]
+                    }}</span>
+                  </div>
+
+                  <!-- Название проекта -->
                   <div class="mb-4">
                     <label
                       for="name"
                       class="block text-sm font-medium text-gray-700"
-                      >Имя:</label
                     >
+                      Название проекта:
+                    </label>
                     <input
                       type="text"
                       id="name"
                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
-                      placeholder="Наименование клиента"
+                      placeholder="Введите название проекта"
                       v-model="form.name"
                       :class="{ 'border-red-500': errors.name }"
                     />
@@ -1029,95 +1195,126 @@ function openModalDetails(record, index) {
                     }}</span>
                   </div>
 
-                  <!-- Телеграм -->
+                  <!-- Ссылка на проект -->
                   <div class="mb-4">
                     <label
-                      for="telegram"
+                      for="link"
                       class="block text-sm font-medium text-gray-700"
-                      >Телеграмм аккаунт:</label
                     >
+                      Ссылка на проект:
+                    </label>
                     <input
                       type="text"
-                      id="telegram"
+                      id="link"
                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
-                      placeholder="Телеграмм аккаунт"
-                      v-model="form.telegram"
-                      :class="{ 'border-red-500': errors.telegram }"
+                      placeholder="Введите ссылку на проект"
+                      v-model="form.link"
+                      :class="{ 'border-red-500': errors.link }"
                     />
-                    <span v-if="errors.telegram" class="text-red-500 err">{{
-                      errors.telegram[0]
+                    <span v-if="errors.link" class="text-red-500 err">{{
+                      errors.link[0]
                     }}</span>
                   </div>
 
-                  <!-- Номер телефона -->
+                  <!-- ID Яндекс Метрики -->
                   <div class="mb-4">
                     <label
-                      for="phone_number"
+                      for="yandex_metric_id"
                       class="block text-sm font-medium text-gray-700"
-                      >Номер телефона:</label
                     >
+                      ID Яндекс Метрики:
+                    </label>
                     <input
                       type="text"
-                      id="phone_number"
+                      id="yandex_metric_id"
                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
-                      placeholder="Номер телефона"
-                      v-model="form.phone_number"
-                      :class="{ 'border-red-500': errors.phone_number }"
+                      placeholder="Введите идентификатор метрики"
+                      v-model="form.yandex_metric_id"
+                      :class="{ 'border-red-500': errors.yandex_metric_id }"
                     />
-                    <span v-if="errors.phone_number" class="text-red-500 err">{{
-                      errors.phone_number[0]
-                    }}</span>
+                    <span
+                      v-if="errors.yandex_metric_id"
+                      class="text-red-500 err"
+                    >
+                      {{ errors.yandex_metric_id[0] }}
+                    </span>
                   </div>
 
-                  <!-- Email -->
+                  <!-- Идентификатор цели -->
                   <div class="mb-4">
                     <label
-                      for="email"
+                      for="goal_id"
                       class="block text-sm font-medium text-gray-700"
-                      >Email:</label
                     >
+                      ID Цели:
+                    </label>
                     <input
-                      type="email"
-                      id="email"
+                      type="text"
+                      id="goal_id"
                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
-                      placeholder="Email"
-                      v-model="form.email"
-                      :class="{ 'border-red-500': errors.email }"
+                      placeholder="Введите идентификатор цели"
+                      v-model="form.goal_id"
+                      :class="{ 'border-red-500': errors.goal_id }"
                     />
-                    <span v-if="errors.email" class="text-red-500 err">{{
-                      errors.email[0]
+                    <span v-if="errors.goal_id" class="text-red-500 err">{{
+                      errors.goal_id[0]
                     }}</span>
                   </div>
 
-                  <!-- Роль -->
+                  <!-- URL лендинга -->
                   <div class="mb-4">
                     <label
-                      for="role"
+                      for="landing_url"
                       class="block text-sm font-medium text-gray-700"
-                      >Роль:</label
                     >
-                    <select
-                      id="role"
+                      URL лендинга:
+                    </label>
+                    <input
+                      type="text"
+                      id="landing_url"
                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
-                      v-model="form.role"
-                      :class="{ 'border-red-500': errors.role }"
-                    >
-                      <option value="" disabled selected>Выберите роль</option>
-                      <option value="client">Клиент</option>
-                      <option value="admin">Админ</option>
-                    </select>
-                    <span v-if="errors.role" class="text-red-500 err">{{
-                      errors.role[0]
-                    }}</span>
+                      placeholder="Введите URL лендинга"
+                      v-model="form.landing_url"
+                      :class="{ 'border-red-500': errors.landing_url }"
+                    />
+                    <span v-if="errors.landing_url" class="text-red-500 err">
+                      {{ errors.landing_url[0] }}
+                    </span>
                   </div>
 
-                  <div class="flex mt-10">
+                  <!-- Measurement Protocol Token -->
+                  <div class="mb-4">
+                    <label
+                      for="measurement_protocol_token"
+                      class="block text-sm font-medium text-gray-700"
+                    >
+                      Measurement Protocol Token:
+                    </label>
+                    <input
+                      type="text"
+                      id="measurement_protocol_token"
+                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+                      placeholder="Введите токен Measurement Protocol"
+                      v-model="form.measurement_protocol_token"
+                      :class="{
+                        'border-red-500': errors.measurement_protocol_token,
+                      }"
+                    />
+                    <span
+                      v-if="errors.measurement_protocol_token"
+                      class="text-red-500 err"
+                    >
+                      {{ errors.measurement_protocol_token[0] }}
+                    </span>
+                  </div>
+
+                  <div class="flex mt-6">
                     <button
                       type="submit"
                       class="flex-grow inline-flex justify-center py-2 mx-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-700 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                       :disabled="isLoading"
                     >
-                      Сохранить
+                      Добавить
                     </button>
                     <button
                       type="button"
@@ -1128,16 +1325,6 @@ function openModalDetails(record, index) {
                     </button>
                   </div>
                 </form>
-              </div>
-
-              <div v-if="successMessage" class="flex justify-center">
-                <button
-                  type="button"
-                  class="flex-grow inline-flex justify-center py-2 mx-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                  @click="closeModal"
-                >
-                  Закрыть
-                </button>
               </div>
             </Modal>
           </div>

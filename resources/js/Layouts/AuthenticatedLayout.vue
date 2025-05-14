@@ -175,6 +175,13 @@ const toggleSubmenuTwo = () => {
                 >
                   Клиенты
                 </NavLink>
+
+                <NavLink
+                  :href="route('projects.dashboard')"
+                  :active="route().current('projects.dashboard')"
+                >
+                  Проекты
+                </NavLink>
               </div>
             </div>
 

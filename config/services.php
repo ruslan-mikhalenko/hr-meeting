@@ -31,4 +31,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'yandex_metrika' => [
+        'counter_id' => env('YANDEX_METRIKA_ID'),             // ID вашего счётчика
+        'secret' => env('YANDEX_METRIKA_SECRET'),             // Секретный токен
+        'endpoint' => 'https://mc.yandex.ru/collect',         // URL для отправки событий
+    ],
 ];

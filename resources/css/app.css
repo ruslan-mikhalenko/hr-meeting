@@ -1,3 +1,57 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Кнопки CRUD*/
+.button-container {
+    display: flex; /* Используем Flexbox для выстраивания кнопок в ряд */
+    gap: 8px; /* Отступ между кнопками */
+    align-items: center; /* Вертикальное выравнивание кнопок по центру */
+}
+.icon-square {
+    width: 30px; /* Ширина квадрата */
+    height: 30px; /* Высота квадрата */
+    display: flex; /* Используем flex для центрирования содержимого */
+    align-items: center; /* Центрируем по вертикали */
+    justify-content: center; /* Центрируем по горизонтали */
+    border-radius: 4px; /* Закругляем углы */
+}
+.edit-button {
+    background-color: #808080; /* Цвет фона для кнопки редактирования */
+    border-color: #b3b3b3; /* Цвет границы для кнопки редактирования */
+}
+.edit-button:hover {
+    background-color: #a7a7a7; /* Цвет фона при наведении */
+    border: 1px solid #b3b3b3 !important;
+}
+.delete-button {
+    background-color: #ff4d4f; /* Цвет фона для кнопки удаления */
+    border-color: #ff4d4f; /* Цвет границы для кнопки удаления */
+}
+.delete-button:hover {
+    background-color: #ff7875; /* Цвет фона при наведении */
+    border-color: #ff7875; /* Цвет границы для кнопки редактирования */
+}
+.err {
+    margin-top: 5px;
+    display: block;
+}
+
+.go_back {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: black; /* Цвет текста */
+    background-color: transparent; /* Цвет фона */
+    padding: 8px 12px; /* Внутренние отступы */
+    /*  border-radius: 5px; */ /* Закругление углов */
+    /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); */ /* Тень */
+    transition: background-color 0.3s ease; /* Плавный переход */
+    white-space: nowrap; /* Запрет на перенос текста */
+    border: 1px solid white;
+}
+
+button:focus {
+    outline: none !important; /* Убирает стандартную обводку */
+    box-shadow: none; /* Убирает тень при фокусе, если она есть */
+}

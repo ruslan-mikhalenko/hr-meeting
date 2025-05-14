@@ -89,7 +89,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => $hashedPassword,
-            'role' => 'super_admin',
+            'role' => 'client',
             'is_active' => 1,
         ]);
 

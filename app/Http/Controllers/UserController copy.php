@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\UserHelper;
-use App\Models\Client;
 use App\Models\Employer;
 use App\Models\HrJobseekers;
 use Illuminate\Support\Str;
@@ -17,7 +16,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Gate;
 
-class ClientController extends Controller
+class UserController extends Controller
 {
     //
     public $rights = false;
@@ -457,32 +456,5 @@ class ClientController extends Controller
 
         // Перемешиваем и обрезаем до нужной длины
         return substr(str_shuffle($password), 0, max($length, 8));
-    }
-
-
-    public function clients(Request $request)
-    {
-
-
-        $query = $request->input('query'); // Строка поиска
-        /*   $id_hr = $request->input('id_hr');  */ // Дополнительный ID HR для фильтрации
-
-        // Строим запрос с соединением между таблицами
-        $results = Client::query()
-            ->join('users', 'clients.user_id', '=', 'users.id') // Соединяем таблицы по ID пользователя
-            ->where('users.role', 'client') // Фильтруем записи, где role = 'hr' или role = 'applicant'
-            ->where(function ($q) use ($query) {
-                // Если указан запрос, фильтруем по id_user и имени
-                if ($query) {
-                    $q->where('clients.user_id', 'like', '%' . $query . '%') // Поиск по id_user
-                        ->orWhere('clients.name', 'like', '%' . $query . '%'); // Поиск по имени
-                }
-            })
-            ->select('clients.*', 'users.role') // Выбираем нужные поля
-            ->get();
-
-
-        // Возвращаем результаты в формате JSON
-        return response()->json($results);
     }
 }

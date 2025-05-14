@@ -33,19 +33,10 @@ class TelegramService
     private function initializeMadeline()
     {
         if (!$this->madeline) {
-            $settings = new Settings([
-                'app_info' => [
-                    'api_id' => (int) env('TELEGRAM_API_ID'),     // Берём ID из переменных среды
-                    'api_hash' => env('TELEGRAM_API_HASH'),       // Берём Hash из переменных среды
-                ],
-                'ipc' => [
-                    'enable' => false, // Отключаем IPC для избежания временной синхронизации
-                ],
-            ]);
+            $this->madeline = new API($this->sessionPath);
 
-            // Создание экземпляра API и запуск сессии
-            $this->madeline = new API($this->sessionPath, $settings);
-            $this->madeline->start();
+            // Авторизация с использованием токена бота
+            $this->madeline->botLogin(env('TELEGRAM_BOT_TOKEN')); // Токен берётся из .env
         }
     }
 
@@ -78,15 +69,14 @@ class TelegramService
     public function sendMessage($chatId, $text)
     {
         try {
-            // Инициализируем клиент MadelineProto
-            $this->initializeMadeline();
+            $this->initializeMadeline(); // Инициализация MadelineProto
 
-            // Используем MadelineProto для отправки сообщения через API
+            // Отправка сообщения
             $this->madeline->messages->sendMessage([
-                'peer'    => $chatId, // Идентификатор чата/пользователя
+                'peer'    => $chatId, // Идентификатор чата (может быть ID или @username)
                 'message' => $text,   // Текст сообщения
             ]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new \Exception("Ошибка отправки сообщения: {$e->getMessage()}");
         }
     }
@@ -101,14 +91,17 @@ class TelegramService
     public function getChannelParticipants($channelUsername)
     {
         try {
-            // Инициализируем клиент MadelineProto
             $this->initializeMadeline();
 
-            // Запрашиваем полную информацию о канале
-            $fullInfo = $this->madeline->getFullInfo($channelUsername);
+            // Получить участников канала, если бот является администратором
+            $participants = $this->madeline->channels->getParticipants([
+                'channel' => $channelUsername,
+                'filter'  => ['_' => 'channelParticipantsRecent'], // Или другой фильтр
+                'offset'  => 0,
+                'limit'   => 100, // Получайте данные частями
+            ]);
 
-            // Возвращаем список участников
-            return $fullInfo['participants'] ?? [];
+            return $participants['users'] ?? [];
         } catch (\Exception $e) {
             logger()->error("Ошибка получения участников канала: {$e->getMessage()}");
             return [];
@@ -125,11 +118,12 @@ class TelegramService
     public function getChannelInfo($channelUsername)
     {
         try {
-            // Инициализируем клиент MadelineProto
-            $this->initializeMadeline();
+            $this->initializeMadeline(); // Инициализация MadelineProto
 
-            // Возвращаем информацию о желаемом канале
-            return $this->madeline->getFullInfo($channelUsername);
+            // Получение информации о канале
+            return $this->madeline->getFullInfo([
+                'peer' => $channelUsername,
+            ]);
         } catch (\Exception $e) {
             logger()->error("Ошибка получения информации о канале: {$e->getMessage()}");
             return [];
