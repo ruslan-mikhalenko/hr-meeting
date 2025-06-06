@@ -22,6 +22,7 @@ class CreateProjectsTable extends Migration
             $table->string('goal_id')->nullable(); // Идентификатор цели
             $table->string('measurement_protocol_token')->nullable(); // Токен Measurement Protocol метрики
             $table->string('landing_url')->nullable(); // URL рекламного лендинга
+            $table->boolean('is_active')->default(false); // Значение по умолчанию true (активно)
             $table->timestamps(); // Поля created_at и updated_at
 
             // Внешний ключ на таблицу clients

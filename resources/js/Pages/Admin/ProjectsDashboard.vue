@@ -203,6 +203,14 @@ const columns = ref([
     dataIndex: "id",
     key: "id",
   },
+
+  {
+    title: "Клиент",
+    dataIndex: "client_name",
+    key: "client_name",
+    sorter: true,
+    /* width: "300px", */
+  },
   {
     title: "Название проекта",
     dataIndex: "name",
@@ -242,6 +250,11 @@ const columns = ref([
     key: "action",
     // Настройте рендеринг столбцов действия
   },
+
+  {
+    title: "Активация",
+    key: "activation",
+  },
 ]);
 
 // Поля формы
@@ -254,6 +267,7 @@ const form = useForm({
   goal_id: "", // Целевой идентификатор
   landing_url: "", // URL лендинга
   measurement_protocol_token: "",
+  isActive: {},
 });
 
 // Сброс полей формы
@@ -389,6 +403,8 @@ function openModalEdit(id) {
       const project = response.data.project;
 
       if (project) {
+        form.user_id = project.user_id;
+        form.client = project.client;
         form.name = project.name || ""; // Название проекта
         form.link = project.link || ""; // Ссылка на проект
         form.yandex_metric_id = project.yandex_metric_id || ""; // Яндекс Метрика
@@ -430,6 +446,7 @@ const submitEditForm = () => {
 
   axios
     .put(route("axios_update_project", { id: editProjectId.value }), {
+      user_id: form.user_id,
       name: form.name, // Название проекта
       link: form.link, // Ссылка на проект
       yandex_metric_id: form.yandex_metric_id, // Идентификатор метрики
@@ -498,7 +515,7 @@ const deleteProject = () => {
 };
 
 //Переменная блокировки выводимых id projects в таблице
-const disallowedIds = [1]; // Массив запрещённых ID
+const disallowedIds = []; // Массив запрещённых ID
 
 //Функционал вылеление гурппы строк  - check
 const selectedRowKeys = ref([]);
@@ -570,14 +587,16 @@ const formatDate = (dateString) => {
 // Состояние для видимости колонок
 const visibleColumns = ref({
   id: true, // ID проекта
+  client_name: true,
   name: true, // Название проекта
   link: true, // Ссылка на проект
-  yandex_metric_id: false, // ID Яндекс Метрики
-  goal_id: false, // Идентификатор цели
-  landing_url: false, // URL лендинга
-  measurement_protocol_token: false, // Protocol Token
+  yandex_metric_id: true, // ID Яндекс Метрики
+  goal_id: true, // Идентификатор цели
+  landing_url: true, // URL лендинга
+  measurement_protocol_token: true, // Protocol Token
   created_at: true, // Дата создания
-  actions: true, // Колонка с действиями
+  action: true, // Колонка с действиями
+  activation: true,
 });
 
 // Переменная для отслеживания общей видимости колонок
@@ -597,11 +616,11 @@ const toggleMultipleColumns = () => {
     visibleColumns.value.measurement_protocol_token = true;
   } else {
     // Если переключаем на отображение минимального набора
-    visibleColumns.value.link = false;
-    visibleColumns.value.yandex_metric_id = false;
-    visibleColumns.value.goal_id = false;
-    visibleColumns.value.landing_url = false;
-    visibleColumns.value.measurement_protocol_token = false;
+    visibleColumns.value.link = true;
+    visibleColumns.value.yandex_metric_id = true;
+    visibleColumns.value.goal_id = true;
+    visibleColumns.value.landing_url = true;
+    visibleColumns.value.measurement_protocol_token = true;
   }
 };
 
@@ -698,7 +717,7 @@ const selectItemPeople = (item) => {
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
         <SelectOutlined :style="{ fontSize: '20px', verticalAlign: '0' }" />
-        &nbsp; Управление клиентами
+        &nbsp; Управление проектами
       </h2>
     </template>
 
@@ -710,11 +729,11 @@ const selectItemPeople = (item) => {
               @click="openModal"
               class="mt-4 bg-gray-700 text-white px-4 py-2 rounded"
             >
-              Добавить клиента
+              Добавить проект
             </button>
 
             <a-input
-              placeholder="Введите название компании, email или ИНН для поиска"
+              placeholder="Введите название проекта, канал"
               v-model:value="searchTerm"
               @input="onSearch"
               style="margin-bottom: 16px"
@@ -747,29 +766,8 @@ const selectItemPeople = (item) => {
               class="w-full overflow-x-auto mt-9 z-0"
             >
               <template #bodyCell="{ column, record }">
-                <template v-if="column.key === 'rating'">
-                  <a-rate
-                    v-model:value="record.rating"
-                    @change="(value) => onRateChange(value, record.id_project)"
-                    :disabled="true"
-                    class="custom-rate"
-                  />
-                </template>
-
                 <template v-if="column.key === 'name'">
                   <span>{{ record.name }}</span>
-                </template>
-
-                <template v-if="column.key === 'unp'">
-                  <span>{{ record.unp }}</span>
-                  <div v-if="record.parent" class="text-center">
-                    {{ record.parent }}
-                  </div>
-                </template>
-
-                <template v-if="column.key === 'role'">
-                  <span v-if="record.role === 'hr'">Кадровик</span>
-                  <span v-if="record.role === 'employer'">Работодатель</span>
                 </template>
 
                 <template v-if="column.key === 'created_at'">
@@ -820,7 +818,7 @@ const selectItemPeople = (item) => {
 
             <Modal
               :isOpen="isModalDetails"
-              title="Данные клиента"
+              title="Данные проекта"
               @close="closeModal"
               class="z-10"
             >
@@ -929,7 +927,7 @@ const selectItemPeople = (item) => {
                       type="text"
                       v-model="searchPeople"
                       @input="onSearchPeople"
-                      placeholder="Поиск получателя платежа по id или Названию ..."
+                      placeholder="Поиск клиента по id или Названию ..."
                       class="bg-yellow-100 border p-2 w-[100%] rounded-md"
                     />
                     <div
@@ -950,6 +948,27 @@ const selectItemPeople = (item) => {
 
                     <span v-if="errors.recipient_id" class="text-red-500">{{
                       errors.recipient_id[0]
+                    }}</span>
+                  </div>
+
+                  <div class="mb-4">
+                    <label
+                      for="client"
+                      class="block text-sm font-medium text-gray-700"
+                    >
+                      Клиент:</label
+                    >
+                    <input
+                      type="text"
+                      id="client"
+                      class="bg-gray-100 mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+                      placeholder=""
+                      v-model="form.client"
+                      :class="{ 'border-red-500': errors.client }"
+                      readonly
+                    />
+                    <span v-if="errors.client" class="text-red-500 err">{{
+                      errors.client[0]
                     }}</span>
                   </div>
 
@@ -1129,7 +1148,7 @@ const selectItemPeople = (item) => {
                       type="text"
                       v-model="searchPeople"
                       @input="onSearchPeople"
-                      placeholder="Поиск получателя платежа по id или Названию ..."
+                      placeholder="Поиск клиента по id или Названию ..."
                       class="bg-yellow-100 border p-2 w-[100%] rounded-md"
                     />
                     <div
@@ -1338,7 +1357,7 @@ const selectItemPeople = (item) => {
           <div class="p-6 text-gray-900">
 
 
-            <h2>Карточка клиента: ID клиента -</h2>
+            <h2>Карточка проекта: ID проекта -</h2>
 
             <main
               class="border md:w-3/4 lg:w-4/4 px-5 py-10 mt-5"

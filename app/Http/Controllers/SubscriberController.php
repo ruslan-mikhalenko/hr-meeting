@@ -15,8 +15,8 @@ class SubscriberController extends Controller
         $telegramService = new TelegramService();
         try {
             // Получаем всех участников канала
-            /**-1002600859664 это id закрытого канала*/
-            $participants = $telegramService->getAllChannelParticipants('-1002600859664');
+            /**-1002600859664 это id закрытого канала @kaktotak_by @silaKnig*/
+            $participants = $telegramService->getAllChannelParticipantsReally('https://t.me/silaKnig');
 
             // Отладки: вывод структуры участников
             dd($participants);

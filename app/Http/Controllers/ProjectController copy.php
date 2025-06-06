@@ -234,7 +234,6 @@ class ProjectController extends Controller
         // Получение информации о фото канала
         $channelInfo = $telegramService->getChannelPhoto($validatedData['link']) ?? [];
 
-
         // Получение основной информации о канале
         $channelInfoOther = $telegramService->getChannelInfo($validatedData['link']) ?? [];
 
@@ -253,7 +252,7 @@ class ProjectController extends Controller
             'title' => $channelInfoOther['title'] ?? null,
             'photo' => $channelInfo['file_path'] ?? null,
             'username' => $channelInfoOther['username'] ?? null,
-            /* 'participants_count' => $channelInfoOther['participants_count'] ?? null, */
+            'participants_count' => $channelInfoOther['participants_count'] ?? null,
             'about' => $channelInfoOther['about'] ?? null,
             'type' => $channelInfoOther['type'] ?? null,
             'privacy' => $channelInfoOther['privacy'] ?? null,
@@ -335,14 +334,52 @@ class ProjectController extends Controller
 
         $subscribers = DB::table('subscribers')
             ->where('project_id', $id)
-            // ->where('is_active', 1) // если нужно, раскомментируй
-            ->paginate(10); // paginate сразу делает запрос и возвращает постраничные данные
+            /* ->where('is_active', 1) */
+            ->get();
 
         if ($subscribers->isEmpty()) {
-            Log::info("Нет подписчиков для проекта с ID {$id}");
+            // Лог или дополнительные действия, если подписчиков нет
+            Log::info("Нет активных подписчиков для проекта с ID {$id}");
         }
 
         /*  dd($subscribers); */
+
+
+        // Пример данных
+
+
+        $startDate = Carbon::createFromFormat('Y-m-d H:i:s', '2025-06-02 00:00:00');
+        $endDate = Carbon::now(); // или используйте нужную конечную дату
+        $hours = [];
+
+        // Генерация массива всех часов
+        for ($date = $startDate; $date <= $endDate; $date->addHour()) {
+            $hours[] = $date->format('Y-m-d H:00:00');
+        }
+
+        // Запрос к базе данных
+        $chartData = DB::table('subscribers')
+            ->selectRaw('DATE_FORMAT(updated_at, "%Y-%m-%d %H:00:00") as hour, COUNT(*) as count')
+            ->where('project_id', $id)
+            ->where('is_active', 1)
+            ->where('updated_at', '>=', '2025-06-02 15:00:00') // Дата начала
+            ->groupByRaw('hour')
+            ->orderBy('hour', 'ASC')
+            ->get()
+            ->keyBy('hour'); // Индексирование по часам
+
+        // Объединение данных
+        $result = [];
+
+        foreach ($hours as $hour) {
+            $count = isset($chartData[$hour]) ? $chartData[$hour]->count : 0; // Если нет данных, ставим 0
+            $result[] = [
+                'hour' => $hour,
+                'count' => $count,
+            ];
+        }
+
+        // $result теперь содержит все часы с соответствующими значениями
 
 
         return Inertia::render(
@@ -351,295 +388,8 @@ class ProjectController extends Controller
                 'project' => $project,
                 'user_auth' => $user_auth,
                 'subscribers' => $subscribers,
+                'chartData' => $result,
             ],
         );
-
-        // Получение списка проектов
-        /* $projects = DB::table('projects')
-            ->select(
-                'projects.*',
-                'clients.name as client_name' // Получение имени клиента
-            )
-            ->join('clients', 'projects.user_id', '=', 'clients.user_id') // Присоединение к таблице clients
-            ->orderByDesc('projects.created_at'); // Сортировка по дате создания
-
-        $perPage = 10; // Количество записей на странице
-        $currentPage = $request->input('page', 1); // Текущая страница
-
-        // Пагинация
-        $projects = $projects->paginate($perPage, ['*'], 'page', $currentPage);
-
-        // Возвращаем данные на фронтенд с помощью Inertia
-        return Inertia::render('Admin/ProjectsDashboard', [
-            'user_auth' => $user_auth,
-            'projects' => $projects->items(),
-            'pagination' => [
-                'current_page' => $projects->currentPage(),
-                'last_page' => $projects->lastPage(),
-                'per_page' => $projects->perPage(),
-                'total' => $projects->total(),
-            ],
-        ]); */
-    }
-
-
-    public function getChartData(Request $request, $id)
-    {
-        $grouping = $request->input('grouping', 'day');
-
-        /* $startDate = $request->input('startDate');
-        $endDate = $request->input('endDate');
-
-        $startDate = $startDate ? Carbon::parse($startDate)->startOfDay() : Carbon::parse('2025-06-02')->startOfDay();
-        $endDate = $endDate ? Carbon::parse($endDate)->endOfDay() : Carbon::now()->endOfDay(); */
-
-
-        $startDate = $request->input('startDate');
-        $endDate = $request->input('endDate');
-
-        // Получаем первую дату подписчика, если startDate не передан
-        if (!$startDate) {
-            $firstDate = DB::table('subscribers')
-                ->where('project_id', $id)
-                ->orderBy('created_at', 'asc')
-                ->value('created_at');
-
-            $startDate = $firstDate ? Carbon::parse($firstDate)->startOfDay() : Carbon::now()->startOfDay();
-        } else {
-            $startDate = Carbon::parse($startDate)->startOfDay();
-        }
-
-        // Обработка endDate как раньше
-        $endDate = $endDate ? Carbon::parse($endDate)->endOfDay() : Carbon::now()->endOfDay();
-
-        switch ($grouping) {
-            case 'hour':
-                $format = '%Y-%m-%d %H:00:00';
-                $phpFormat = 'Y-m-d H:00:00';
-                $step = 'addHour';
-                break;
-            case 'day':
-                $format = '%Y-%m-%d';
-                $phpFormat = 'Y-m-d';
-                $step = 'addDay';
-                break;
-            case 'month':
-                $format = '%Y-%m';
-                $phpFormat = 'Y-m';
-                $step = 'addMonth';
-                break;
-            case 'year':
-                $format = '%Y';
-                $phpFormat = 'Y';
-                $step = 'addYear';
-                break;
-            default:
-                $format = '%Y-%m-%d';
-                $phpFormat = 'Y-m-d';
-                $step = 'addDay';
-                break;
-        }
-
-        $periods = [];
-        for ($date = $startDate->copy(); $date <= $endDate; $date->$step()) {
-            $periods[] = $date->format($phpFormat);
-        }
-
-
-        /* dd($startDate . '   ' . $endDate); */
-
-        $is_active = $request->input('is_active', 1); // по умолчанию подписчики
-
-        /*         $chartData = DB::table('subscribers')
-            ->selectRaw("DATE_FORMAT(updated_at, '{$format}') as period, COUNT(*) as count")
-            ->where('project_id', $id)
-            ->where('is_active', $is_active) // ← 🔹 ключевая строка
-            ->whereBetween('updated_at', [$startDate, $endDate])
-            ->groupBy('period')
-            ->orderBy('period')
-            ->get()
-            ->keyBy('period'); */
-
-        /**Приме для каждого project_id свой диапазон даты исключения - чтобы первый парсинг был исключен как первые подписчики */
-        /* $chartData = DB::table('subscribers')
-            ->selectRaw("DATE_FORMAT(updated_at, '{$format}') as period, COUNT(*) as count")
-            ->where('project_id', $id)
-            ->where('is_active', $is_active)
-            ->whereBetween('updated_at', [$startDate, $endDate])
-            ->when($id == 123, function ($query) {
-                $query->whereNotBetween('updated_at', ['2025-06-02 14:01:00', '2025-06-02 14:02:10']);
-            })
-            ->when($id == 456, function ($query) {
-                $query->whereNotBetween('updated_at', ['2025-06-01 12:00:00', '2025-06-01 12:01:30']);
-            })
-            ->when($id == 789, function ($query) {
-                $query->whereNotBetween('updated_at', ['2025-06-03 09:15:00', '2025-06-03 09:16:00']);
-            })
-            ->groupBy('period')
-            ->orderBy('period')
-            ->get()
-            ->keyBy('period'); */
-
-
-        $chartData = DB::table('subscribers')
-            ->selectRaw("DATE_FORMAT(updated_at, '{$format}') as period, COUNT(*) as count")
-            ->where('project_id', $id)
-            ->where('is_active', $is_active)
-            ->whereBetween('updated_at', [$startDate, $endDate])
-            ->whereNotBetween('updated_at', ['2025-06-03 17:16:00', '2025-06-03 17:20:00']) // 🔥 исключаем участок - первые по парсингу из канала (не причисляем их к подписчикам)
-            ->groupBy('period')
-            ->orderBy('period')
-            ->get()
-            ->keyBy('period');
-
-
-
-
-        $total = 0;
-        $result = [];
-
-        foreach ($periods as $period) {
-            $count = isset($chartData[$period]) ? $chartData[$period]->count : 0;
-            $total += $count; // Считаем общее количество
-
-            $result[] = [
-                'period' => $period,
-                'count' => $count,
-            ];
-        }
-
-        return response()->json([
-            'chartData' => $result,
-            'total' => $total,
-        ]);
-    }
-
-
-
-    public function getCumulativeChart(Request $request, $id)
-    {
-        $grouping = $request->input('grouping', 'day');
-
-        /* $startDate = $request->input('startDate');
-        $endDate = $request->input('endDate');
-
-        $startDate = $startDate ? Carbon::parse($startDate)->startOfDay() : Carbon::parse('2025-06-02')->startOfDay();
-        $endDate = $endDate ? Carbon::parse($endDate)->endOfDay() : Carbon::now()->endOfDay();
-
-       */
-        $startDate = $request->input('startDate');
-        $endDate = $request->input('endDate');
-
-        // Получаем первую дату подписчика, если startDate не передан
-        if (!$startDate) {
-            $firstDate = DB::table('subscribers')
-                ->where('project_id', $id)
-                ->orderBy('created_at', 'asc')
-                ->value('created_at');
-
-            $startDate = $firstDate ? Carbon::parse($firstDate)->startOfDay() : Carbon::now()->startOfDay();
-        } else {
-            $startDate = Carbon::parse($startDate)->startOfDay();
-        }
-
-        // Обработка endDate как раньше
-        $endDate = $endDate ? Carbon::parse($endDate)->endOfDay() : Carbon::now()->endOfDay();
-
-
-
-        switch ($grouping) {
-            case 'hour':
-                $format = '%Y-%m-%d %H:00:00';
-                $phpFormat = 'Y-m-d H:00:00';
-                $step = 'addHour';
-                break;
-            case 'day':
-                $format = '%Y-%m-%d';
-                $phpFormat = 'Y-m-d';
-                $step = 'addDay';
-                break;
-            case 'month':
-                $format = '%Y-%m';
-                $phpFormat = 'Y-m';
-                $step = 'addMonth';
-                break;
-            case 'year':
-                $format = '%Y';
-                $phpFormat = 'Y';
-                $step = 'addYear';
-                break;
-            default:
-                $format = '%Y-%m-%d';
-                $phpFormat = 'Y-m-d';
-                $step = 'addDay';
-                break;
-        }
-
-        $periods = [];
-        for ($date = $startDate->copy(); $date <= $endDate; $date->$step()) {
-            $periods[] = $date->format($phpFormat);
-        }
-
-        // Получаем подписки и отписки
-        $subscriptions = DB::table('subscribers')
-            ->selectRaw("DATE_FORMAT(updated_at, '{$format}') as period, COUNT(*) as count")
-            ->where('project_id', $id)
-            ->where('is_active', 1)
-            ->whereBetween('updated_at', [$startDate, $endDate])
-            ->whereNotBetween('updated_at', ['2025-06-03 17:16:00', '2025-06-03 17:20:00'])
-            ->groupBy('period')
-            ->orderBy('period')
-            ->get()
-            ->keyBy('period');
-
-        $unsubscriptions = DB::table('subscribers')
-            ->selectRaw("DATE_FORMAT(updated_at, '{$format}') as period, COUNT(*) as count")
-            ->where('project_id', $id)
-            ->where('is_active', 0)
-            ->whereBetween('updated_at', [$startDate, $endDate])
-            ->groupBy('period')
-            ->orderBy('period')
-            ->get()
-            ->keyBy('period');
-
-        $chartData = [];
-        $cumulativeData = [];
-        $tableData = [];  // Вот сюда пойдут данные для таблицы
-        $total = 0;
-        $cumulative = 0;
-
-        foreach ($periods as $period) {
-            $subs = $subscriptions[$period]->count ?? 0;
-            $unsubs = $unsubscriptions[$period]->count ?? 0;
-            $net = $subs - $unsubs;
-
-            $total += $subs;
-            $cumulative += $net;
-
-            $chartData[] = [
-                'period' => $period,
-                'count' => $subs,
-            ];
-
-            $cumulativeData[] = [
-                'period' => $period,
-                'count' => $cumulative,
-            ];
-
-            $tableData[] = [
-                'period' => $period,
-                'subscriptions' => $subs,
-                'unsubscriptions' => $unsubs,
-                'result' => $net, // 👈 новая строка
-                'cumulative' => $cumulative,
-            ];
-        }
-
-        return response()->json([
-            'chartData' => $chartData,
-            'cumulativeChart' => $cumulativeData,
-            'tableData' => $tableData,  // Добавил сюда
-            'total' => $total,
-        ]);
     }
 }

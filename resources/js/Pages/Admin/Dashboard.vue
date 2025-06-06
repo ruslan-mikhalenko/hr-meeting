@@ -500,7 +500,7 @@ const deleteUser = () => {
 };
 
 //Переменная блокировки выводимых id users в таблице
-const disallowedIds = [1]; // Массив запрещённых ID
+const disallowedIds = []; // Массив запрещённых ID
 
 //Функционал вылеление гурппы строк  - check
 const selectedRowKeys = ref([]);
@@ -644,7 +644,7 @@ function openModalDetails(record, index) {
             </button>
 
             <a-input
-              placeholder="Введите название компании, email или ИНН для поиска"
+              placeholder="Введите имя клиента, телефон, email, telegram"
               v-model:value="searchTerm"
               @input="onSearch"
               style="margin-bottom: 16px"

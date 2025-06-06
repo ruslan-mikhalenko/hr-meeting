@@ -25,6 +25,7 @@ const showCustomService = ref(false);
 watch(
   () => formData.value.service,
   (newValue) => {
+    console.log("Service selected:", newValue); // Отладка
     showCustomService.value = newValue === "custom";
   }
 );
@@ -344,7 +345,10 @@ const handleScrollTo = (id) => {
             <ul class="space-y-4 text-lg font-medium">
               <li>📚 Тематическая Контентная поддержка</li>
               <li>📈 Увеличивайте охваты и набирайте подписчиков</li>
-              <li>📊 Для анализа доступны мощные аналитические инструменты</li>
+              <li>
+                📊 Для анализа доступны простые и понятные аналитические
+                инструменты
+              </li>
               <li>🤝 Возможность совместных проектов и рекламы</li>
             </ul>
           </div>
@@ -462,9 +466,11 @@ const handleScrollTo = (id) => {
                     >
                       Создание Telegram-канала + раскрутка + аналитика
                     </option>
-                    <option value="Своя услуга по Telegram">Своя услуга</option>
+                    <option value="custom">Своя услуга</option>
+                    <!-- Здесь нужно заменить -->
                   </select>
                 </div>
+
                 <!-- Поле для описания "Своя услуга" -->
                 <div v-if="showCustomService" class="md:col-span-2">
                   <label
@@ -479,7 +485,6 @@ const handleScrollTo = (id) => {
                     rows="3"
                     class="w-full border-gray-300 rounded-md shadow-sm px-4 py-2 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Опишите, что именно вам нужно"
-                    required
                   ></textarea>
                 </div>
               </div>
@@ -595,6 +600,10 @@ body {
   height: 100%;
 }
 
+input {
+  height: 50px;
+}
+
 input[type="tel"] {
   width: 100% !important; /* Убедимся, что ширина поля остается на всю доступную ширину */
   padding-left: 50px; /* Учитываем иконку страны (флаг) */
@@ -604,8 +613,9 @@ input[type="tel"] {
 input:required,
 select:required,
 textarea:required {
-  background-color: #f5fbff; /* Легкий розовый оттенок */
-  border-color: #349dff; /* Красная рамка */
+  background-color: #f9fcff; /* Легкий розовый оттенок */
+  border-color: #616161; /* Красная рамка */
+  height: 45px;
 }
 
 section#features ul {

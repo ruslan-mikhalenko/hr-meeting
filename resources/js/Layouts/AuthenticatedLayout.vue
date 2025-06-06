@@ -170,6 +170,7 @@ const toggleSubmenuTwo = () => {
               <!-- Navigation Links -->
               <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                 <NavLink
+                  v-if="$page.props.auth.user.role === 'super_admin'"
                   :href="route('dashboard')"
                   :active="route().current('dashboard')"
                 >
@@ -177,8 +178,17 @@ const toggleSubmenuTwo = () => {
                 </NavLink>
 
                 <NavLink
+                  v-if="$page.props.auth.user.role === 'super_admin'"
                   :href="route('projects.dashboard')"
                   :active="route().current('projects.dashboard')"
+                >
+                  Проекты
+                </NavLink>
+
+                <NavLink
+                  v-if="$page.props.auth.user.role === 'client'"
+                  :href="route('dashboard')"
+                  :active="route().current('dashboard')"
                 >
                   Проекты
                 </NavLink>
@@ -279,7 +289,23 @@ const toggleSubmenuTwo = () => {
             :href="route('dashboard')"
             :active="route().current('dashboard')"
             class="text-gray-700 hover:text-gray-900"
-            >Dashboard</ResponsiveNavLink
+            >Клиенты</ResponsiveNavLink
+          >
+
+          <ResponsiveNavLink
+            v-if="$page.props.auth.user.role === 'super_admin'"
+            :href="route('projects.dashboard')"
+            :active="route().current('projects.dashboard')"
+            class="text-gray-700 hover:text-gray-900"
+            >Проекты</ResponsiveNavLink
+          >
+
+          <ResponsiveNavLink
+            v-if="$page.props.auth.user.role === 'client'"
+            :href="route('dashboard')"
+            :active="route().current('dashboard')"
+            class="text-gray-700 hover:text-gray-900"
+            >Проекты</ResponsiveNavLink
           >
         </div>
 
@@ -308,8 +334,8 @@ const toggleSubmenuTwo = () => {
       <header
         :class="{
           'bg-white': $page.props.auth.user.role === 'super_admin',
-          'bg-yellow-50': $page.props.auth.user.role === 'hr',
-          'bg-lime-50': $page.props.auth.user.role === 'employer',
+          'bg-white': $page.props.auth.user.role === 'client',
+          'bg-lime-50': $page.props.auth.user.role === 'client',
           shadow: true,
           'mt-0': true,
         }"

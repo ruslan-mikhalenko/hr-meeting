@@ -1,0 +1,3675 @@
+Logger:         	MadelineProto 8.4.4
+Logger:         	Copyright (C) 2016-2025 Daniil Gentili
+Logger:         	Licensed under AGPLv3
+Logger:         	https://github.com/danog/MadelineProto
+Serialization:  	Got exclusive session lock!
+DataCenter, RuslanMikhalenko:     	Acquiring connect lock for 2!
+DataCenter, RuslanMikhalenko:     	Connecting to DC 2
+DataCenterConnection, RuslanMikhalenko: 	Restoring 0 messages to DC 2
+Session, RuslanMikhalenko:        	Resetting session in DC 2.0 due to creating initial session...
+Connection, RuslanMikhalenko:     	Connecting to DC 2.0 via tcp://149.154.167.50:443 main DC 2, via ipv4 using AbridgedStream => BufferedRawStream => DefaultStream 
+Connection, RuslanMikhalenko:     	Connected to DC 2.0 via tcp://149.154.167.50:443 main DC 2, via ipv4 using AbridgedStream => BufferedRawStream => DefaultStream!
+DataCenterConnection, RuslanMikhalenko: 	Acquiring lock in order to init auth for DC 2
+DataCenterConnection, RuslanMikhalenko: 	Initing auth for DC 2
+DataCenterConnection, RuslanMikhalenko: 	Generating temporary authorization key for DC 2...
+AuthKeyHandler, RuslanMikhalenko: 	Requesting pq...
+Session, RuslanMikhalenko:        	Garbage collected 0 outgoing messages in DC 2, 1 left
+ResponseHandler, RuslanMikhalenko: 	Trying to assign a response of type ResPQ to its request...
+ResponseHandler, RuslanMikhalenko: 	Does the request of return type ResPQ match?
+ResponseHandler, RuslanMikhalenko: 	Yes
+AuthKeyHandler, RuslanMikhalenko: 	Factorizing with native_single_cpp (please wait, might take a while)
+AuthKeyHandler, RuslanMikhalenko: 	Factorizing with python_single_alt (please wait, might take a while)
+AuthKeyHandler, RuslanMikhalenko: 	Install https://prime.madelineproto.xyz and the FFI extension to speed this up!
+AuthKeyHandler, RuslanMikhalenko: 	Factorizing with python_single (please wait, might take a while)
+AuthKeyHandler, RuslanMikhalenko: 	Install https://prime.madelineproto.xyz and the FFI extension to speed this up!
+AuthKeyHandler, RuslanMikhalenko: 	Factorizing with native_single (please wait, might take a while)
+AuthKeyHandler, RuslanMikhalenko: 	Install https://prime.madelineproto.xyz and the FFI extension to speed this up!
+AuthKeyHandler, RuslanMikhalenko: 	Factorization 3005986408912616399 = 1509543839 * 1991321041
+AuthKeyHandler, RuslanMikhalenko: 	Starting Diffie Hellman key exchange
+ResponseHandler, RuslanMikhalenko: 	Trying to assign a response of type Server_DH_Params to its request...
+ResponseHandler, RuslanMikhalenko: 	Does the request of return type Server_DH_Params match?
+ResponseHandler, RuslanMikhalenko: 	Yes
+AuthKeyHandler, RuslanMikhalenko: 	Server-client time delta = -1.0 s
+Crypt, RuslanMikhalenko:          	Executing p/g checks (1/2)...
+Crypt, RuslanMikhalenko:          	Executing p/g checks (2/2)...
+Crypt, RuslanMikhalenko:          	Executing g check...
+Crypt, RuslanMikhalenko:          	Executing g_a check (1/2)...
+Crypt, RuslanMikhalenko:          	Executing g_a check (2/2)...
+AuthKeyHandler, RuslanMikhalenko: 	Generating b...
+AuthKeyHandler, RuslanMikhalenko: 	Generating g_b...
+Crypt, RuslanMikhalenko:          	Executing g_a check (1/2)...
+Crypt, RuslanMikhalenko:          	Executing g_a check (2/2)...
+AuthKeyHandler, RuslanMikhalenko: 	Executing g_b check...
+AuthKeyHandler, RuslanMikhalenko: 	Preparing client_DH_inner_data...
+AuthKeyHandler, RuslanMikhalenko: 	Executing set_client_DH_params...
+ResponseHandler, RuslanMikhalenko: 	Trying to assign a response of type Set_client_DH_params_answer to its request...
+ResponseHandler, RuslanMikhalenko: 	Does the request of return type Set_client_DH_params_answer match?
+ResponseHandler, RuslanMikhalenko: 	Yes
+AuthKeyHandler, RuslanMikhalenko: 	Generating authorization key (install gmp to speed up this process)...
+AuthKeyHandler, RuslanMikhalenko: 	Diffie Hellman key exchange processed successfully!
+AuthKeyHandler, RuslanMikhalenko: 	Auth key generated
+DataCenterConnection, RuslanMikhalenko: 	Binding authorization keys...
+WriteLoop, RuslanMikhalenko:      	Skipping users.getUsers pending due to unbound keys in DC 2.0
+DataCenterConnection, RuslanMikhalenko: 	Bound temporary and permanent authorization keys, DC 2
+WriteLoop, RuslanMikhalenko:      	Skipping users.getUsers pending due to uninited connection in DC 2.0
+WriteLoop, RuslanMikhalenko:      	Writing client info (also executing help.getConfig)...
+UpdateHandler, RuslanMikhalenko:  	Parsing updates (updateShort) received via the socket...
+DataCenterConnection, RuslanMikhalenko: 	Done initing auth for DC 2
+MTProto, RuslanMikhalenko:        	Reporting: danog\MadelineProto\RPCErrorException: AUTH_KEY_DUPLICATED in /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Stack trace:
+#0 /home/ruslan/telegram/vendor/danog/madelineproto/src/MTProtoSession/ResponseHandler.php(494): danog\MadelineProto\RPCErrorException::make()
+#1 /home/ruslan/telegram/vendor/danog/madelineproto/src/WrappedFuture.php(59): danog\MadelineProto\Connection::danog\MadelineProto\MTProtoSession\{closure}()
+#2 /home/ruslan/telegram/vendor/danog/madelineproto/src/MTProtoSession/CallHandler.php(92): danog\MadelineProto\WrappedFuture->await()
+#3 /home/ruslan/telegram/vendor/danog/madelineproto/src/DataCenterConnection.php(181): danog\MadelineProto\Connection->methodCallAsyncRead()
+#4 /home/ruslan/telegram/vendor/revolt/event-loop/src/EventLoop/Internal/AbstractDriver.php(430): danog\MadelineProto\DataCenterConnection->initAuthorization()
+#5 /home/ruslan/telegram/vendor/revolt/event-loop/src/EventLoop/Internal/AbstractDriver.php(621): Revolt\EventLoop\Internal\AbstractDriver->invokeMicrotasks()
+#6 [internal function]: Revolt\EventLoop\Internal\AbstractDriver->Revolt\EventLoop\Internal\{closure}()
+#7 /home/ruslan/telegram/vendor/revolt/event-loop/src/EventLoop/Internal/DriverSuspension.php(64): Fiber->resume()
+#8 /home/ruslan/telegram/vendor/revolt/event-loop/src/EventLoop/Internal/AbstractDriver.php(430): Revolt\EventLoop\Internal\DriverSuspension::Revolt\EventLoop\Internal\{closure}()
+#9 /home/ruslan/telegram/vendor/revolt/event-loop/src/EventLoop/Internal/AbstractDriver.php(621): Revolt\EventLoop\Internal\AbstractDriver->invokeMicrotasks()
+#10 [internal function]: Revolt\EventLoop\Internal\AbstractDriver->Revolt\EventLoop\Internal\{closure}()
+#11 /home/ruslan/telegram/vendor/revolt/event-loop/src/EventLoop/Internal/AbstractDriver.php(502): Fiber->resume()
+#12 /home/ruslan/telegram/vendor/revolt/event-loop/src/EventLoop/Internal/AbstractDriver.php(558): Revolt\EventLoop\Internal\AbstractDriver->invokeCallbacks()
+#13 [internal function]: Revolt\EventLoop\Internal\AbstractDriver->Revolt\EventLoop\Internal\{closure}()
+#14 /home/ruslan/telegram/vendor/revolt/event-loop/src/EventLoop/Internal/AbstractDriver.php(96): Fiber->resume()
+#15 /home/ruslan/telegram/vendor/revolt/event-loop/src/EventLoop/Internal/DriverSuspension.php(117): Revolt\EventLoop\Internal\AbstractDriver->Revolt\EventLoop\Internal\{closure}()
+#16 /home/ruslan/telegram/vendor/amphp/amp/src/Future.php(251): Revolt\EventLoop\Internal\DriverSuspension->suspend()
+#17 /home/ruslan/telegram/vendor/danog/madelineproto/src/Connection.php(593): Amp\Future->await()
+#18 /home/ruslan/telegram/vendor/danog/madelineproto/src/MTProtoSession/CallHandler.php(189): danog\MadelineProto\Connection->sendMessage()
+#19 /home/ruslan/telegram/vendor/danog/madelineproto/src/MTProtoSession/CallHandler.php(91): danog\MadelineProto\Connection->methodCallAsyncWrite()
+#20 /home/ruslan/telegram/vendor/danog/madelineproto/src/MTProtoTools/CallHandler.php(45): danog\MadelineProto\Connection->methodCallAsyncRead()
+#21 /home/ruslan/telegram/vendor/danog/madelineproto/src/MTProto.php(1625): danog\MadelineProto\MTProto->methodCallAsyncRead()
+#22 /home/ruslan/telegram/vendor/danog/madelineproto/src/MTProto.php(1172): danog\MadelineProto\MTProto->fullGetSelf()
+#23 /home/ruslan/telegram/vendor/danog/madelineproto/src/API.php(344): danog\MadelineProto\MTProto->wakeup()
+#24 /home/ruslan/telegram/vendor/danog/madelineproto/src/API.php(194): danog\MadelineProto\API->connectToMadelineProto()
+#25 /home/ruslan/telegram/vendor/danog/madelineproto/src/Ipc/Runner/entry.php(114): danog\MadelineProto\API->__construct()
+#26 /home/ruslan/telegram/vendor/danog/madelineproto/src/Ipc/Runner/entry.php(154): danog\MadelineProto\Ipc\Runner\{closure}()
+#27 {main}
+
+Next Revolt\EventLoop\UncaughtThrowable: Uncaught danog\MadelineProto\RPCErrorException thrown in event loop callback danog\MadelineProto\DataCenterConnection::initAuthorization defined in /home/ruslan/telegram/vendor/danog/madelineproto/src/DataCenterConnection.php:149; use Revolt\EventLoop::setErrorHandler() to gracefully handle such exceptions: AUTH_KEY_DUPLICATED in /home/ruslan/telegram/vendor/revolt/event-loop/src/EventLoop/UncaughtThrowable.php:13
+Stack trace:
+#0 /home/ruslan/telegram/vendor/revolt/event-loop/src/EventLoop/Internal/AbstractDriver.php(405): Revolt\EventLoop\UncaughtThrowable::throwingCallback()
+#1 /home/ruslan/telegram/vendor/revolt/event-loop/src/EventLoop/Internal/DriverSuspension.php(127): Revolt\EventLoop\Internal\AbstractDriver::Revolt\EventLoop\Internal\{closure}()
+#2 /home/ruslan/telegram/vendor/amphp/amp/src/Future.php(251): Revolt\EventLoop\Internal\DriverSuspension->suspend()
+#3 /home/ruslan/telegram/vendor/danog/madelineproto/src/Connection.php(593): Amp\Future->await()
+#4 /home/ruslan/telegram/vendor/danog/madelineproto/src/MTProtoSession/CallHandler.php(189): danog\MadelineProto\Connection->sendMessage()
+#5 /home/ruslan/telegram/vendor/danog/madelineproto/src/MTProtoSession/CallHandler.php(91): danog\MadelineProto\Connection->methodCallAsyncWrite()
+#6 /home/ruslan/telegram/vendor/danog/madelineproto/src/MTProtoTools/CallHandler.php(45): danog\MadelineProto\Connection->methodCallAsyncRead()
+#7 /home/ruslan/telegram/vendor/danog/madelineproto/src/MTProto.php(1625): danog\MadelineProto\MTProto->methodCallAsyncRead()
+#8 /home/ruslan/telegram/vendor/danog/madelineproto/src/MTProto.php(1172): danog\MadelineProto\MTProto->fullGetSelf()
+#9 /home/ruslan/telegram/vendor/danog/madelineproto/src/API.php(344): danog\MadelineProto\MTProto->wakeup()
+#10 /home/ruslan/telegram/vendor/danog/madelineproto/src/API.php(194): danog\MadelineProto\API->connectToMadelineProto()
+#11 /home/ruslan/telegram/vendor/danog/madelineproto/src/Ipc/Runner/entry.php(114): danog\MadelineProto\API->__construct()
+#12 /home/ruslan/telegram/vendor/danog/madelineproto/src/Ipc/Runner/entry.php(154): danog\MadelineProto\Ipc\Runner\{closure}()
+#13 {main}
+entry, RuslanMikhalenko:          	danog\MadelineProto\RPCErrorException: AUTH_KEY_DUPLICATED in /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Stack trace:
+#0 /home/ruslan/telegram/vendor/danog/madelineproto/src/MTProtoSession/ResponseHandler.php(494): danog\MadelineProto\RPCErrorException::make()
+#1 /home/ruslan/telegram/vendor/danog/madelineproto/src/WrappedFuture.php(59): danog\MadelineProto\Connection::danog\MadelineProto\MTProtoSession\{closure}()
+#2 /home/ruslan/telegram/vendor/danog/madelineproto/src/MTProtoSession/CallHandler.php(92): danog\MadelineProto\WrappedFuture->await()
+#3 /home/ruslan/telegram/vendor/danog/madelineproto/src/DataCenterConnection.php(181): danog\MadelineProto\Connection->methodCallAsyncRead()
+#4 /home/ruslan/telegram/vendor/revolt/event-loop/src/EventLoop/Internal/AbstractDriver.php(430): danog\MadelineProto\DataCenterConnection->initAuthorization()
+#5 /home/ruslan/telegram/vendor/revolt/event-loop/src/EventLoop/Internal/AbstractDriver.php(621): Revolt\EventLoop\Internal\AbstractDriver->invokeMicrotasks()
+#6 [internal function]: Revolt\EventLoop\Internal\AbstractDriver->Revolt\EventLoop\Internal\{closure}()
+#7 /home/ruslan/telegram/vendor/revolt/event-loop/src/EventLoop/Internal/DriverSuspension.php(64): Fiber->resume()
+#8 /home/ruslan/telegram/vendor/revolt/event-loop/src/EventLoop/Internal/AbstractDriver.php(430): Revolt\EventLoop\Internal\DriverSuspension::Revolt\EventLoop\Internal\{closure}()
+#9 /home/ruslan/telegram/vendor/revolt/event-loop/src/EventLoop/Internal/AbstractDriver.php(621): Revolt\EventLoop\Internal\AbstractDriver->invokeMicrotasks()
+#10 [internal function]: Revolt\EventLoop\Internal\AbstractDriver->Revolt\EventLoop\Internal\{closure}()
+#11 /home/ruslan/telegram/vendor/revolt/event-loop/src/EventLoop/Internal/AbstractDriver.php(502): Fiber->resume()
+#12 /home/ruslan/telegram/vendor/revolt/event-loop/src/EventLoop/Internal/AbstractDriver.php(558): Revolt\EventLoop\Internal\AbstractDriver->invokeCallbacks()
+#13 [internal function]: Revolt\EventLoop\Internal\AbstractDriver->Revolt\EventLoop\Internal\{closure}()
+#14 /home/ruslan/telegram/vendor/revolt/event-loop/src/EventLoop/Internal/AbstractDriver.php(96): Fiber->resume()
+#15 /home/ruslan/telegram/vendor/revolt/event-loop/src/EventLoop/Internal/DriverSuspension.php(117): Revolt\EventLoop\Internal\AbstractDriver->Revolt\EventLoop\Internal\{closure}()
+#16 /home/ruslan/telegram/vendor/amphp/amp/src/Future.php(251): Revolt\EventLoop\Internal\DriverSuspension->suspend()
+#17 /home/ruslan/telegram/vendor/danog/madelineproto/src/Connection.php(593): Amp\Future->await()
+#18 /home/ruslan/telegram/vendor/danog/madelineproto/src/MTProtoSession/CallHandler.php(189): danog\MadelineProto\Connection->sendMessage()
+#19 /home/ruslan/telegram/vendor/danog/madelineproto/src/MTProtoSession/CallHandler.php(91): danog\MadelineProto\Connection->methodCallAsyncWrite()
+#20 /home/ruslan/telegram/vendor/danog/madelineproto/src/MTProtoTools/CallHandler.php(45): danog\MadelineProto\Connection->methodCallAsyncRead()
+#21 /home/ruslan/telegram/vendor/danog/madelineproto/src/MTProto.php(1625): danog\MadelineProto\MTProto->methodCallAsyncRead()
+#22 /home/ruslan/telegram/vendor/danog/madelineproto/src/MTProto.php(1172): danog\MadelineProto\MTProto->fullGetSelf()
+#23 /home/ruslan/telegram/vendor/danog/madelineproto/src/API.php(344): danog\MadelineProto\MTProto->wakeup()
+#24 /home/ruslan/telegram/vendor/danog/madelineproto/src/API.php(194): danog\MadelineProto\API->connectToMadelineProto()
+#25 /home/ruslan/telegram/vendor/danog/madelineproto/src/Ipc/Runner/entry.php(114): danog\MadelineProto\API->__construct()
+#26 /home/ruslan/telegram/vendor/danog/madelineproto/src/Ipc/Runner/entry.php(154): danog\MadelineProto\Ipc\Runner\{closure}()
+#27 {main}
+
+Next Revolt\EventLoop\UncaughtThrowable: Uncaught danog\MadelineProto\RPCErrorException thrown in event loop callback danog\MadelineProto\DataCenterConnection::initAuthorization defined in /home/ruslan/telegram/vendor/danog/madelineproto/src/DataCenterConnection.php:149; use Revolt\EventLoop::setErrorHandler() to gracefully handle such exceptions: AUTH_KEY_DUPLICATED in /home/ruslan/telegram/vendor/revolt/event-loop/src/EventLoop/UncaughtThrowable.php:13
+Stack trace:
+#0 /home/ruslan/telegram/vendor/revolt/event-loop/src/EventLoop/Internal/AbstractDriver.php(405): Revolt\EventLoop\UncaughtThrowable::throwingCallback()
+#1 /home/ruslan/telegram/vendor/revolt/event-loop/src/EventLoop/Internal/DriverSuspension.php(127): Revolt\EventLoop\Internal\AbstractDriver::Revolt\EventLoop\Internal\{closure}()
+#2 /home/ruslan/telegram/vendor/amphp/amp/src/Future.php(251): Revolt\EventLoop\Internal\DriverSuspension->suspend()
+#3 /home/ruslan/telegram/vendor/danog/madelineproto/src/Connection.php(593): Amp\Future->await()
+#4 /home/ruslan/telegram/vendor/danog/madelineproto/src/MTProtoSession/CallHandler.php(189): danog\MadelineProto\Connection->sendMessage()
+#5 /home/ruslan/telegram/vendor/danog/madelineproto/src/MTProtoSession/CallHandler.php(91): danog\MadelineProto\Connection->methodCallAsyncWrite()
+#6 /home/ruslan/telegram/vendor/danog/madelineproto/src/MTProtoTools/CallHandler.php(45): danog\MadelineProto\Connection->methodCallAsyncRead()
+#7 /home/ruslan/telegram/vendor/danog/madelineproto/src/MTProto.php(1625): danog\MadelineProto\MTProto->methodCallAsyncRead()
+#8 /home/ruslan/telegram/vendor/danog/madelineproto/src/MTProto.php(1172): danog\MadelineProto\MTProto->fullGetSelf()
+#9 /home/ruslan/telegram/vendor/danog/madelineproto/src/API.php(344): danog\MadelineProto\MTProto->wakeup()
+#10 /home/ruslan/telegram/vendor/danog/madelineproto/src/API.php(194): danog\MadelineProto\API->connectToMadelineProto()
+#11 /home/ruslan/telegram/vendor/danog/madelineproto/src/Ipc/Runner/entry.php(114): danog\MadelineProto\API->__construct()
+#12 /home/ruslan/telegram/vendor/danog/madelineproto/src/Ipc/Runner/entry.php(154): danog\MadelineProto\Ipc\Runner\{closure}()
+#13 {main}
+entry, RuslanMikhalenko:          	Got exception in IPC server, exiting...
+entry, RuslanMikhalenko:          	Reporting error!
+SessionPaths, RuslanMikhalenko:   	Waiting for exclusive lock of /home/ruslan/telegram/storage/app/telegram.session/ipcState.php.lock...
+SessionPaths, RuslanMikhalenko:   	Got exclusive lock of /home/ruslan/telegram/storage/app/telegram.session/ipcState.php.lock...
+entry, RuslanMikhalenko:          	Reported error!
+MTProto, RuslanMikhalenko:        	Prompting final serialization (SHUTDOWN)...
+SessionPaths, RuslanMikhalenko:   	Waiting for exclusive lock of /home/ruslan/telegram/storage/app/telegram.session/safe.php.lock...
+SessionPaths, RuslanMikhalenko:   	Got exclusive lock of /home/ruslan/telegram/storage/app/telegram.session/safe.php.lock...
+SessionPaths, RuslanMikhalenko:   	Waiting for exclusive lock of /home/ruslan/telegram/storage/app/telegram.session/lightState.php.lock...
+SessionPaths, RuslanMikhalenko:   	Got exclusive lock of /home/ruslan/telegram/storage/app/telegram.session/lightState.php.lock...
+APIWrapper, RuslanMikhalenko:     	Saved session!
+MTProto, RuslanMikhalenko:        	Done final serialization (SHUTDOWN)!
+AbstractServer, RuslanMikhalenko: 	Accepted IPC client connection!
+Logger:         	MadelineProto 8.4.4
+Logger:         	Copyright (C) 2016-2025 Daniil Gentili
+Logger:         	Licensed under AGPLv3
+Logger:         	https://github.com/danog/MadelineProto
+Serialization:  	Got exclusive session lock!
+DataCenter, RuslanMikhalenko:     	Acquiring connect lock for 2!
+DataCenter, RuslanMikhalenko:     	Connecting to DC 2
+DataCenterConnection, RuslanMikhalenko: 	Restoring 0 messages to DC 2
+Session, RuslanMikhalenko:        	Resetting session in DC 2.0 due to creating initial session...
+Connection, RuslanMikhalenko:     	Connecting to DC 2.0 via tcp://149.154.167.50:443 main DC 2, via ipv4 using AbridgedStream => BufferedRawStream => DefaultStream 
+Connection, RuslanMikhalenko:     	Connected to DC 2.0 via tcp://149.154.167.50:443 main DC 2, via ipv4 using AbridgedStream => BufferedRawStream => DefaultStream!
+DataCenterConnection, RuslanMikhalenko: 	Acquiring lock in order to init auth for DC 2
+DataCenterConnection, RuslanMikhalenko: 	Initing auth for DC 2
+DataCenterConnection, RuslanMikhalenko: 	Done initing auth for DC 2
+Session, RuslanMikhalenko:        	Garbage collected 0 outgoing messages in DC 2, 1 left
+PingLoop, RuslanMikhalenko:       	Ping DC 2.0
+UpdateHandler, RuslanMikhalenko:  	Parsing updates (updateShort) received via the socket...
+MTProto, RuslanMikhalenko:        	AUTH_KEY_DUPLICATED
+MTProto, RuslanMikhalenko:        	Starting update system
+MTProto, RuslanMikhalenko:        	Obtaining updates after deserialization...
+APIWrapper, RuslanMikhalenko:     	MadelineProto is ready!
+SessionPaths, RuslanMikhalenko:   	Waiting for exclusive lock of /home/ruslan/telegram/storage/app/telegram.session/ipcState.php.lock...
+SessionPaths, RuslanMikhalenko:   	Got exclusive lock of /home/ruslan/telegram/storage/app/telegram.session/ipcState.php.lock...
+SessionPaths, RuslanMikhalenko:   	Waiting for exclusive lock of /home/ruslan/telegram/storage/app/telegram.session/safe.php.lock...
+SessionPaths, RuslanMikhalenko:   	Got exclusive lock of /home/ruslan/telegram/storage/app/telegram.session/safe.php.lock...
+SessionPaths, RuslanMikhalenko:   	Waiting for exclusive lock of /home/ruslan/telegram/storage/app/telegram.session/lightState.php.lock...
+SessionPaths, RuslanMikhalenko:   	Got exclusive lock of /home/ruslan/telegram/storage/app/telegram.session/lightState.php.lock...
+APIWrapper, RuslanMikhalenko:     	Saved session!
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop generic
+UpdateHandler, RuslanMikhalenko:  	Saving update of type updateServiceNotification
+UpdateHandler, RuslanMikhalenko:  	Saving update of type updateServiceNotification
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001807221223
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001607635100
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001819724841
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001835896811
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001179807965
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001850353414
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001581361164
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001471430787
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001416513237
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001482326248
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001907244885
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001975272406
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001142192494
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001138029724
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001928063509
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001365484455
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001692185851
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001129103094
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1002218086080
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001836729775
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001132013128
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001692191720
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001248989125
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001274787540
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001235236281
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001761238502
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001933475795
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001520539198
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001335321835
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001723529717
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001507048515
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001198395044
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001739385538
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001290061428
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001360370332
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001236151927
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001729253667
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001327579854
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001332462301
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001248969117
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001231880494
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001989355874
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001521235518
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001347652740
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001125779212
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001522362003
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001426093454
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001103957700
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001231772976
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001284891936
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1002600859664
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1002562720525
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001161464837
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1002456468337
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001910182981
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1002419704872
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1001953397820
+FeedLoop, RuslanMikhalenko:       	Resumed update feed loop channel -1002046356041
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['help.getConfig']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+MTProto.php(1537):  	methodCallAsyncRead()
+PeriodicLoopInternal.php(49):	getConfig()
+PeriodicLoop.php(41):	danog\MadelineProto\Loop\Generic\{closure}()
+GenericLoop.php(55):	danog\Loop\{closure}()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['help.getConfig']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+MTProto.php(1537):  	methodCallAsyncRead()
+PeriodicLoopInternal.php(49):	getConfig()
+PeriodicLoop.php(41):	danog\MadelineProto\Loop\Generic\{closure}()
+GenericLoop.php(55):	danog\Loop\{closure}()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(174):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(174):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+entry, RuslanMikhalenko:          	Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+MTProto, RuslanMikhalenko:        	Reporting: Surfaced: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['updates.getChannelDifference']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+UpdateLoop.php(102):	methodCallAsyncRead()
+Loop.php(139):      	loop()
+Loop.php(251):      	loopInternal()
+AbstractDriver.php(602):	danog\Loop\{closure}()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+AbstractServer, RuslanMikhalenko: 	Accepted IPC client connection!
+AbstractServer, RuslanMikhalenko: 	Got error while calling IPC method: Telegram returned an RPC error: Concurrent usage of the current session from multiple connections was detected, the current session was invalidated by the server for security reasons! (406) (AUTH_KEY_DUPLICATED), caused by /home/ruslan/telegram/vendor/danog/madelineproto/src/RPCErrorException.php:839
+Revision: 8.4.4
+
+TL trace:
+['channels.getParticipants']
+ResponseHandler.php(494):	make()
+WrappedFuture.php(59):	danog\MadelineProto\MTProtoSession\{closure}()
+CallHandler.php(92):	await()
+CallHandler.php(45):	methodCallAsyncRead()
+PeerHandler.php(851):	methodCallAsyncRead()
+PeerHandler.php(789):	fetchParticipants()
+functions.php(33):  	danog\MadelineProto\MTProtoTools\{closure}()
+AbstractDriver.php(430):	Amp\{closure}()
+AbstractDriver.php(567):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+DriverSuspension.php(64):	resume()
+AbstractDriver.php(430):	Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(621):	invokeMicrotasks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(502):	resume()
+AbstractDriver.php(558):	invokeCallbacks()
+Revolt\EventLoop\Internal\{closure}()
+AbstractDriver.php(96):	resume()
+DriverSuspension.php(117):	Revolt\EventLoop\Internal\{closure}()
+Future.php(251):    	suspend()
+AbstractServer.php(177):	await()
+entry.php(119):     	waitShutdown()
+entry.php(154):     	danog\MadelineProto\Ipc\Runner\{closure}()
+
+AbstractServer, RuslanMikhalenko: 	Accepted IPC client connection!
+Logger:         	MadelineProto 8.4.4
+Logger:         	Copyright (C) 2016-2025 Daniil Gentili
+Logger:         	Licensed under AGPLv3
+Logger:         	https://github.com/danog/MadelineProto
+Serialization:  	Got exclusive session lock!
+Logger:         	MadelineProto 8.4.4
+Logger:         	Copyright (C) 2016-2025 Daniil Gentili
+Logger:         	Licensed under AGPLv3
+Logger:         	https://github.com/danog/MadelineProto
+Serialization:  	Got exclusive session lock!
+Logger:         	MadelineProto 8.4.4
+Logger:         	Copyright (C) 2016-2025 Daniil Gentili
+Logger:         	Licensed under AGPLv3
+Logger:         	https://github.com/danog/MadelineProto
+Serialization:  	Got exclusive session lock!
+Logger:         	MadelineProto 8.4.4
+Logger:         	Copyright (C) 2016-2025 Daniil Gentili
+Logger:         	Licensed under AGPLv3
+Logger:         	https://github.com/danog/MadelineProto
+Serialization:  	Got exclusive session lock!
+Logger:         	MadelineProto 8.4.4
+Logger:         	Copyright (C) 2016-2025 Daniil Gentili
+Logger:         	Licensed under AGPLv3
+Logger:         	https://github.com/danog/MadelineProto
+Serialization:  	Got exclusive session lock!

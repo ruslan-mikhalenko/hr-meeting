@@ -9,11 +9,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-use GuzzleHttp\Client;
-
-use GuzzleHttp\Pool;
-use GuzzleHttp\Psr7\Request;
-
 class TelegramService
 {
     private $madeline;
@@ -73,98 +68,6 @@ class TelegramService
         }
     }
 
-
-    /**
-     * Получить фото канала.
-     *
-     * @param string $channelUsername
-     * @return string|null Путь к сохранённому файлу или null, если фото отсутствует.
-     * @throws \Exception
-     */
-    public function getChannelPhoto($channelUsername)
-    {
-        try {
-            // Инициализируем MadelineProto
-            $this->initializeMadeline();
-
-            // Получаем полную информацию о канале
-            $response = $this->madeline->getFullInfo($channelUsername);
-
-            // Проверяем наличие фото
-            if (isset($response['full']['chat_photo'])) {
-                // Получаем объект `chat_photo`
-                $chatPhoto = $response['full']['chat_photo'];
-
-                // Указываем публичную директорию для сохранения фото
-                $photoDirectory = public_path('channel_photos');
-                if (!is_dir($photoDirectory)) {
-                    mkdir($photoDirectory, 0755, true);
-                }
-
-                // Генерируем имя файла
-                $photoPath = $photoDirectory . '/' . $chatPhoto->fileName;
-
-                // Скачиваем фото в указанную директорию
-                $this->madeline->downloadToFile($chatPhoto, $photoPath);
-
-
-                return [
-                    'success' => true,
-                    'message' => 'Фото успешно загружено.',
-                    'file_path' => url('channel_photos/' . $chatPhoto->fileName),
-                ];
-
-
-                // Возвращаем путь внутри public
-                /* return response()->json([
-                    'success' => true,
-                    'message' => 'Фото успешно загружено.',
-                    'file_path' => url('channel_photos/' . $chatPhoto->fileName),
-                ]); */
-            } else {
-
-                return [
-                    'success' => false,
-                    'message' => 'Фото канала отсутствует.',
-                ];
-
-
-                // Если фото отсутствует
-                /* return response()->json([
-                    'success' => false,
-                    'message' => 'Фото канала отсутствует.',
-                ]); */
-            }
-        } catch (\Exception $e) {
-            // Логирование ошибки
-            logger()->error("Ошибка при загрузке фото канала: {$e->getMessage()}");
-            return response()->json([
-                'success' => false,
-                'message' => 'Произошла ошибка при загрузке фото канала.',
-                'error' => $e->getMessage(),
-            ], 500);
-        }
-    }
-
-
-
-
-
-    public function allInfoChannal($channelUsername)
-    {
-        try {
-            // Инициализируем клиент MadelineProto
-            $this->initializeMadeline();
-
-            // Возвращаем информацию о канале
-            return $this->madeline->getFullInfo($channelUsername);
-        } catch (\Exception $e) {
-            logger()->error("Ошибка получения информации о канале: {$e->getMessage()}");
-            throw new \Exception("Ошибка получения информации : {$e->getMessage()}");
-        }
-    }
-
-
     /**
      * Отправить сообщение в конкретный чат (peer).
      *
@@ -219,23 +122,6 @@ class TelegramService
      * @return array
      * @throws \Exception
      */
-    /* public function getChannelInfo($channelUsername)
-    {
-        try {
-            // Инициализируем клиент MadelineProto
-            $this->initializeMadeline();
-
-            // Возвращаем информацию о желаемом канале
-            $response = $this->madeline->getFullInfo($channelUsername);
-            return $response; // Возвращаем информацию о канале
-
-        } catch (\Exception $e) {
-            logger()->error("Ошибка получения информации о канале: {$e->getMessage()}");
-            return [];
-        }
-    } */
-
-    /** ------------------------------------------------------------ */
     public function getChannelInfo($channelUsername)
     {
         try {
@@ -243,106 +129,12 @@ class TelegramService
             $this->initializeMadeline();
 
             // Возвращаем информацию о желаемом канале
-            $response = $this->madeline->getFullInfo($channelUsername);
-
-
-
-
-            // Определяем тип чата (канал, группа, мегагруппа, гигагруппа)
-            $chatType = $this->getChatType($response);
-
-            // Определяем приватность чата (публичный или закрытый)
-            $chatPrivacy = $this->getChatPrivacy($response);
-
-            // Формируем массив с подробностями о чате
-            $chatDetails = [
-                'id' => $response['full']['id'] ?? null,
-                'title' => $response['Chat']['title'] ?? null,
-                'username' => $response['Chat']['username'] ?? null,
-                'participants_count' => $response['full']['participants_count'] ?? null,
-                'about' => $response['full']['about'] ?? null,
-                'type' => $chatType, // Тип чата (канал, группа и т.д.)
-                'privacy' => $chatPrivacy, // Приватный или публичный
-
-            ];
-
-            return $chatDetails;
+            return $this->madeline->getFullInfo($channelUsername);
         } catch (\Exception $e) {
             logger()->error("Ошибка получения информации о канале: {$e->getMessage()}");
             return [];
         }
     }
-
-    /**
-     * Определяет тип Telegram объекта: канал, группа, мегагруппа или гигагруппа
-     *
-     * @param array $chatInfo Информация о чате, полученная через getFullInfo
-     * @return string Тип чата: 'channel', 'megagroup', 'gigagroup', 'group'
-     */
-    private function getChatType(array $chatInfo): string
-    {
-        // Если это канал
-        if (!empty($chatInfo['Chat']['broadcast']) && $chatInfo['Chat']['broadcast'] === true) {
-            return 'channel';
-        }
-
-        // Если это мегагруппа
-        if (!empty($chatInfo['Chat']['megagroup']) && $chatInfo['Chat']['megagroup'] === true) {
-            return 'megagroup';
-        }
-
-        // Если это гигагруппа
-        if (!empty($chatInfo['Chat']['gigagroup']) && $chatInfo['Chat']['gigagroup'] === true) {
-            return 'gigagroup';
-        }
-
-        // Если ничего из вышеуказанных случаев, это обычная группа
-        return 'group';
-    }
-
-    /**
-     * Определяет, является ли Telegram-объект публичным или закрытым.
-     *
-     * @param array $chatInfo Информация о чате, полученная через getFullInfo
-     * @return string Тип доступа: 'public' или 'private'
-     */
-    private function getChatPrivacy(array $chatInfo): string
-    {
-        // Если username установлен, значит это публичный объект
-        if (!empty($chatInfo['Chat']['username'])) {
-            return 'public';
-        }
-
-        // Если username отсутствует, это закрытый объект
-        return 'private';
-    }
-
-
-    /** -------------------------------------------------------------- */
-
-    /* public function getChannelInfo(string $channelUsername)
-    {
-        try {
-            // Инициализируем клиент MadelineProto
-            $this->initializeMadeline();
-
-            // Используем правильный метод для получения информации о канале
-            $response = $this->madeline->channels->getFullChannel([
-                'channel' => $channelUsername, // ID, username или InputPeer канала
-            ]);
-
-            return $response; // Возвращаем информацию о канале
-        } catch (\Exception $e) {
-            logger()->error("Ошибка получения информации о канале: {$e->getMessage()}");
-            return [];
-        }
-    } */
-
-
-
-
-
-
 
     /**
      * Порционное получение подписчиков канала/группы с паузами.
@@ -414,22 +206,19 @@ class TelegramService
 
             $chatInfo = $this->getChannelInfo($channelId);
 
-
             // DEBUG: Логируем основную информацию о чате
             Log::info('Chat Info: ' . json_encode($chatInfo));
 
             // Записываем информацию о чате
-            /* $chatDetails = [
-                'id' => $chatInfo['full']['id'] ?? null,
-                'title' => $chatInfo['Chat']['title'] ?? null,
+            $chatDetails = [
+                'id' => $chatInfo['id'] ?? null,
+                'title' => $chatInfo['title'] ?? null,
                 'username' => $chatInfo['username'] ?? null,
                 'participants_count' => $chatInfo['participants_count'] ?? null,
                 'about' => $chatInfo['about'] ?? null,
                 'type' => $this->getChatType($chatInfo), // Определяем тип (канал, группа и т.д.)
                 'privacy' => $this->getChatPrivacy($chatInfo), // Определяем приватность
-            ]; */
-
-            $chatDetails = $chatInfo;
+            ];
 
             $allParticipants = [];
             $offset = 0;
@@ -439,7 +228,7 @@ class TelegramService
                 // Получаем следующую порцию участников
                 $batchParticipants = $this->madeline->channels->getParticipants([
                     'channel' => $channelId,
-                    'filter' => ['_' => 'channelParticipantsSearch'], // Фильтр: подписчики (можно заменить)
+                    'filter' => ['_' => 'channelParticipantsRecent'], // Фильтр: подписчики (можно заменить)
                     'offset' => $offset,
                     'limit' => $limit, // Максимум 200, это ограничение Telegram API
                 ]);
@@ -516,6 +305,62 @@ class TelegramService
 
 
 
+    private function getChatType($chatInfo)
+    {
+        // Основной тип, как его определяет MadelineProto
+        $type = $chatInfo['_'] ?? null;
+
+        // Проверяем, является ли тип "channel"
+        if ($type === 'channel') {
+            // Проверяем, является ли объект супергруппой
+            if (isset($chatInfo['megagroup']) && $chatInfo['megagroup'] === true) {
+                return 'supergroup'; // Это супергруппа
+            }
+            return 'channel'; // Это канал
+        }
+
+        // Проверяем, является ли это обычной группой (chat)
+        if ($type === 'chat') {
+            // Проверим, есть ли характерные признаки канала
+            if (isset($chatInfo['username']) && !empty($chatInfo['username'])) {
+                return 'channel'; // Канал, так как есть username
+            }
+            if (isset($chatInfo['participants_count']) && $chatInfo['participants_count'] > 0) {
+                return 'group'; // Группа, так как есть участники
+            }
+        }
+
+        // Если тип не определён явно, проверим другие поля
+        if (!isset($chatInfo['username']) && isset($chatInfo['participants_count']) && $chatInfo['participants_count'] > 0) {
+            if (isset($chatInfo['about']) && str_starts_with($chatInfo['about'], 'https://t.me/')) {
+                return 'channel'; // Предположительно канал, если участники есть и есть приглашение
+            }
+            return 'group'; // Обычная группа
+        }
+
+        if (isset($chatInfo['username']) && !empty($chatInfo['username'])) {
+            return 'channel'; // Канал из-за наличия username
+        }
+
+        // Вернем тип по умолчанию, если ничего не подошло
+        return 'unknown';
+    }
+
+
+
+    private function getChatPrivacy($chatInfo)
+    {
+        // Если есть username, то группа/канал открытые
+        if (isset($chatInfo['username']) && !empty($chatInfo['username'])) {
+            return 'public';
+        }
+
+        // Если username нет, то это закрытая группа/канал
+        return 'private';
+    }
+
+
+
     /**
      * Сохранение подписчиков в базе данных (активные/новые/удалённые подписчики).
      *
@@ -523,9 +368,9 @@ class TelegramService
      */
     private function saveSubscribers(array $currentSubscribers, $channelId)
     {
-        // 1. Получение project_id и client_id из таблицы projects по $channelId
+        // Вытаскиваем project_id и client_id из таблицы projects по channelId
         $project = DB::table('projects')
-            ->select('id as project_id', 'user_id as client_id', 'channel_id')
+            ->select('id as project_id', 'user_id as client_id')
             ->where('link', $channelId)
             ->first();
 
@@ -537,20 +382,17 @@ class TelegramService
         $projectId = $project->project_id;
         $clientId = $project->client_id;
 
-        // 2. Получение существующих подписчиков из базы для данного project_id
+        // Получаем существующих подписчиков из базы для данного project_id
         $existingSubscribers = DB::table('subscribers')
             ->where('project_id', $projectId)
             ->pluck('telegram_user_id')
             ->toArray();
 
-        // 3. Подготовка для добавления новых подписчиков
+        // Массив для новых подписчиков
         $newSubscribers = [];
 
         foreach ($currentSubscribers as $subscriber) {
             $userId = $subscriber['telegram_user_id'];
-
-            // Получаем статус из подписчика, например из поля 'status'
-            /* $isActive = isset($subscriber['status']) && in_array($subscriber['status'], ['active', 'member']) ? 1 : 0; */
 
             if (in_array($userId, $existingSubscribers)) {
                 // Если подписчик уже существует, обновляем его информацию
@@ -562,8 +404,8 @@ class TelegramService
                         'last_name' => $subscriber['last_name'] ?? null,
                         'username' => $subscriber['username'] ?? null,
                         'phone' => $subscriber['phone'] ?? null,
-                        'is_active' => 1,
-                        /* 'updated_at' => now(), */
+                        'is_active' => 1, // Явное приведение к числу
+                        'updated_at' => now(),
                     ]);
             } else {
                 // Если подписчик новый, добавляем его в массив
@@ -575,7 +417,7 @@ class TelegramService
                     'last_name' => $subscriber['last_name'] ?? null,
                     'username' => $subscriber['username'] ?? null,
                     'phone' => $subscriber['phone'] ?? null,
-                    'is_active' => 1,
+                    'is_active' => 1, // Явное приведение к числу
                     'subscribed_at' => now(),
                     'created_at' => now(),
                     'updated_at' => now(),
@@ -585,87 +427,23 @@ class TelegramService
 
         Log::info("!!!Новые подписчики: " . json_encode($newSubscribers));
 
-        // 4. Вставляем новых подписчиков
+
+        // Вставляем новых подписчиков
         if (!empty($newSubscribers)) {
             DB::table('subscribers')->insert($newSubscribers);
         }
 
-        // 5. Пометка отсутствующих пользователей как неактивных
+
+
+        // Помечаем отсутствующих пользователей как неактивных
         $currentUserIds = array_column($currentSubscribers, 'telegram_user_id');
 
-        $missingSubscriberIds = DB::table('subscribers')
-            ->where('project_id', $projectId)
-            ->whereNotIn('telegram_user_id', $currentUserIds)
-            ->pluck('telegram_user_id')
-            ->toArray();
-
-        Log::info("Отсутствующие ID подписчиков: " . json_encode($missingSubscriberIds));
-
-        // 6. Асинхронное получение статуса подписчиков
-        $client = new Client();
-        $concurrency = 10; // Максимум одновременных запросов
-        $inactiveCount = 0;
-
-        // Очистим список от невалидных ID
-        $missingSubscriberIds = array_filter($missingSubscriberIds, function ($id) {
-            return is_numeric($id) && $id > 0;
-        });
-
-        $token = env('TELEGRAM_BOT_TOKEN');
-
-        // Генератор запросов
-        $requests = function ($missingSubscriberIds) use ($project, $token) {
-            foreach ($missingSubscriberIds as $telegramUserId) {
-                $url = "https://api.telegram.org/bot{$token}/getChatMember"
-                    . "?chat_id=" . urlencode($project->channel_id)
-                    . "&user_id=" . urlencode($telegramUserId);
-
-                yield new Request('GET', $url);
-
-                // Необязательно, но можно добавить задержку для снижения нагрузки
-                usleep(50000); // 50 мс
-            }
-        };
-
-        // Pool для параллельных запросов
-        $pool = new Pool($client, $requests($missingSubscriberIds), [
-            'concurrency' => $concurrency,
-            'fulfilled' => function ($response, $index) use (&$missingSubscriberIds, $projectId, &$inactiveCount) {
-                $telegramUserId = array_values($missingSubscriberIds)[$index];
-                $data = json_decode($response->getBody(), true);
-
-                if (
-                    isset($data['result']['status']) &&
-                    in_array($data['result']['status'], ['left', 'kicked'])
-                ) {
-                    $existing = DB::table('subscribers')
-                        ->where('project_id', $projectId)
-                        ->where('telegram_user_id', $telegramUserId)
-                        ->first();
-
-                    if ($existing && $existing->is_active != 0) {
-                        DB::table('subscribers')
-                            ->where('project_id', $projectId)
-                            ->where('telegram_user_id', $telegramUserId)
-                            ->update([
-                                'is_active' => 0,
-                                'updated_at' => now(),
-                            ]);
-                        $inactiveCount++;
-                    }
-                }
-            },
-            'rejected' => function ($reason, $index) use (&$missingSubscriberIds) {
-                $telegramUserId = array_values($missingSubscriberIds)[$index];
-                Log::error("Ошибка запроса для {$telegramUserId}: {$reason->getMessage()}");
-            },
-        ]);
-
-        // Запускаем выполнение
-        $promise = $pool->promise();
-        $promise->wait();
-
-        Log::info("Обновлено {$inactiveCount} неактивных подписчиков.");
+        if (!empty($currentUserIds)) {
+            DB::table('subscribers')
+                ->where('project_id', $projectId)
+                ->whereNotIn('telegram_user_id', $currentUserIds)
+                ->update(['is_active' => 0, 'updated_at' => now()]);
+        }
     }
 
 
@@ -691,32 +469,13 @@ class TelegramService
             // Инициализация сервиса Яндекс.Метрики
             $metrikaService = app(YandexMetrikaService::class, ['link' => $channelId]);
 
-
-            /*** ----- */
-            // Получение основной информации о канале
-            $channelInfoOther = $this->getChannelInfo($project->link);
-
-
-            // Обновление данных в таблице projects
-            DB::table('projects')->where('id', $project->id)->update([
-                'participants_count' =>  $channelInfoOther['participants_count'],
-
-            ]);
-
-            /** --------- */
-
             // Получение текущих подписчиков канала (порциями)
             $allParticipants = $this->getChannelParticipantsBatch($channelId);
-
-            // Логируем содержимое $allParticipants
-            /*  Log::info("Содержимое allParticipants: " . json_encode($allParticipants, JSON_PRETTY_PRINT)); */
-
 
             if (empty($allParticipants)) {
                 Log::info("Для канала {$channelId} не найдено подписчиков.");
                 return;
             }
-
 
             // Преобразуем данные для обработки
             $currentSubscribers = array_column($allParticipants, null, 'telegram_user_id');
@@ -741,7 +500,6 @@ class TelegramService
                 }
             }
 
-
             // Отправка событий в Яндекс.Метрику для новых и возвращённых подписчиков
             foreach (array_merge($newSubscribers, $returningSubscribers) as $subscriberInfo) {
                 $metrikaService->sendEvent($subscriberInfo['telegram_user_id'], $goalId, [
@@ -756,23 +514,5 @@ class TelegramService
         } catch (\Exception $e) {
             Log::error("Ошибка при обработке подписчиков для канала {$channelId}: {$e->getMessage()}");
         }
-    }
-
-
-    /** Метод отправки сообщения телеграмм ботом - ответ чуком на start */
-
-
-    public function sendMessageWithKeyboard($chatId, $text, array $inlineKeyboard)
-    {
-        $token = env('TELEGRAM_BOT_TOKEN');
-
-        Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
-            'chat_id' => $chatId,
-            'text' => $text,
-            'reply_markup' => json_encode([
-                'inline_keyboard' => $inlineKeyboard
-            ]),
-            'parse_mode' => 'HTML',
-        ]);
     }
 }

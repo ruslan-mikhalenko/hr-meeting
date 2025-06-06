@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Services\TelegramService; // Ваш сервис для работы с Telegram
+use Illuminate\Support\Facades\DB; // Для работы с БД
 
 class CheckTelegramSubscribers extends Command
 {
@@ -41,12 +42,28 @@ class CheckTelegramSubscribers extends Command
      */
     public function handle(): void
     {
-        /*-1002600859664 */
-        $channelId = '@komplemir_by'; // Замените на ID вашего канала
+        // Получить все проекты из таблицы projects
+        $projects = DB::table('projects')
+            ->where('is_active', 1)
+            ->select('link')->get();
 
-        // Вызов метода отслеживания подписчиков
-        $this->telegramService->trackNewSubscribers($channelId);
+        if ($projects->isEmpty()) {
+            $this->error('В таблице projects нет ссылок.');
+            return;
+        }
 
-        $this->info('Подписчики проверены и отправлены в Метрику!');
+        foreach ($projects as $project) {
+            // Убедимся, что поле link не пустое
+            if (!empty($project->link)) {
+                $this->info("Проверка наличия проекта: {$project->link}");
+
+                // Вызов метода отслеживания подписчиков
+                $this->telegramService->trackNewSubscribers($project->link);
+            } else {
+                $this->warn('Пропущено: проект с пустой ссылкой');
+            }
+        }
+
+        $this->info('Все подписчики проверены и отправлены в Метрику!');
     }
 }

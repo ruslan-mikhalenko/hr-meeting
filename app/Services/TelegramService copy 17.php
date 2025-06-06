@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\Log;
 
 use GuzzleHttp\Client;
 
-use GuzzleHttp\Pool;
-use GuzzleHttp\Psr7\Request;
 
 class TelegramService
 {
@@ -525,7 +523,7 @@ class TelegramService
     {
         // 1. Получение project_id и client_id из таблицы projects по $channelId
         $project = DB::table('projects')
-            ->select('id as project_id', 'user_id as client_id', 'channel_id')
+            ->select('id as project_id', 'user_id as client_id')
             ->where('link', $channelId)
             ->first();
 
@@ -602,70 +600,54 @@ class TelegramService
         Log::info("Отсутствующие ID подписчиков: " . json_encode($missingSubscriberIds));
 
         // 6. Асинхронное получение статуса подписчиков
-        $client = new Client();
-        $concurrency = 10; // Максимум одновременных запросов
+        $client = new Client(); // Guzzle HTTP client
+        $promises = [];
+
+        foreach ($missingSubscriberIds as $telegramUserId) {
+            // Создаём асинхронный запрос
+            $promises[$telegramUserId] = $client->requestAsync('GET', "https://api.telegram.org/bot7591243364:AAGEAx2TqfZkZfMSVa3nhrvizf7v_x1KJMw/getChatMember", [
+                'query' => [
+                    'chat_id' => $channelId,
+                    'user_id' => $telegramUserId,
+                ],
+            ]);
+        }
+
         $inactiveCount = 0;
 
-        // Очистим список от невалидных ID
-        $missingSubscriberIds = array_filter($missingSubscriberIds, function ($id) {
-            return is_numeric($id) && $id > 0;
-        });
+        // Обрабатываем результаты запросов
+        foreach ($promises as $telegramUserId => $promise) {
+            try {
+                $response = $promise->wait(); // Ждём выполнения запроса
+                if ($response->getStatusCode() === 200) {
+                    $data = json_decode($response->getBody(), true);
 
-        $token = env('TELEGRAM_BOT_TOKEN');
-
-        // Генератор запросов
-        $requests = function ($missingSubscriberIds) use ($project, $token) {
-            foreach ($missingSubscriberIds as $telegramUserId) {
-                $url = "https://api.telegram.org/bot{$token}/getChatMember"
-                    . "?chat_id=" . urlencode($project->channel_id)
-                    . "&user_id=" . urlencode($telegramUserId);
-
-                yield new Request('GET', $url);
-
-                // Необязательно, но можно добавить задержку для снижения нагрузки
-                usleep(50000); // 50 мс
-            }
-        };
-
-        // Pool для параллельных запросов
-        $pool = new Pool($client, $requests($missingSubscriberIds), [
-            'concurrency' => $concurrency,
-            'fulfilled' => function ($response, $index) use (&$missingSubscriberIds, $projectId, &$inactiveCount) {
-                $telegramUserId = array_values($missingSubscriberIds)[$index];
-                $data = json_decode($response->getBody(), true);
-
-                if (
-                    isset($data['result']['status']) &&
-                    in_array($data['result']['status'], ['left', 'kicked'])
-                ) {
-                    $existing = DB::table('subscribers')
-                        ->where('project_id', $projectId)
-                        ->where('telegram_user_id', $telegramUserId)
-                        ->first();
-
-                    if ($existing && $existing->is_active != 0) {
-                        DB::table('subscribers')
+                    if (
+                        isset($data['result']['status']) &&
+                        in_array($data['result']['status'], ['left', 'kicked']) // Если пользователь покинул канал или был удалён
+                    ) {
+                        // Проверка, действительно ли нужно обновлять (если не был уже деактивирован ранее)
+                        $existing = DB::table('subscribers')
                             ->where('project_id', $projectId)
                             ->where('telegram_user_id', $telegramUserId)
-                            ->update([
-                                'is_active' => 0,
-                                'updated_at' => now(),
-                            ]);
-                        $inactiveCount++;
+                            ->first();
+
+                        if ($existing && $existing->is_active != 0) {
+                            DB::table('subscribers')
+                                ->where('project_id', $projectId)
+                                ->where('telegram_user_id', $telegramUserId)
+                                ->update(['is_active' => 0, 'updated_at' => now()]);
+                            $inactiveCount++;
+                        }
                     }
                 }
-            },
-            'rejected' => function ($reason, $index) use (&$missingSubscriberIds) {
-                $telegramUserId = array_values($missingSubscriberIds)[$index];
-                Log::error("Ошибка запроса для {$telegramUserId}: {$reason->getMessage()}");
-            },
-        ]);
+            } catch (\Exception $e) {
+                // Если запрос завершился с ошибкой
+                Log::error("Ошибка обработки пользователя $telegramUserId: {$e->getMessage()}");
+            }
+        }
 
-        // Запускаем выполнение
-        $promise = $pool->promise();
-        $promise->wait();
-
-        Log::info("Обновлено {$inactiveCount} неактивных подписчиков.");
+        Log::info("Обновлено $inactiveCount неактивных подписчиков.");
     }
 
 
@@ -690,20 +672,6 @@ class TelegramService
 
             // Инициализация сервиса Яндекс.Метрики
             $metrikaService = app(YandexMetrikaService::class, ['link' => $channelId]);
-
-
-            /*** ----- */
-            // Получение основной информации о канале
-            $channelInfoOther = $this->getChannelInfo($project->link);
-
-
-            // Обновление данных в таблице projects
-            DB::table('projects')->where('id', $project->id)->update([
-                'participants_count' =>  $channelInfoOther['participants_count'],
-
-            ]);
-
-            /** --------- */
 
             // Получение текущих подписчиков канала (порциями)
             $allParticipants = $this->getChannelParticipantsBatch($channelId);
@@ -756,23 +724,5 @@ class TelegramService
         } catch (\Exception $e) {
             Log::error("Ошибка при обработке подписчиков для канала {$channelId}: {$e->getMessage()}");
         }
-    }
-
-
-    /** Метод отправки сообщения телеграмм ботом - ответ чуком на start */
-
-
-    public function sendMessageWithKeyboard($chatId, $text, array $inlineKeyboard)
-    {
-        $token = env('TELEGRAM_BOT_TOKEN');
-
-        Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
-            'chat_id' => $chatId,
-            'text' => $text,
-            'reply_markup' => json_encode([
-                'inline_keyboard' => $inlineKeyboard
-            ]),
-            'parse_mode' => 'HTML',
-        ]);
     }
 }

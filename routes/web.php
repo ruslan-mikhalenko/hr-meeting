@@ -45,6 +45,9 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->group(
     function () {
+
+        /** РОУТЫ ДЛЯ СУПЕР АДМИНА */
+
         /** Клиенты */
         Route::get('/dashboard', [ClientController::class, 'dashboard'])->name('dashboard');
 
@@ -62,7 +65,7 @@ Route::middleware(['auth'])->group(
         /** Проекты */
 
         Route::get('/projects', [ProjectController::class, 'dashboard'])->name('projects.dashboard');
-
+        Route::get('/client/projects/{id}/chart', [ClientController::class, 'getChartData']);
 
         Route::post('/filtering_project', [ProjectController::class, 'filtering_project'])->name('filtering_project');
         Route::post('/axios_add_project', [ProjectController::class, 'axios_add_project'])->name('axios_add_project');
@@ -73,6 +76,14 @@ Route::middleware(['auth'])->group(
         Route::post('/axios_active_project', [ProjectController::class, 'axios_active_project'])->name('axios_active_project');
 
 
+        /** РОУТЫ ДЛЯ КЛИЕНТА */
+        Route::get('/project/{id}', [ProjectController::class, 'project'])->name('project');
+        Route::post('/filtering_subscribers', [ClientController::class, 'filtering_subscribers'])->name('filtering_subscribers');
+
+
+        Route::get('/client/projects/{id}/chart', [ProjectController::class, 'getChartData']);
+
+        Route::get('/client/projects/{project}/cumulative-chart', [ProjectController::class, 'getCumulativeChart']);
 
         /* Route::get('/dashboard_payment', [PaymentController::class, 'dashboard_payment'])->name('dashboard_payment'); */
     }
@@ -100,15 +111,25 @@ Route::post('/submit-form', [RequestController::class, 'submitForm'])->name('sub
 Route::get('/subscribers', [SubscriberController::class, 'index']);
 
 
+
+
+
+
 Route::get('/get-channel-id', function () {
     $telegramService = new TelegramService();
 
+    /* https: //t.me/+8bg_Ns9SXeIzZDNi  - Женщина без возраста*/
+
     // Укажите приватную ссылку на ваш канал
-    $inviteLink = 'https://t.me/+GBRMKva5zohjNjMy';
+    /*  $inviteLink = 'https://t.me/+8bg_Ns9SXeIzZDNi'; */
+    /*  $inviteLink = 'https://t.me/silaKnig';
+ */
+    /*  $inviteLink = '-1002288688917'; */
+    $inviteLink = 'https://t.me/+D5kQbcwsaCtkYTY6';
 
     try {
         // Получение информации о канале
-        $channelInfo = $telegramService->getChannelInfo($inviteLink);
+        dd($channelInfo = $telegramService->getChannelInfo($inviteLink));
 
         // Возврат ID канала
         return response()->json([
@@ -125,9 +146,29 @@ Route::get('/get-channel-id', function () {
 });
 
 
+Route::get('/info', function (TelegramService $telegramService) {
+    $inviteLink = 'https://t.me/+D5kQbcwsaCtkYTY6';
+
+    try {
+        $channelInfo = $telegramService->allInfoChannal($inviteLink);
+        return response()->json($channelInfo); // Возвращаем JSON-ответ
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage()
+        ], 500);
+    }
+});
 
 
-Route::get('/test-yandex-metrica', function () {
+Route::get('/channel-photo/{username}', function ($username, TelegramService $telegramService) {
+    $channelInfo = $telegramService->getChannelPhoto($username);
+
+    /* $channelInfo = $telegramService->getChannelPhoto($validatedData['link']); */
+    dd($channelInfo['file_path']);
+});
+
+
+/* Route::get('/test-yandex-metrica', function () {
     $metrikaId = '101725200';
     $goalName = 'new_subscriber';
 
@@ -153,13 +194,13 @@ Route::get('/test-yandex-metrica', function () {
     }
 
     return 'Задача окончания Cron выполнена!';
-});
+}); */
 
 
-use App\Services\YandexMetrikaService;
+use App\Services\YandexMetrikaService1;
 use Illuminate\Support\Str;
 
-Route::get('/test-yandex-metrika', function (YandexMetrikaService $metrikaService) {
+Route::get('/test-yandex-metrika', function (YandexMetrikaService1 $metrikaService) {
     // Генерация уникального идентификатора клиента
     $clientId = random_int(100000000, 999999999); // Уникальный Client ID
     $eventAction = 'new_subscriber';   // Название тестового события
@@ -176,6 +217,8 @@ Route::get('/test-yandex-metrika', function (YandexMetrikaService $metrikaServic
         ],
     ];
 
+
+
     $success = $metrikaService->sendEvent($clientId, $eventAction, [
         'url' => $url,
         'custom_params' => $customParams, // Встроенные параметры
@@ -185,6 +228,45 @@ Route::get('/test-yandex-metrika', function (YandexMetrikaService $metrikaServic
     return $success
         ? 'Тестовая цель "test_event" успешно отправлена!'
         : 'Ошибка при отправке тестовой цели "test_event". Проверьте лог.';
+});
+
+
+use GuzzleHttp\Client;
+
+Route::get('/test-bot', function () {
+    try {
+        // Telegram Bot Token
+        $botToken = '7591243364:AAGEAx2TqfZkZfMSVa3nhrvizf7v_x1KJMw';
+
+        // Данные для тестирования (замените на реальные значения)
+        $channelId = '-1001142192494'; // Например, '@my_channel' или ID -1001234567890
+        $telegramUserId = '1559385679'; // ID пользователя Telegram
+
+        // Создаём экземпляр GuzzleHttp Client
+        $client = new Client();
+
+        // Запрос к Telegram API
+        $response = $client->request('GET', "https://api.telegram.org/bot{$botToken}/getChatMember", [
+            'query' => [
+                'chat_id' => $channelId, // Укажите канал или ID
+                'user_id' => $telegramUserId, // Укажите ID пользователя
+            ],
+        ]);
+
+        // Получаем и декодируем результат
+        $responseBody = json_decode($response->getBody(), true);
+
+        // Возвращаем информацию о пользователе для теста
+        return response()->json([
+            'status' => 'success',
+            'data' => $responseBody,
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage(),
+        ]);
+    }
 });
 
 

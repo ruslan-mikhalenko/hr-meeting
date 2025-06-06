@@ -110,8 +110,38 @@ class UserController extends Controller
 
         if ($user_auth->role === 'client') {
 
-            return redirect()->route('dashboard_client');
+            /* return redirect()->route('dashboard_client'); */
+
+
+            // Возвращаем представление для всех ролей, так как проверка уже проведена на уровне middleware
+            return Inertia::render('Сlient/Dashboard', [
+                'rights' => $this->rights,
+                'user_auth' => $user_auth,
+
+                // Другие данные, если необходимо
+            ]);
         }
+
+
+        if ($user_auth->role === 'super_admin') {
+
+
+
+            // Возвращаем представление для всех ролей, так как проверка уже проведена на уровне middleware
+            return Inertia::render('Admin/Dashboard', [
+                'rights' => $this->rights,
+                'user_auth' => $user_auth,
+                'users' => $users->items(),
+                'pagination' => [
+                    'current_page' => $users->currentPage(),
+                    'last_page' => $users->lastPage(),
+                    'per_page' => $users->perPage(),
+                    'total'  => $users->total(),
+                ],
+                // Другие данные, если необходимо
+            ]);
+        }
+
 
 
 

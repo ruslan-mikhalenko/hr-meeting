@@ -25,24 +25,47 @@ import { Head } from "@inertiajs/vue3";
  -->
 
 <script setup>
-import { onMounted, onBeforeUnmount } from "vue";
+import { onMounted, onBeforeUnmount, ref } from "vue";
 
-// URL для редиректа
-const channelUrl = "https://t.me/+GBRMKva5zohjNjMy"; // Укажите ссылку на ваш канал
+// Функция для безопасного base64-кодирования с поддержкой Unicode
+function b64EncodeUnicode(str) {
+  return btoa(
+    encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) =>
+      String.fromCharCode("0x" + p1)
+    )
+  );
+}
 
-// Автоматический редирект, выполняющийся при загрузке страницы
+// Параметры
+const userId = 123;
+const orderId = 456;
+const channel = "Тест";
+
+// Сформированный payload
+const rawPayload = `site_join|user=${userId}|order=${orderId}|channel=${channel}`;
+const payload = b64EncodeUnicode(rawPayload);
+
+// Объявляем как `ref`, чтобы использовать в шаблоне и функциях
+const channelUrl = ref(`https://t.me/TelegaBoostTest_bot?start=${payload}`);
+
+// Кнопка ручного редиректа
+function redirectToChannel() {
+  console.log("Переход по кнопке на:", channelUrl.value);
+  window.location.href = channelUrl.value;
+}
+
+// Автоматический редирект
 onMounted(() => {
   console.log("Страница загружена. Подготовка к редиректу...");
-  setTimeout(() => {
-    console.log("Автоматический редирект на:", channelUrl);
-    window.location.href = channelUrl; // Редирект через 5 секунд
-  }, 5000);
+  /* setTimeout(() => {
+    console.log("Автоматический редирект на:", channelUrl.value);
+    window.location.href = channelUrl.value;
+  }, 15000); */
 
-  // Добавление метрики
   addYandexMetrika();
 });
 
-// Функция добавления Яндекс.Метрики
+// Яндекс.Метрика
 function addYandexMetrika() {
   (function (m, e, t, r, i, k, a) {
     m[i] =
@@ -70,9 +93,8 @@ function addYandexMetrika() {
   });
 }
 
-// При необходимости можно очищать Метрику при размонтировании компонента
 onBeforeUnmount(() => {
-  console.log("Страница покидается. Можно очистить Метрику, если нужно.");
+  console.log("Уход со страницы.");
 });
 </script>
 
@@ -84,8 +106,36 @@ onBeforeUnmount(() => {
       <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="px-6 pt-6 text-gray-800 text-center">
+              <!-- <h2 class="text-xl font-bold mb-2">🚀 Как получить доступ</h2> -->
+
+              <!-- <p class="text-base">Краткое наполнение контентом</p>
+
+              <p class="text-base">
+                🚀 Сейчас вы перейдёте в Telegram-бота,<br />
+                👉 где, нажав кнопку <strong>«Start»</strong> внизу экрана, вы
+                получите ссылку на канал Тест и сможете присоединиться к нему.
+              </p>
+              <p class="text-sm mt-2 text-gray-500">
+                Если переход не начался автоматически — нажмите кнопку ниже.
+              </p> -->
+
+              <p class="text-base">Краткое наполнение контентом</p>
+
+              <p class="text-base">
+                🔔 Подпишитесь на канал в Telegram <br />
+                Прямой переход к подписке займёт всего пару секунд!
+
+                <p>👇 Нажмите «Start» ниже, чтобы подписаться на канал</p>
+<p>📲 Нажмите кнопку «Start» — и бот мгновенно даст ссылку на наш канал «Тест».</p>
+              </p>
+              <p class="text-sm mt-2 text-gray-500">
+                Если переход не начался автоматически — нажмите кнопку ниже.
+              </p>
+            </div>
+
             <div class="p-6 text-gray-900 text-center text-lg font-semibold">
-              Редирект на канал через 5 секунды...
+              Редирект к подписке через 15 секунды...
             </div>
             <!-- Центральное расположение кнопки -->
             <div class="flex justify-center items-center mt-6">
@@ -93,7 +143,7 @@ onBeforeUnmount(() => {
                 @click="redirectToChannel"
                 class="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                Перейти на канал
+                Перейти к подписке на канал
               </button>
             </div>
           </div>

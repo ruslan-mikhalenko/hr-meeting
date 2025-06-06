@@ -6,6 +6,8 @@ use App\Helpers\UserHelper;
 use App\Models\Client;
 use App\Models\Employer;
 use App\Models\HrJobseekers;
+use App\Models\Project;
+use App\Models\Subscriber;
 use Illuminate\Support\Str;
 
 use App\Models\User;
@@ -16,6 +18,8 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Gate;
+
+use App\Services\TelegramService;
 
 class ClientController extends Controller
 {
@@ -42,7 +46,7 @@ class ClientController extends Controller
 
     public function dashboard(Request $request)
     {
-
+        /* dd(111); */
 
         /*  $search = $request->input('search', '');
         $perPage = $request->input('perPage', 5);
@@ -91,32 +95,52 @@ class ClientController extends Controller
  */
 
 
-        $users = User::query()
-            ->leftJoin('clients', 'users.id', '=', 'clients.user_id')
-            ->select(
-                'users.*',
-                'clients.original_email',
-                'clients.original_password',
 
-            )
-            ->where('users.role', '!=', 'super_admin') // Исключаем пользователей с ролью 'super_admin'
-            ->orderByDesc('users.created_at'); // Убедитесь, что вы сортируете по правильному полю
-
-        $perPage = 10; // Замените, если нужно, на 'per_page'
-        $currentPage = 1;
-
-        // Пагинация
-        $users = $users->paginate($perPage, ['*'], 'page', $currentPage);
 
 
         if ($user_auth->role === 'client') {
 
-            return redirect()->route('dashboard_client');
+            $projects = Project::where('user_id', $user_auth->id)
+                ->get();
+
+            $client_rights = $user_auth->is_active;
+
+
+            /* dd($client_rights); */
+
+            /*  return redirect()->route('dashboard_client'); */
+            // Возвращаем представление для всех ролей, так как проверка уже проведена на уровне middleware
+            return Inertia::render('Сlient/Dashboard', [
+                'client_rights' => $client_rights,
+                'user_auth' => $user_auth,
+                'projects' => $projects
+
+                // Другие данные, если необходимо
+            ]);
         }
 
 
 
         if ($user_auth->role === 'super_admin') {
+
+
+            $users = User::query()
+                ->leftJoin('clients', 'users.id', '=', 'clients.user_id')
+                ->select(
+                    'users.*',
+                    'clients.original_email',
+                    'clients.original_password',
+
+                )
+                ->where('users.role', '!=', 'super_admin') // Исключаем пользователей с ролью 'super_admin'
+                ->orderByDesc('users.created_at'); // Убедитесь, что вы сортируете по правильному полю
+
+            $perPage = 10; // Замените, если нужно, на 'per_page'
+            $currentPage = 1;
+
+            // Пагинация
+            $users = $users->paginate($perPage, ['*'], 'page', $currentPage);
+
 
 
 
@@ -484,5 +508,72 @@ class ClientController extends Controller
 
         // Возвращаем результаты в формате JSON
         return response()->json($results);
+    }
+
+    /** ----------------------------------------------------------------- */
+
+    public function filtering_subscribers(Request $request)
+    {
+        $search = $request->input('search', '');
+        $perPage = $request->input('perPage', 10);
+        $currentPage = $request->input('page', 1);
+        $sortField = $request->input('sortField', 'created_at');
+        $sortOrder = $request->input('sortOrder', 'desc');
+        $is_active = $request->input('is_active', 1);
+        $projectId = $request->input('project_id');
+
+        $query = Subscriber::query()
+            ->where('project_id', $projectId)
+            ->where('is_active', $is_active);
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%");
+                // Добавь другие поля при необходимости, например:
+                // ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        // Сортировка
+        if (!empty($sortField) && !empty($sortOrder)) {
+            $query->orderBy($sortField, $sortOrder);
+        } else {
+            $query->orderByDesc('created_at');
+        }
+
+        // Пагинация
+        $subscribers = $query->paginate($perPage, ['*'], 'page', $currentPage);
+
+        /** Тянем точку отсчёта */
+        $firstDate = Subscriber::where('project_id', $projectId)
+            ->orderBy('created_at', 'asc')
+            ->value('created_at');
+
+
+        $project = Project::query()
+            ->where('id', $projectId)
+            ->first();
+
+
+        /* $telegramService = new TelegramService();
+
+        // Получение основной информации о канале
+        $channelInfoOther = $telegramService->getChannelInfo($project->link);
+
+        // dd($channelInfoOther);
+        $participants_count_from_channel = $channelInfoOther['participants_count']; */
+
+
+        return response()->json([
+            'subscribers' => $subscribers->items(),
+            'pagination' => [
+                'current_page' => $subscribers->currentPage(),
+                'last_page' => $subscribers->lastPage(),
+                'per_page' => $subscribers->perPage(),
+                'total' => $subscribers->total(),
+            ],
+            'firstDate' => $firstDate,  // вот сюда кладём первую дату
+            'participants_count_from_channel' => $project->participants_count
+        ]);
     }
 }

@@ -23,43 +23,70 @@ class TelegramController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
+
+
     public function handleWebhook(Request $request)
     {
+        $update = $request->all();
+        Log::info('Telegram Webhook Data:', $update); // Логируем всю активность
+
+        if (isset($update['message'])) {
+            $message = $update['message'];
+            $chat = $message['chat'];
+            $chatId = $chat['id'];
+            $firstName = $chat['first_name'] ?? '';
+            $username = $chat['username'] ?? '';
+
+            if (isset($message['text']) && str_starts_with($message['text'], '/start')) {
+                $text = $message['text'];
+                $params = explode(' ', $text);
+                $payload = $params[1] ?? null;
+
+                Log::info("Параметр после /start: " . ($payload ?? 'нет'));
+
+                if ($payload) {
+                    try {
+                        $decoded = base64_decode($payload);
+                        $decoded = urldecode($decoded); // обязательно, чтобы получить строку с Юникодом
+
+                        // Преобразуем в query-форму для parse_str
+                        parse_str(str_replace('|', '&', $decoded), $parsed);
+
+                        $userId = $parsed['user'] ?? null;
+                        $orderId = $parsed['order'] ?? null;
+                        $channel = $parsed['channel'] ?? null;
 
 
-        $update = $request->all(); // Получаем данные от Telegram
-        Log::info('Telegram Webhook Data:', $update); // Логируем данные для отладки
+                        Log::info("Пользователь пришёл с сайта: user=$userId, order=$orderId");
 
-        // Проверяем, что это сообщение из канала
-        if (isset($update['channel_post'])) {
-            $channelPost = $update['channel_post']; // Берем данные из channel_post
+                        $messageText = "<b>Добро пожаловать в наш канал - {$channel}!</b>\n\n"
+                            . "📌 Здесь вы найдёте:\n"
+                            . "Тест - {$orderId} {$orderId}\n"
+                            . "• 🔥 Актуальные новости\n"
+                            . "• 📈 Обновления сервиса\n"
+                            . "• 🎁 Эксклюзивные предложения\n\n"
+                            . "👇 <b>Нажмите кнопку ниже, чтобы подписаться:</b>";
 
-            // Определяем ID канала и отправителя
-            $channelId = $channelPost['chat']['id'];      // ID канала
-            $senderId = $channelPost['sender_chat']['id']; // ID отправителя (обычно совпадает с каналом)
-
-            // Если отправителем является сам канал, игнорируем сообщение
-            if ($senderId === $channelId) {
-                Log::info("Сообщение отправлено каналом (ботом), оно не будет обработано.");
-                return response()->json(['status' => 'ignored']);
-            }
-
-            // Проверяем, есть ли текст в сообщении
-            if (isset($channelPost['text'])) {
-                $text = $channelPost['text']; // Текст сообщения
-
-                // Отправляем приветствие
-                try {
-                    $this->telegramService->sendMessage($channelId, 'Привет!');
-                } catch (\Exception $e) {
-                    Log::error("Ошибка отправки сообщения в канал: " . $e->getMessage());
+                        $this->telegramService->sendMessageWithKeyboard(
+                            $chatId,
+                            $messageText,
+                            [
+                                [
+                                    ['text' => '📢 Подписаться на канал', 'url' => 'https://t.me/+GBRMKva5zohjNjMy']
+                                ]
+                            ],
+                            'HTML' // ← Вот здесь ключ
+                        );
+                    } catch (\Exception $e) {
+                        Log::error("Ошибка обработки payload: " . $e->getMessage());
+                        $this->telegramService->sendMessage($chatId, 'Произошла ошибка. Пожалуйста, попробуйте позже.');
+                    }
+                } else {
+                    $this->telegramService->sendMessage($chatId, 'Привет! Напиши /help, чтобы узнать команды.');
                 }
             }
         }
 
-        return response()->json(['status' => 'ok']); // Уведомляем Telegram, что запрос обработан
-
-
-
+        return response()->json(['status' => 'ok']);
     }
 }

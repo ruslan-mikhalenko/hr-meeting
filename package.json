@@ -19,6 +19,8 @@
     },
     "dependencies": {
         "ant-design-vue": "^4.2.6",
-        "intl-tel-input": "^25.3.1"
+        "chart.js": "^4.4.9",
+        "intl-tel-input": "^25.3.1",
+        "xlsx": "^0.18.5"
     }
 }
