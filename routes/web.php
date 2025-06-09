@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RequestController;
@@ -75,11 +76,28 @@ Route::middleware(['auth'])->group(
         Route::delete('/axios_delete_project/{id}', [ProjectController::class, 'axios_delete_project'])->name('axios_delete_project');
         Route::post('/axios_active_project', [ProjectController::class, 'axios_active_project'])->name('axios_active_project');
 
+        /* Лэндинги */
+
+        Route::get('/landings', [LandingController::class, 'dashboard'])->name('landings.dashboard');
+
+
+        Route::post('/filtering_landing', [LandingController::class, 'filtering_landing'])->name('filtering_landing');
+        Route::post('/axios_add_landing', [LandingController::class, 'axios_add_landing'])->name('axios_add_landing');
+        Route::post('/axios_edit_landing', [LandingController::class, 'axios_edit_landing'])->name('axios_edit_landing');
+
+        Route::put('/axios_update_landing/{id}', [LandingController::class, 'axios_update_landing'])->name('axios_update_landing');
+        Route::delete('/axios_delete_landing/{id}', [LandingController::class, 'axios_delete_landing'])->name('axios_delete_landing');
+        Route::post('/axios_active_landing', [LandingController::class, 'axios_active_landing'])->name('axios_active_landing');
+
+        /* Поиск проекта по набираемым данным и вывод в выпадающий select */
+        Route::get('/projects_search', [ProjectController::class, 'projects_search'])->name('projects.search');
+
 
         /** РОУТЫ ДЛЯ КЛИЕНТА */
         Route::get('/project/{id}', [ProjectController::class, 'project'])->name('project');
-        Route::post('/filtering_subscribers', [ClientController::class, 'filtering_subscribers'])->name('filtering_subscribers');
 
+        Route::post('/filtering_subscribers', [ClientController::class, 'filtering_subscribers'])->name('filtering_subscribers');
+        Route::post('/filtering_landings', [ClientController::class, 'filtering_landings'])->name('filtering_landings');
 
         Route::get('/client/projects/{id}/chart', [ProjectController::class, 'getChartData']);
 
@@ -270,6 +288,36 @@ Route::get('/test-bot', function () {
 });
 
 
+
+Route::get('/test-message', function () {
+    $chatId = '5639619935'; // или ID чата/канала
+    $message = 'Привет от бота!';
+
+    try {
+        $telegramService = new TelegramService();
+        $telegramService->sendMessage($chatId, $message);
+        return 'Сообщение отправлено!';
+    } catch (\Exception $e) {
+        return 'Ошибка: ' . $e->getMessage();
+    }
+});
+
+Route::get('/send-bot-message', function () {
+    $botToken = env('TELEGRAM_BOT_TOKEN');
+    $chatId = '5639619935'; // ID пользователя
+    $message = 'Привет от бота!';
+
+    $response = Http::post("https://api.telegram.org/bot{$botToken}/sendMessage", [
+        'chat_id' => $chatId,
+        'text' => $message,
+    ]);
+
+    if ($response->successful()) {
+        return 'Сообщение отправлено ботом!';
+    } else {
+        return 'Ошибка при отправке сообщения: ' . $response->body();
+    }
+});
 
 
 

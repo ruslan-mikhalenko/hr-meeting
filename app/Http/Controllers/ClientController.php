@@ -6,6 +6,7 @@ use App\Helpers\UserHelper;
 use App\Models\Client;
 use App\Models\Employer;
 use App\Models\HrJobseekers;
+use App\Models\Landing;
 use App\Models\Project;
 use App\Models\Subscriber;
 use Illuminate\Support\Str;
@@ -574,6 +575,64 @@ class ClientController extends Controller
             ],
             'firstDate' => $firstDate,  // вот сюда кладём первую дату
             'participants_count_from_channel' => $project->participants_count
+        ]);
+    }
+
+
+
+    public function filtering_landings(Request $request)
+    {
+        $search = $request->input('search', '');
+        $perPage = $request->input('perPage', 10);
+        $currentPage = $request->input('page', 1);
+        $sortField = $request->input('sortField', 'created_at');
+        $sortOrder = $request->input('sortOrder', 'desc');
+        $is_active = $request->input('is_active', 1);
+        $projectId = $request->input('project_id');
+
+        $query = Landing::query()
+            ->where('project_id', $projectId)
+            ->where('is_active', $is_active);
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+                // Добавь другие поля при необходимости, например:
+                // ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        // Сортировка
+        if (!empty($sortField) && !empty($sortOrder)) {
+            $query->orderBy($sortField, $sortOrder);
+        } else {
+            $query->orderByDesc('created_at');
+        }
+
+        // Пагинация
+        $landings = $query->paginate($perPage, ['*'], 'page', $currentPage);
+
+
+
+        /* $telegramService = new TelegramService();
+
+        // Получение основной информации о канале
+        $channelInfoOther = $telegramService->getChannelInfo($project->link);
+
+        // dd($channelInfoOther);
+        $participants_count_from_channel = $channelInfoOther['participants_count']; */
+
+
+        return response()->json([
+            'landings' => $landings->items(),
+            'pagination_langings' => [
+                'current_page' => $landings->currentPage(),
+                'last_page' => $landings->lastPage(),
+                'per_page' => $landings->perPage(),
+                'total' => $landings->total(),
+            ],
+
+
         ]);
     }
 }

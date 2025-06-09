@@ -30,6 +30,15 @@ class ProjectController extends Controller
     {
         $user_auth = Auth::user();
 
+
+
+        if ($user_auth->role === 'client') {
+
+            return redirect()->route('dashboard');
+        }
+
+
+
         // Получение списка проектов
         $projects = DB::table('projects')
             ->select(
@@ -315,6 +324,35 @@ class ProjectController extends Controller
         ], 200); // HTTP 200 OK
     }
 
+
+    public function projects_search(Request $request)
+    {
+
+
+        $query = $request->input('query'); // Строка поиска
+        /*   $id_hr = $request->input('id_hr');  */ // Дополнительный ID HR для фильтрации
+
+        // Строим запрос с соединением между таблицами
+        $results = Project::query()
+            ->where(function ($q) use ($query) {
+                // Если указан запрос, фильтруем по id_user и имени
+                if ($query) {
+                    $q->where('projects.user_id', 'like', '%' . $query . '%') // Поиск по id_user
+                        ->orWhere('projects.name', 'like', '%' . $query . '%'); // Поиск по имени
+                }
+            })
+            ->select('projects.*') // Выбираем нужные поля
+            ->get();
+
+
+        // Возвращаем результаты в формате JSON
+        return response()->json($results);
+    }
+
+
+
+
+
     /** -------------------------------------------------------------------------------------------- */
 
     public function project($id)
@@ -342,6 +380,18 @@ class ProjectController extends Controller
             Log::info("Нет подписчиков для проекта с ID {$id}");
         }
 
+        /** Лендинги */
+
+        $landings = DB::table('landings')
+            ->where('project_id', $id)
+            ->where('is_active', 1) // если нужно, раскомментируй
+            ->paginate(10); // paginate сразу делает запрос и возвращает постраничные данные
+
+        if ($landings->isEmpty()) {
+            Log::info("Нет лендингов для проекта с ID {$id}");
+        }
+
+
         /*  dd($subscribers); */
 
 
@@ -351,6 +401,7 @@ class ProjectController extends Controller
                 'project' => $project,
                 'user_auth' => $user_auth,
                 'subscribers' => $subscribers,
+                'landings' => $landings
             ],
         );
 

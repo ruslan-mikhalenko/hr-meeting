@@ -55,59 +55,6 @@ import Modal from "@/Components/ModalCrud.vue";
 
 import Loader from "@/Components/Loader.vue"; // Импортируем компонент предзагрузчика
 
-/** Экспорт в PDF */
-import html2pdf from "html2pdf.js";
-
-const pdfContent = ref(null);
-
-const isGeneratingPDF = ref(false);
-
-const downloadPDF = async () => {
-  const element = pdfContent.value;
-  if (!element) return;
-
-  isGeneratingPDF.value = true;
-
-  const options = {
-    margin: [0.2, 0.5, 0.5, 0.5], // top, left, bottom, right
-    filename: "report.pdf",
-    image: { type: "jpeg", quality: 0.98 },
-    html2canvas: { scale: 2 },
-    jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
-  };
-
-  await new Promise((resolve) => {
-    html2pdf().from(element).set(options).save().then(resolve);
-  });
-
-  isGeneratingPDF.value = false;
-};
-
-const pdfContent2 = ref(null);
-
-const downloadPDF2 = async () => {
-  const element2 = pdfContent2.value;
-  if (!element2) return;
-
-  isGeneratingPDF.value = true;
-
-  const options = {
-    margin: [0.2, 0.5, 0.5, 0.5],
-    filename: "report.pdf",
-    image: { type: "jpeg", quality: 0.98 },
-    html2canvas: { scale: 2 },
-    jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
-  };
-
-  await new Promise((resolve) => {
-    html2pdf().from(element2).set(options).save().then(resolve);
-  });
-
-  isGeneratingPDF.value = false;
-};
-
-/** */
-
 const props = defineProps({
   rights: {
     type: Boolean,
@@ -268,109 +215,6 @@ const handleTableChange = (current_page, current_search, sorter) => {
   );
 };
 
-/** Для лендингов фильтрация */
-
-const searchTermLandings = ref("");
-const searchCompletelyLandings = ref("");
-const sortFieldLandings = ref("created_at");
-const sortOrderLandings = ref("desc");
-
-//Загрузка текущего состояния таблицы Subscribers при изменении пагинации, поиска, сортировки
-const fetchLandings = (
-  page,
-  searchTerm = null,
-  sortField = null,
-  sortOrder = null,
-  perPage = pagination_langings.value.per_page
-) => {
-  isLoading.value = true;
-
-  axios
-    .post(route("filtering_landings"), {
-      project_id: props.project.id,
-      page,
-      perPage,
-      search: searchTerm,
-      sortField,
-      sortOrder,
-      is_active: isActiveFilter.value, // 🔹 Добавляем сюда
-    })
-    .then((response) => {
-      localLandings.value = response.data.landings;
-      pagination_langings.value = {
-        current_page: response.data.pagination_langings.current_page,
-        per_page: response.data.pagination_langings.per_page,
-        total: response.data.pagination_langings.total,
-        last_page: response.data.pagination_langings.last_page,
-      };
-
-      if (
-        localLandings.value.length === 0 &&
-        pagination.value.current_page > 1
-      ) {
-        pagination.value.current_page--;
-        return fetchLandings(
-          pagination.value.current_page,
-          searchTerm,
-          sortField,
-          sortOrder
-        );
-      }
-    })
-    .catch((error) => {
-      console.error("Ошибка при загрузке подписчиков:", error);
-    })
-    .finally(() => {
-      isLoading.value = false;
-    });
-};
-
-// Поиск
-const onSearchLandings = () => {
-  searchCompletelyLandings.value = searchTermLandings.value;
-  pagination_langings.value.current_page = 1;
-  fetchLandings(
-    pagination_langings.value.current_page,
-    searchCompletelyLandings.value,
-    sortFieldLandings.value,
-    sortOrderLandings.value
-  );
-};
-
-const handlePageChangeLandings = (page) => {
-  fetchLandings(
-    page,
-    searchCompletelyLandings.value,
-    sortFieldLandings.value,
-    sortOrderLandings.value
-  );
-};
-
-const handlePageSizeChangeLandings = (currentPage, newPageSize) => {
-  pagination_langings.value.per_page = newPageSize;
-  pagination_langings.value.current_page = currentPage;
-  fetchLandings(
-    currentPage,
-    searchCompletelyLandings.value,
-    sortFieldLandings.value,
-    sortOrderLandings.value,
-    newPageSize
-  );
-};
-
-const handleTableChangeLandings = (pagination, filters, sorter) => {
-  sortFieldLandings.value = sorter.columnKey;
-  sortOrderLandings.value = sorter.order === "ascend" ? "asc" : "desc";
-  fetchLandings(
-    pagination_langings.value.current_page,
-    searchCompletelyLandings.value,
-    sortFieldLandings.value,
-    sortOrderLandings.value
-  );
-};
-
-/** */
-
 const showGraph = ref(false);
 const groupBy = ref(null);
 
@@ -512,13 +356,6 @@ let cumulativeChartInstance = null;
 onMounted(() => {
   fetchSubscribers(
     pagination.value.current_page,
-    "",
-    sortField.value,
-    sortOrder.value
-  );
-
-  fetchLandings(
-    pagination_langings.value.current_page,
     "",
     sortField.value,
     sortOrder.value
@@ -924,112 +761,83 @@ const buildCumulativeChart = () => {
                   </div>
 
                   <div class="ml-2 sm:ml-6">
-                    <div ref="pdfContent">
-                      <h3
-                        class="relative text-[1.1rem] font-semibold text-black pl-4 border-l-8 border-[#45A0F2] bg-white py-3 mb-6 after:content-[''] after:block after:w-full after:h-[2px] after:bg-black after:mt-4 !bg-[#ffffd9] mt-12"
-                      >
-                        Анализ динамики {{ label }}
-                      </h3>
+                    <h3
+                      class="relative text-[1.1rem] font-semibold text-black pl-4 border-l-8 border-[#45A0F2] bg-white py-3 mb-6 after:content-[''] after:block after:w-full after:h-[2px] after:bg-black after:mt-4 !bg-[#ffffd9] mt-12"
+                    >
+                      Анализ динамики подписок и отписок
+                    </h3>
 
-                      <div class="flex justify-center my-4">
-                        <a-space>
-                          <a-button
-                            v-if="!isGeneratingPDF"
-                            :type="isActiveFilter === 1 ? 'primary' : 'default'"
-                            :style="
-                              isActiveFilter === 1
-                                ? 'background-color: #52c41a; border-color: #52c41a; color: white'
-                                : ''
-                            "
-                            @click="switchActiveFilter(1)"
-                          >
-                            Подписка
-                          </a-button>
-
-                          <a-button
-                            v-if="!isGeneratingPDF"
-                            :type="isActiveFilter === 0 ? 'primary' : 'default'"
-                            :style="
-                              isActiveFilter === 0
-                                ? 'background-color: #ff4d4f; border-color: #ff4d4f; color: white'
-                                : ''
-                            "
-                            @click="switchActiveFilter(0)"
-                          >
-                            Отписка
-                          </a-button>
-                        </a-space>
-                      </div>
-                      <!-- Заголовок динамический -->
-                      <div class="text-center mt-10 mb-10 font-bold">
-                        <span>
-                          {{ label }} на проект за выбранный период (с
-                          {{ formatDate(firstDate) }} - по
-                          {{
-                            groupBy === "hour"
-                              ? "часам"
-                              : groupBy === "day"
-                              ? "дням"
-                              : groupBy === "month"
-                              ? "месяцам"
-                              : groupBy === "year"
-                              ? "годам"
-                              : groupBy
-                          }})
-                        </span>
-                        - <span>{{ total }}</span> чел
-                      </div>
-
-                      <div class="mt-6">
-                        <!-- График -->
-                        <canvas
-                          ref="chartRef"
-                          class="w-full sm:w-2/3 h-[300px]"
-                          v-if="showGraph"
-                        ></canvas>
-                      </div>
-
-                      <div class="mt-10">
-                        <table v-if="filteredData.length">
-                          <thead>
-                            <tr>
-                              <th class="text-center">Период</th>
-                              <th class="text-center">Количество</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr v-for="item in filteredData" :key="item.period">
-                              <td class="text-center">{{ item.period }}</td>
-                              <td class="text-center">{{ item.count }}</td>
-                            </tr>
-                            <tr>
-                              <td class="text-center">
-                                <strong>Итого</strong>
-                              </td>
-                              <td class="text-center">
-                                <strong>{{ total }}</strong>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-
-                        <p v-else>Нет данных для отображения.</p>
-                        <button
-                          v-if="!isGeneratingPDF"
-                          @click="exportToExcel"
-                          class="export-btn rounded-[5px] bg-[#FEB72D] py-[7px] px-[10px] mt-2 text-[0.9rem]"
+                    <div class="flex justify-center my-4">
+                      <a-space>
+                        <a-button
+                          :type="isActiveFilter === 1 ? 'primary' : 'default'"
+                          :style="
+                            isActiveFilter === 1
+                              ? 'background-color: #52c41a; border-color: #52c41a; color: white'
+                              : ''
+                          "
+                          @click="switchActiveFilter(1)"
                         >
-                          Экспорт таблицы в Excel
-                        </button>
-                      </div>
-                      <a-button
-                        v-if="!isGeneratingPDF"
-                        type="primary"
-                        class="my-4"
-                        @click="downloadPDF"
+                          Подписка
+                        </a-button>
+
+                        <a-button
+                          :type="isActiveFilter === 0 ? 'primary' : 'default'"
+                          :style="
+                            isActiveFilter === 0
+                              ? 'background-color: #ff4d4f; border-color: #ff4d4f; color: white'
+                              : ''
+                          "
+                          @click="switchActiveFilter(0)"
+                        >
+                          Отписка
+                        </a-button>
+                      </a-space>
+                    </div>
+                    <!-- Заголовок динамический -->
+                    <div class="text-center mt-10 mb-10 font-bold">
+                      <span>{{ label }} на проект за выбранный период</span> -
+                      <span>{{ total }}</span>
+                    </div>
+
+                    <div class="mt-6">
+                      <!-- График -->
+                      <canvas
+                        ref="chartRef"
+                        class="w-full sm:w-2/3 h-[300px]"
+                        v-if="showGraph"
+                      ></canvas>
+                    </div>
+
+                    <div class="mt-10">
+                      <table v-if="filteredData.length">
+                        <thead>
+                          <tr>
+                            <th class="text-center">Период</th>
+                            <th class="text-center">Количество</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="item in filteredData" :key="item.period">
+                            <td class="text-center">{{ item.period }}</td>
+                            <td class="text-center">{{ item.count }}</td>
+                          </tr>
+                          <tr>
+                            <td class="text-center"><strong>Итого</strong></td>
+                            <td class="text-center">
+                              <strong>{{ total }}</strong>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+
+                      <p v-else>Нет данных для отображения.</p>
+                      <button
+                        @click="exportToExcel"
+                        class="export-btn rounded-[5px] bg-[#FEB72D] py-[7px] px-[10px] mt-2 text-[0.9rem]"
                       >
-                        Скачать PDF отчёт
-                      </a-button>
+                        Экспорт таблицы в Excel
+                      </button>
                     </div>
 
                     <div>
@@ -1083,7 +891,7 @@ const buildCumulativeChart = () => {
                     </div>
                   </div>
 
-                  <div ref="pdfContent2">
+                  <div>
                     <h3
                       class="relative text-[1.1rem] font-semibold text-black pl-4 border-l-8 border-[#45A0F2] bg-white py-3 mb-6 after:content-[''] after:block after:w-full after:h-[2px] after:bg-black after:mt-4 !bg-[#ffffd9] mt-12"
                     >
@@ -1150,29 +958,61 @@ const buildCumulativeChart = () => {
                       </table>
 
                       <button
-                        v-if="!isGeneratingPDF"
                         @click="exportToExcel2"
                         class="export-btn rounded-[5px] bg-[#FEB72D] py-[7px] px-[10px] mt-2 text-[0.9rem]"
                       >
                         Экспорт таблицы в Excel
                       </button>
                     </div>
-
-                    <a-button
-                      v-if="!isGeneratingPDF"
-                      type="primary"
-                      class="my-4"
-                      @click="downloadPDF2"
-                    >
-                      Скачать PDF отчёт
-                    </a-button>
                   </div>
                 </section>
               </AccordionItem>
 
               <AccordionItem title="Продвижение">
-                <!-- <p>В разработке</p> -->
-                <section class="pt-4">
+                <p>В разработке</p>
+
+                <div>
+                  <h3
+                    class="relative text-[1.1rem] font-semibold text-black pl-4 border-l-8 border-[#45A0F2] bg-white py-3 mb-6 after:content-[''] after:block after:w-full after:h-[2px] after:bg-black after:mt-4 !bg-[#ffffd9] mt-12"
+                  >
+                    Лендинги (посадочные страницы) на проект
+                  </h3>
+
+                  <a-input
+                    placeholder="Введите название имени подписчика для поиска"
+                    v-model:value="searchTerm"
+                    @input="onSearch"
+                    style="margin-bottom: 16px"
+                    class="rounded mt-5"
+                  />
+
+                  <a-table
+                    :row-key="(record) => record.id"
+                    :data-source="localLandings"
+                    :columns="columns_landings"
+                    :pagination="false"
+                    :row-selection="rowSelection"
+                    @change="handleTableChange"
+                    class="w-full overflow-x-auto mt-9 z-0"
+                  >
+                    <template #bodyCell="{ column, record }">
+                      <template v-if="column.key === 'updated_at'">
+                        {{ formatDate(record.updated_at) }}
+                      </template>
+                    </template>
+                  </a-table>
+
+                  <a-pagination
+                    :current="pagination_langings.current_page"
+                    :pageSize="pagination_langings.per_page"
+                    :total="pagination_langings.total"
+                    @change="handlePageChange"
+                    @showSizeChange="handlePageSizeChange"
+                    style="margin-top: 20px"
+                  />
+                </div>
+
+                <section class="pt-4" hidden>
                   <p>
                     Суть продвижения проекта заключается в создании посадочных
                     страниц (лендингов) ведущих на канал с целью привлечения
@@ -1219,47 +1059,6 @@ const buildCumulativeChart = () => {
                     проект (канал) &ndash; целевой аудитории.
                   </p>
                 </section>
-
-                <div>
-                  <h3
-                    class="relative text-[1.1rem] font-semibold text-black pl-4 border-l-8 border-[#45A0F2] bg-white py-3 mb-6 after:content-[''] after:block after:w-full after:h-[2px] after:bg-black after:mt-4 !bg-[#ffffd9] mt-12"
-                  >
-                    Лендинги (посадочные страницы) на проект
-                  </h3>
-
-                  <a-input
-                    placeholder="Введите название лендинга для поиска"
-                    v-model:value="searchTermLandings"
-                    @input="onSearchLandings"
-                    style="margin-bottom: 16px"
-                    class="rounded mt-5"
-                  />
-
-                  <a-table
-                    :row-key="(record) => record.id"
-                    :data-source="localLandings"
-                    :columns="columns_landings"
-                    :pagination="false"
-                    :row-selection="rowSelection"
-                    @change="handleTableChangeLandings"
-                    class="w-full overflow-x-auto mt-9 z-0"
-                  >
-                    <template #bodyCell="{ column, record }">
-                      <template v-if="column.key === 'updated_at'">
-                        {{ formatDate(record.updated_at) }}
-                      </template>
-                    </template>
-                  </a-table>
-
-                  <a-pagination
-                    :current="pagination_langings.current_page"
-                    :pageSize="pagination_langings.per_page"
-                    :total="pagination_langings.total"
-                    @change="handlePageChangeLandings"
-                    @showSizeChange="handlePageSizeChangeLandings"
-                    style="margin-top: 20px"
-                  />
-                </div>
               </AccordionItem>
 
               <!-- <ul>
@@ -1383,12 +1182,6 @@ th {
 
 .inactive-btn {
   opacity: 0.8;
-}
-
-@media print {
-  .no-print {
-    display: none !important;
-  }
 }
 </style>
 

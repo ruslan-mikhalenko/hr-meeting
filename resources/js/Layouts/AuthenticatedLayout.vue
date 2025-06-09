@@ -186,6 +186,14 @@ const toggleSubmenuTwo = () => {
                 </NavLink>
 
                 <NavLink
+                  v-if="$page.props.auth.user.role === 'super_admin'"
+                  :href="route('landings.dashboard')"
+                  :active="route().current('landings.dashboard')"
+                >
+                  Лендинги
+                </NavLink>
+
+                <NavLink
                   v-if="$page.props.auth.user.role === 'client'"
                   :href="route('dashboard')"
                   :active="route().current('dashboard')"
@@ -299,6 +307,14 @@ const toggleSubmenuTwo = () => {
             class="text-gray-700 hover:text-gray-900"
             >Проекты</ResponsiveNavLink
           >
+
+          <ResponsiveNavLink
+            v-if="$page.props.auth.user.role === 'super_admin'"
+            :href="route('landings.dashboard')"
+            :active="route().current('landings.dashboard')"
+          >
+            Лендинги
+          </ResponsiveNavLink>
 
           <ResponsiveNavLink
             v-if="$page.props.auth.user.role === 'client'"
