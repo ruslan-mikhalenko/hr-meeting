@@ -1,10 +1,10 @@
 <template>
-  <section id="intro" class="text-center py-20 bg-[#9ED6FD] shadow">
+  <section id="intro" class="text-center py-20 bg-[white] shadow">
     <div class="container mx-auto px-6">
       <div class="mt-8 grid grid-cols-1 gap-8 md:grid-cols-3">
         <!-- Левый блок -->
         <div
-          class="service-card md:col-span-2 bg-white p-8 rounded-lg shadow-lg"
+          class="service-card md:col-span-2 bg-white p-8 pt-0 rounded-lg shadow-lg"
         >
           <h1 class="text-4xl font-bold text-blue-700 mb-4">
             Повышение эффективности работы с персоналом
@@ -110,36 +110,48 @@
           </p>
         </div>
 
-        <!-- Правый блок: слайдер -->
-        <div class="service-card md:col-span-1 md:flex md:justify-center">
-          <div class="relative flex justify-center items-center py-2">
-            <div
-              class="absolute z-20"
-              :style="{
-                width: isMobile ? '240px' : '300px',
-                height: isMobile ? '520px' : '580px',
-                top: isMobile ? '0px' : '0px',
-              }"
-            >
-              <a-carousel autoplay effect="fade" dots class="w-full h-full">
-                <div
-                  v-for="(slide, index) in slides"
-                  :key="index"
-                  :class="[
-                    'h-full w-full bg-cover bg-center text-white flex items-center justify-center px-4',
-                    `bg-slide-${index}`,
-                  ]"
-                >
-                  <div class="p-4 rounded-xl text-center h-[520px] pt-[270px]">
-                    <h3
-                      class="text-base font-bold mb-2 text-[1.7rem] leading-[1.9rem]"
+        <!-- Правый блок: форма -->
+        <div class="service-card">
+          <div>
+            <div class="relative flex justify-center items-center py-2">
+              <!-- <img
+                src="/mockup-phone.png"
+                alt="Phone Frame"
+                class="max-w-[200px] md:max-w-[250px] z-10"
+                style="visibility: hidden"
+              /> -->
+
+              <!-- Слайдер, вставленный в экран телефона -->
+              <div
+                class="absolute z-20"
+                :style="{
+                  width: isMobile ? '240px' : '500px',
+                  height: isMobile ? '520px' : '375px',
+                  top: isMobile ? '0px' : '0px',
+                }"
+              >
+                <a-carousel autoplay effect="fade" dots class="w-full h-full">
+                  <div
+                    v-for="(slide, index) in slides"
+                    :key="index"
+                    :class="[
+                      'h-full w-full bg-cover bg-center text-white flex items-center justify-center px-4',
+                      `bg-slide-${index}`,
+                    ]"
+                  >
+                    <div
+                      class="p-4 rounded-xl text-center h-[520px] pt-[270px]"
                     >
-                      {{ slide.title }}
-                    </h3>
-                    <p class="text-sm mt-[20px]">{{ slide.subtitle }}</p>
+                      <h3
+                        class="text-base font-bold mb-2 text-[1.7rem] leading-[1.9rem]"
+                      >
+                        {{ slide.title }}
+                      </h3>
+                      <p class="text-sm mt-[20px]">{{ slide.subtitle }}</p>
+                    </div>
                   </div>
-                </div>
-              </a-carousel>
+                </a-carousel>
+              </div>
             </div>
           </div>
         </div>
@@ -147,7 +159,6 @@
     </div>
   </section>
 </template>
-
 
 <script setup>
 import { ref, onMounted } from "vue";
@@ -224,20 +235,20 @@ onMounted(() => {
 
 <style scoped>
 .bg-slide-0 {
-  background-image: url("/slides/pict1.png");
+  background-image: url("/slides/2.png");
 }
 .bg-slide-1 {
-  background-image: url("/slides/pict1.png");
+  background-image: url("/slides/2.png");
 }
 .bg-slide-2 {
-  background-image: url("/slides/pict1.png");
+  background-image: url("/slides/2.png");
 }
 
 .bg-slide-3 {
-  background-image: url("/slides/pict1.png");
+  background-image: url("/slides/2.png");
 }
 .bg-slide-4 {
-  background-image: url("/slides/pict1.png");
+  background-image: url("/slides/2.png");
 }
 
 /* Минимальные стили для капчи */

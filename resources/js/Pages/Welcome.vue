@@ -200,38 +200,33 @@ onMounted(() => {
 
     <section class="min-h-screen flex flex-col bg-gray-100 text-gray-800">
       <!-- Основной контент -->
-      <main class="flex-grow pt-16 lg:pt-16">
+      <main class="flex-grow pt-0 lg:pt-0">
         <!-- Раздел Вступление -->
-        <IntroSection />
+        <!-- <IntroSection /> -->
 
         <section id="services" class="bg-gray-50 py-16">
           <div class="container mx-auto px-6 text-center">
-            <h2 class="text-3xl font-bold text-blue-700">В чём суть</h2>
+            <h1 class="text-3xl font-bold text-blue-700">
+              Оптимальные решения для вашего бизнеса
+            </h1>
             <p class="mt-4 text-gray-600">
               Мы помогаем вам реализовать идеи и создать успешный
               Telegram-канал.
             </p>
-            <div class="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2">
-              <div class="service-card flex">
-                <!-- <img
-                src="/2.png"
-                alt="Telegram Promotion"
-                class="mt-12 mx-auto w-[500px]"
-              /> -->
-
+            <img
+              src="/main.png"
+              alt="Telegram Promotion"
+              class="mt-12 mx-auto w-[500px]"
+            />
+            <div
+              class="mt-16 custom-grid grid grid-cols-1 md:grid-cols-3 gap-8"
+            >
+              <!-- Левый блок -->
+              <div class="service-card flex flex-col left-block md:col-span-2">
+                <h1 class="text-3xl font-bold text-blue-700">
+                  Повышение эффективности работы с персоналом
+                </h1>
                 <ul class="space-y-8 justify-center items-center">
-                  <!-- <li class="flex items-center space-x-4">
-                  <Badge
-                    color="#52c41a"
-                    class="flex-shrink-0 rounded-full bg-green-100 w-8 h-8 flex items-center justify-center"
-                  >
-                    <CheckOutlined style="font-size: 20px; color: #52c41a" />
-                  </Badge>
-                  <span class="text-gray-800 text-xl text-left">
-                    <b>Создайте канал, если его ещё нет</b> – сделайте это сами
-                    или мы поможем
-                  </span>
-                </li> -->
                   <li class="flex items-center space-x-4">
                     <Badge
                       color="#52c41a"
@@ -256,7 +251,6 @@ onMounted(() => {
                       аналитику в личном кабинете и в Яндекс Метрике.
                     </span>
                   </li>
-
                   <li class="flex items-center space-x-4">
                     <Badge
                       color="#52c41a"
@@ -265,11 +259,10 @@ onMounted(() => {
                       <CheckOutlined style="font-size: 20px; color: #52c41a" />
                     </Badge>
                     <span class="text-gray-800 text-xl text-left">
-                      Возможность рассылок присоединившимся к вашему каналу–
+                      Возможность рассылок присоединившимся к вашему каналу –
                       увеличьте интерактивность со своей аудиторией.
                     </span>
                   </li>
-
                   <li class="flex items-center space-x-4">
                     <Badge
                       color="#52c41a"
@@ -279,28 +272,29 @@ onMounted(() => {
                     </Badge>
                     <span class="text-gray-800 text-xl text-left">
                       Рекламируйте через Яндекс Директ – создавайте лендинги для
-                      продвижения и оптимизируйте рекламные компании
+                      продвижения и оптимизируйте рекламные компании.
                     </span>
                   </li>
                 </ul>
               </div>
-              <div>
+
+              <!-- Правый блок -->
+              <div class="md:col-span-1 right-block">
                 <div class="relative flex justify-center items-center py-2">
                   <!-- Изображение смартфона -->
-                  <!-- <img
-                  src="/mockup-phone.png"
-                  alt="Phone Frame"
-                  class="max-w-[250px] md:max-w-[350px] z-10"
-                  style="visibility: hidden"
-                /> -->
+                  <img
+                    src="/mockup-phone.png"
+                    alt="Phone Frame"
+                    class="max-w-[300px] md:max-w-[300px] z-10"
+                    style="visibility: hidden"
+                  />
 
-                  <!-- Слайдер, вставленный в экран телефона -->
+                  <!-- Слайдер -->
                   <div
                     class="absolute z-20"
                     :style="{
-                      width: isMobile ? '240px' : '300px',
-                      height: isMobile ? '520px' : '580px',
-                      top: isMobile ? '0px' : '0px',
+                      width: isMobile ? '240px' : '330px',
+                      height: isMobile ? '520px' : '509px',
                     }"
                   >
                     <a-carousel
@@ -318,7 +312,7 @@ onMounted(() => {
                         ]"
                       >
                         <div
-                          class="p-4 rounded-xl text-center h-[520px] pt-[270px]"
+                          class="p-4 rounded-xl text-center h-[509px] pt-[70px] text-[blue]"
                         >
                           <h3
                             class="text-base font-bold mb-2 text-[1.7rem] leading-[1.9rem]"
@@ -331,124 +325,6 @@ onMounted(() => {
                     </a-carousel>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="py-24 px-6 max-w-5xl mx-auto">
-          <h2 class="text-5xl font-extrabold text-center text-indigo-700 mb-16">
-            Оказываем содействие
-          </h2>
-          <p class="text-center max-w-4xl mx-auto text-xl text-gray-700 mb-20">
-            Всё что нужно для успешного продвижения вашего Telegram-канала в
-            одном удобном сервисе.
-          </p>
-          <div
-            class="flex flex-col space-y-20 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-20"
-          >
-            <div class="flex items-center space-x-8 md:order-1">
-              <img
-                src="/images/analytics.svg"
-                alt="Аналитика"
-                class="w-48 h-48 object-contain"
-              />
-              <div>
-                <h3 class="text-4xl font-bold mb-3 text-gray-900">
-                  Простая аналитика
-                </h3>
-                <p class="text-gray-600 text-lg max-w-md">
-                  Отслеживайте ключевые показатели канала в удобном интерфейсе.
-                </p>
-              </div>
-            </div>
-
-            <div
-              class="flex items-center space-x-8 md:order-2 md:flex-row-reverse"
-            >
-              <img
-                src="/images/report.svg"
-                alt="Отчёты"
-                class="w-48 h-48 object-contain"
-              />
-              <div>
-                <h3 class="text-4xl font-bold mb-3 text-gray-900">
-                  PDF отчёты
-                </h3>
-                <p class="text-gray-600 text-lg max-w-md">
-                  Формируйте понятные отчёты и делитесь ими с командой и
-                  клиентами.
-                </p>
-              </div>
-            </div>
-
-            <div class="flex items-center space-x-8 md:order-3">
-              <img
-                src="/images/subscribers.svg"
-                alt="Подписчики"
-                class="w-48 h-48 object-contain"
-              />
-              <div>
-                <h3 class="text-4xl font-bold mb-3 text-gray-900">
-                  Сбор подписчиков
-                </h3>
-                <p class="text-gray-600 text-lg max-w-md">
-                  Увеличивайте аудиторию с помощью удобных инструментов.
-                </p>
-              </div>
-            </div>
-
-            <div
-              class="flex items-center space-x-8 md:order-4 md:flex-row-reverse"
-            >
-              <img
-                src="/images/messaging.svg"
-                alt="Рассылки"
-                class="w-48 h-48 object-contain"
-              />
-              <div>
-                <h3 class="text-4xl font-bold mb-3 text-gray-900">
-                  Рассылки в Telegram
-                </h3>
-                <p class="text-gray-600 text-lg max-w-md">
-                  Делайте персональные рассылки подписчикам в личку.
-                </p>
-              </div>
-            </div>
-
-            <!-- Новый блок 5 -->
-            <div class="flex items-center space-x-8 md:order-5">
-              <img
-                src="/images/seo.svg"
-                alt="SEO"
-                class="w-48 h-48 object-contain"
-              />
-              <div>
-                <h3 class="text-4xl font-bold mb-3 text-gray-900">
-                  SEO оптимизация
-                </h3>
-                <p class="text-gray-600 text-lg max-w-md">
-                  Достигайте высоких позиций в поисковых системах.
-                </p>
-              </div>
-            </div>
-
-            <!-- Новый блок 6 -->
-            <div
-              class="flex items-center space-x-8 md:order-6 md:flex-row-reverse"
-            >
-              <img
-                src="/images/support.svg"
-                alt="Поддержка"
-                class="w-48 h-48 object-contain"
-              />
-              <div>
-                <h3 class="text-4xl font-bold mb-3 text-gray-900">
-                  Круглосуточная поддержка
-                </h3>
-                <p class="text-gray-600 text-lg max-w-md">
-                  Получайте помощь в любое время суток от нашей команды.
-                </p>
               </div>
             </div>
           </div>
@@ -473,55 +349,60 @@ onMounted(() => {
                 <div
                   class="grid grid-cols-1 gap-6 md:grid-cols-2 my-16 p-0 md:p-10"
                 >
-                  <!-- Поле "Ваше имя" -->
+                  <!-- Поле "ФИО" -->
                   <div>
                     <label
                       class="block text-sm font-medium text-gray-600 mb-2"
-                      for="name"
+                      for="fullName"
                     >
-                      Ваше имя <span class="text-red-500">*</span>
+                      ФИО <span class="text-red-500">*</span>
                     </label>
                     <input
-                      id="name"
+                      id="fullName"
                       type="text"
-                      v-model="formData.name"
+                      v-model="formData.fullName"
                       class="w-full border-gray-300 rounded-md shadow-sm px-4 py-2 focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="Введите ваше имя"
+                      placeholder="Введите ваше ФИО"
                       required
                     />
                   </div>
-                  <!-- Поле "Телеграмм аккаунт" -->
+
+                  <!-- Поле "Должность" -->
                   <div>
                     <label
                       class="block text-sm font-medium text-gray-600 mb-2"
-                      for="telegram"
+                      for="position"
                     >
-                      Телеграмм аккаунт
+                      Должность
                     </label>
                     <input
-                      id="telegram"
+                      id="position"
                       type="text"
-                      v-model="formData.telegram"
+                      v-model="formData.position"
                       class="w-full border-gray-300 rounded-md shadow-sm px-4 py-2 focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="@username"
+                      placeholder="Введите вашу должность"
                     />
                   </div>
+
                   <!-- Поле "Телефон" -->
                   <div>
                     <label
                       class="block text-sm font-medium text-gray-600 mb-2"
                       for="phone"
-                      >Телефон</label
                     >
+                      Телефон <span class="text-red-500">*</span>
+                    </label>
                     <input
                       id="phone"
                       type="tel"
                       ref="inputRef"
                       v-model="formData.phone"
-                      class="w-full border-gray-300 rounded-md shadow-sm px-4 py-2"
-                      placeholder=""
+                      class="w-full border-gray-300 rounded-md shadow-sm px-4 py-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Введите номер телефона"
+                      required
                     />
                   </div>
+
                   <!-- Поле "Email" -->
                   <div>
                     <label
@@ -539,6 +420,7 @@ onMounted(() => {
                       required
                     />
                   </div>
+
                   <!-- Поле "Услуга" -->
                   <div class="md:col-span-2">
                     <label
@@ -613,21 +495,38 @@ onMounted(() => {
 </template>
 
 <style scoped>
+@media (max-width: 1023px) {
+  .custom-grid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .custom-grid .left-block {
+    order: 1; /* Левый блок будет первым */
+    width: 100%; /* Займет всю ширину */
+  }
+
+  .custom-grid .right-block {
+    order: 2; /* Правый блок будет вторым */
+    width: 100%; /* Займет всю ширину */
+  }
+}
+
 .bg-slide-0 {
-  background-image: url("/slides/pict1.png");
+  background-image: url("/slides/3.png");
 }
 .bg-slide-1 {
-  background-image: url("/slides/pict1.png");
+  background-image: url("/slides/3.png");
 }
 .bg-slide-2 {
-  background-image: url("/slides/pict1.png");
+  background-image: url("/slides/3.png");
 }
 
 .bg-slide-3 {
-  background-image: url("/slides/pict1.png");
+  background-image: url("/slides/3.png");
 }
 .bg-slide-4 {
-  background-image: url("/slides/pict1.png");
+  background-image: url("/slides/3.png");
 }
 
 /* Добавим отступы для таймлайна */

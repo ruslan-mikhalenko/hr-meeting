@@ -31,12 +31,6 @@ const isMenuOpen = ref(false);
           <Link href="/#contacts" class="menu-item">Контакты</Link>
         </nav>
 
-        <!-- Кнопки авторизации -->
-        <div class="hidden lg:flex gap-4">
-          <Link href="/login" class="btn btn-primary">Войти</Link>
-          <Link href="/register" class="btn btn-secondary">Регистрация</Link>
-        </div>
-
         <!-- Мобильное меню -->
         <button @click="isMenuOpen = !isMenuOpen" class="lg:hidden">
           <svg
@@ -77,10 +71,6 @@ const isMenuOpen = ref(false);
           <Link href="/#features" class="mobile-menu-item">Возможности</Link>
           <Link href="/#order" class="mobile-menu-item">Заявка</Link>
           <Link href="/#contacts" class="mobile-menu-item">Контакты</Link>
-          <Link href="/login" class="btn btn-primary w-full">Войти</Link>
-          <Link href="/register" class="btn btn-secondary w-full"
-            >Регистрация</Link
-          >
         </nav>
       </div>
     </header>
