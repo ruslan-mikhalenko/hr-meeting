@@ -27,6 +27,13 @@ import { Head } from "@inertiajs/vue3";
 <script setup>
 import { onMounted, onBeforeUnmount, ref } from "vue";
 
+const props = defineProps({
+  landing_link: {
+    type: String,
+    required: true,
+  },
+});
+
 // Функция для безопасного base64-кодирования с поддержкой Unicode
 function b64EncodeUnicode(str) {
   return btoa(
@@ -36,13 +43,16 @@ function b64EncodeUnicode(str) {
   );
 }
 
+console.log(props.landing_link);
+
 // Параметры
+const landing_link = props.landing_link;
 const userId = 123;
 const orderId = 456;
 const channel = "Тест";
 
 // Сформированный payload
-const rawPayload = `site_join|user=${userId}|order=${orderId}|channel=${channel}`;
+const rawPayload = `site_join|user=${landing_link}`;
 const payload = b64EncodeUnicode(rawPayload);
 
 // Объявляем как `ref`, чтобы использовать в шаблоне и функциях
@@ -128,7 +138,7 @@ onBeforeUnmount(() => {
 
                 <p>👇 Нажмите «Start» ниже, чтобы подписаться на канал</p>
                 <p>📲 Нажмите кнопку «Start» — и бот мгновенно даст ссылку на наш канал «Тест».</p>
-                
+
               </p>
               <p class="text-sm mt-2 text-gray-500">
                 Если переход не начался автоматически — нажмите кнопку ниже.

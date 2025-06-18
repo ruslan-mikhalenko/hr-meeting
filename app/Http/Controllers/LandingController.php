@@ -9,12 +9,16 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
+use App\Services\YandexMetrikaService;
+
+use Illuminate\Support\Str;
+
 class LandingController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
-        $this->middleware('checkRole:super-admin,client');
+        $this->middleware('auth')->except('show');
+        $this->middleware('checkRole:super-admin,client')->except('show');
     }
 
     /**
@@ -24,15 +28,43 @@ class LandingController extends Controller
     {
         $user_auth = Auth::user();
 
-        $landings = DB::table('landings')
-            ->select('landings.*', 'projects.name as project_name')
-            ->join('projects', 'landings.project_id', '=', 'projects.id')
-            ->orderByDesc('landings.created_at');
-
         $perPage = 10;
         $currentPage = $request->input('page', 1);
 
-        $landings = $landings->paginate($perPage, ['*'], 'page', $currentPage);
+
+
+        $landings = DB::table('landings')
+            ->select(
+                'landings.*',
+                'projects.name as project_name',
+                'projects.link as project_link',
+                'clients.name as client_name'
+            )
+            ->join('projects', 'landings.project_id', '=', 'projects.id')
+            ->leftJoin('clients', 'projects.user_id', '=', 'clients.user_id')
+            ->orderByDesc('landings.created_at')
+            ->paginate($perPage, ['*'], 'page', $currentPage);
+
+        // Обработка project_link: транслитерация, удаление спецсимволов, нижний регистр
+        $landings->getCollection()->transform(function ($landing) {
+            $link = $landing->project_link ?? '';
+
+            // Удаление префикса https://t.me/
+            $link = str_replace('https://t.me/', '', $link);
+
+            // Преобразуем: транслитерация, удаление лишнего, нижний регистр
+            $link = Str::ascii($link); // Преобразование кириллицы в латиницу
+            $link = preg_replace('/[^A-Za-z0-9_]/', '', $link); // Удаление спецсимволов и - и +
+            $link = Str::lower($link); // Нижний регистр
+
+            $landing->project_link_clean = $link;
+
+            return $landing;
+        });
+
+
+        /*  dd($landings); */
+
 
         return Inertia::render('Admin/LandingsDashboard', [
             'user_auth' => $user_auth,
@@ -68,16 +100,42 @@ class LandingController extends Controller
         }
 
         $query = DB::table('landings')
-            ->select('landings.*', 'projects.name as project_name')
+            ->select(
+                'landings.*',
+                'projects.name as project_name',
+                'projects.link as project_link',
+                'clients.name as client_name' // или другие поля клиента, которые нужны
+            )
             ->join('projects', 'landings.project_id', '=', 'projects.id')
+            ->leftJoin('clients', 'projects.user_id', '=', 'clients.user_id')
             ->when($search, function ($q) use ($search) {
                 $q->where('landings.name', 'LIKE', "%{$search}%")
-                    ->orWhere('landings.url', 'LIKE', "%{$search}%")
-                    ->orWhere('landings.short_description', 'LIKE', "%{$search}%");
+                    ->orWhere('clients.name', 'LIKE', "%{$search}%");
             })
             ->orderBy($sortField, $sortOrder);
 
+
         $landings = $query->paginate($perPage, ['*'], 'page', $currentPage);
+
+
+        // Обработка project_link: транслитерация, удаление спецсимволов, нижний регистр
+        $landings->getCollection()->transform(function ($landing) {
+            $link = $landing->project_link ?? '';
+
+            // Удаление префикса https://t.me/
+            $link = str_replace('https://t.me/', '', $link);
+
+            // Преобразуем: транслитерация, удаление лишнего, нижний регистр
+            $link = Str::ascii($link); // Преобразование кириллицы в латиницу
+            $link = preg_replace('/[^A-Za-z0-9_]/', '', $link); // Удаление спецсимволов и - и +
+            $link = Str::lower($link); // Нижний регистр
+
+            $landing->project_link_clean = $link;
+
+            return $landing;
+        });
+
+
 
         return response()->json([
             'landings' => $landings->items(),
@@ -331,5 +389,91 @@ class LandingController extends Controller
             'landing' => $updatedLanding,
             'message' => $request->checked ? 'Лендинг активирован.' : 'Лендинг деактивирован.',
         ], 200);
+    }
+
+
+
+
+    public function show($first, $second, $three = null)
+    {
+
+
+        /*  dd($first . ' ' . $second . ' ' .  $three); */
+
+        // $second - это признак того что лендинг с Ботом
+
+        // $three - это признак того что лендинг напрямую на подписку (без бота)
+
+
+
+
+        if ($three) {
+            $project = Project::find($three);
+            if (!$project) {
+                abort(404, 'Project not found');
+            }
+            $landing_link = 'th-' . $project->id;
+
+            $link_join = $project->link;
+
+
+
+            DB::table('events')->insert([
+                'project_id' => $project->id,
+                'event' => 'transition',
+                'when' => now(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        } else {
+            $landing = Landing::where('url', $second)->first();
+            if (!$landing) {
+                abort(404, 'Landing not found');
+            }
+            $project = Project::find($landing->project_id);
+            if (!$project) {
+                abort(404, 'Project not found');
+            }
+            $landing_link = 'sec-' . $project->id;
+            $link_join = null;
+
+
+            DB::table('events')->insert([
+                'project_id' => $project->id,
+                'landing_id' => $landing->id,
+                'event' => 'transition',
+                'when' => now(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        /*  dd($project->link); */
+
+        $yandex_metric_id = $project->yandex_metric_id;
+        $click_land_goal_id = $project->click_land_goal_id;
+
+        if ($yandex_metric_id && $click_land_goal_id) {
+
+            // Инициализация сервиса Яндекс.Метрики
+            $metrikaService = app(YandexMetrikaService::class, ['link' => $project->link]);
+
+            $uniqueUserId = substr(time(), -5) . rand(10000, 99999);
+
+            $metrikaService->sendEvent($uniqueUserId, $click_land_goal_id, [
+
+                'url' => $project->link,
+            ]);
+        }
+
+        /* dd($click_land_goal_id); */
+
+
+        return Inertia::render('LandingDashboard', [
+
+            'landing_link' => $landing_link,
+            'yandex_metric_id' => $yandex_metric_id,
+            'link_join' => $link_join,
+        ]);
     }
 }

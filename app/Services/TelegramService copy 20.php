@@ -523,7 +523,7 @@ class TelegramService
      */
     private function saveSubscribers(array $currentSubscribers, $channelId)
     {
-        // 1. Получение project_id и client_id из таблицы projects по $channelId
+        // 1. Получение project
         $project = DB::table('projects')
             ->select('id as project_id', 'user_id as client_id', 'channel_id', 'unsubscribe_goal_id')
             ->where('link', $channelId)
@@ -536,24 +536,24 @@ class TelegramService
 
         $projectId = $project->project_id;
         $clientId = $project->client_id;
+        $goalId = $project->unsubscribe_goal_id;
 
-        // 2. Получение существующих подписчиков из базы для данного project_id
+        // 2. Получение всех текущих подписчиков
         $existingSubscribers = DB::table('subscribers')
             ->where('project_id', $projectId)
             ->pluck('telegram_user_id')
             ->toArray();
 
-        // 3. Подготовка для добавления новых подписчиков
         $newSubscribers = [];
+        $currentUserIds = [];
 
+        // 3. Обработка входящих подписчиков
         foreach ($currentSubscribers as $subscriber) {
             $userId = $subscriber['telegram_user_id'];
-
-            // Получаем статус из подписчика, например из поля 'status'
-            /* $isActive = isset($subscriber['status']) && in_array($subscriber['status'], ['active', 'member']) ? 1 : 0; */
+            $currentUserIds[] = $userId;
 
             if (in_array($userId, $existingSubscribers)) {
-                // Если подписчик уже существует, обновляем его информацию
+                // Обновляем существующего
                 DB::table('subscribers')
                     ->where('project_id', $projectId)
                     ->where('telegram_user_id', $userId)
@@ -563,10 +563,10 @@ class TelegramService
                         'username' => $subscriber['username'] ?? null,
                         'phone' => $subscriber['phone'] ?? null,
                         'is_active' => 1,
-                        /* 'updated_at' => now(), */
+                        'updated_at' => now(),
                     ]);
             } else {
-                // Если подписчик новый, добавляем его в массив
+                // Готовим к вставке нового
                 $newSubscribers[] = [
                     'project_id' => $projectId,
                     'user_id' => $clientId,
@@ -583,58 +583,50 @@ class TelegramService
             }
         }
 
+
         Log::info("!!!Новые подписчики: " . json_encode($newSubscribers));
 
-        // 4. Вставляем новых подписчиков
         if (!empty($newSubscribers)) {
             DB::table('subscribers')->insert($newSubscribers);
+            Log::info("Добавлено новых подписчиков: " . count($newSubscribers));
         }
 
-        // 5. Пометка отсутствующих пользователей как неактивных
-        $currentUserIds = array_column($currentSubscribers, 'telegram_user_id');
-
+        // 4. Поиск недостающих подписчиков (в базе, но не в списке)
         $missingSubscriberIds = DB::table('subscribers')
             ->where('project_id', $projectId)
             ->whereNotIn('telegram_user_id', $currentUserIds)
+            ->where(function ($query) {
+                $query->whereNull('last_checked_at')
+                    ->orWhere('last_checked_at', '<', now()->subHours(1));
+            })
             ->pluck('telegram_user_id')
             ->toArray();
 
+        $missingSubscriberIds = array_filter($missingSubscriberIds, fn($id) => is_numeric($id) && $id > 0);
+        if (empty($missingSubscriberIds)) return;
+
         Log::info("Отсутствующие ID подписчиков: " . json_encode($missingSubscriberIds));
 
-        // 6. Асинхронное получение статуса подписчиков
+        // 5. Подготовка к асинхронной проверке
         $client = new Client();
-        $concurrency = 10; // Максимум одновременных запросов
-        $inactiveCount = 0;
-
-        // Очистим список от невалидных ID
-        $missingSubscriberIds = array_filter($missingSubscriberIds, function ($id) {
-            return is_numeric($id) && $id > 0;
-        });
-
+        $concurrency = 10;
         $token = env('TELEGRAM_BOT_TOKEN');
+        $metrikaService = app(YandexMetrikaService::class, ['link' => $channelId]);
+        $inactiveCount = 0;
+        $checkedIds = [];
 
-        // Генератор запросов
-        $requests = function ($missingSubscriberIds) use ($project, $token) {
-
-            foreach ($missingSubscriberIds as $telegramUserId) {
+        $requests = function ($ids) use ($project, $token) {
+            foreach ($ids as $telegramUserId) {
                 $url = "https://api.telegram.org/bot{$token}/getChatMember"
                     . "?chat_id=" . urlencode($project->channel_id)
                     . "&user_id=" . urlencode($telegramUserId);
 
                 yield new Request('GET', $url);
-
-                // Необязательно, но можно добавить задержку для снижения нагрузки
-                usleep(50000); // 50 мс
-
+                usleep(30000); // 30мс - плавнее нагрузка
             }
         };
 
-
-        $goalId = $project->unsubscribe_goal_id ?? null; // Получаем цель отписки из проекта
-        // Инициализация сервиса Яндекс.Метрики
-        $metrikaService = app(YandexMetrikaService::class, ['link' => $channelId]);
-
-        // Pool для параллельных запросов
+        // 6. Обработка ответов
         $pool = new Pool($client, $requests($missingSubscriberIds), [
             'concurrency' => $concurrency,
             'fulfilled' => function ($response, $index) use (
@@ -643,21 +635,22 @@ class TelegramService
                 &$inactiveCount,
                 $goalId,
                 $metrikaService,
-                $project
+                $project,
+                &$checkedIds
             ) {
                 $telegramUserId = array_values($missingSubscriberIds)[$index];
-                $data = json_decode($response->getBody(), true);
+                $checkedIds[] = $telegramUserId;
 
-                if (
-                    isset($data['result']['status']) &&
-                    in_array($data['result']['status'], ['left', 'kicked'])
-                ) {
+                $data = json_decode($response->getBody(), true);
+                $status = $data['result']['status'] ?? null;
+
+                if (in_array($status, ['left', 'kicked'])) {
                     $existing = DB::table('subscribers')
                         ->where('project_id', $projectId)
                         ->where('telegram_user_id', $telegramUserId)
                         ->first();
 
-                    /* if ($existing && $existing->is_active != 0) {
+                    if ($existing && $existing->is_active != 0) {
                         DB::table('subscribers')
                             ->where('project_id', $projectId)
                             ->where('telegram_user_id', $telegramUserId)
@@ -667,62 +660,34 @@ class TelegramService
                             ]);
                         $inactiveCount++;
 
-
-                        // Отправка события в Метрику
                         if ($goalId && isset($data['result']['user'])) {
                             $user = $data['result']['user'];
-
                             $metrikaService->sendEvent($telegramUserId, $goalId, [
                                 'name' => $user['first_name'] ?? null,
                                 'username' => $user['username'] ?? null,
                                 'url' => 'https://t.me/' . $project->channel_id,
                             ]);
-
-                            Log::info("Отправка события отписки в Метрику для пользователя: {$telegramUserId}, цель: {$goalId}");
-                        }
-                    } */
-
-                    if ($existing && $existing->is_active != 0) {
-                        // Обновляем статус подписчика на неактивный
-                        DB::table('subscribers')
-                            ->where('project_id', $projectId)
-                            ->where('telegram_user_id', $telegramUserId)
-                            ->update([
-                                'is_active' => 0,
-                                'updated_at' => now(),
-                            ]);
-                        $inactiveCount++;
-
-                        // Получаем данные из таблицы subscribers
-                        $subscriber = DB::table('subscribers')
-                            ->where('project_id', $projectId)
-                            ->where('telegram_user_id', $telegramUserId)
-                            ->first();
-
-                        Log::info("Цель отписки: {$goalId} - {$subscriber->first_name} - {$subscriber->username} - {$project->channel_id}");
-
-                        // Отправка события в Метрику
-                        if ($goalId && $subscriber) {
-                            $metrikaService->sendEvent($telegramUserId, $goalId, [
-                                'name' => $subscriber->first_name ?? null, // Предполагается, что поле существует
-                                'username' => $subscriber->username ?? null, // Предполагается, что поле существует
-                                'url' => 'https://t.me/' . $project->channel_id,
-                            ]);
-
-                            Log::info("Отправка события отписки в Метрику для пользователя: {$telegramUserId}, цель: {$goalId}");
                         }
                     }
                 }
             },
             'rejected' => function ($reason, $index) use (&$missingSubscriberIds) {
                 $telegramUserId = array_values($missingSubscriberIds)[$index];
-                Log::error("Ошибка запроса для {$telegramUserId}: {$reason->getMessage()}");
+                Log::error("Ошибка при получении статуса для {$telegramUserId}: " . $reason->getMessage());
             },
         ]);
 
-        // Запускаем выполнение
+        // 7. Запуск запросов
         $promise = $pool->promise();
         $promise->wait();
+
+        // 8. Обновление времени последней проверки
+        if (!empty($checkedIds)) {
+            DB::table('subscribers')
+                ->where('project_id', $projectId)
+                ->whereIn('telegram_user_id', $checkedIds)
+                ->update(['last_checked_at' => now()]);
+        }
 
         Log::info("Обновлено {$inactiveCount} неактивных подписчиков.");
     }

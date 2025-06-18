@@ -11,7 +11,7 @@ import {
   defineEmits,
 } from "vue";
 
-import AccordionItem from "@/Pages/Сlient/AccordionItem.vue";
+import AccordionItem from "@/Pages/Client/AccordionItem.vue";
 
 import { DatePicker, Radio } from "ant-design-vue";
 import { nextTick } from "vue";

@@ -114,7 +114,7 @@ class UserController extends Controller
 
 
             // Возвращаем представление для всех ролей, так как проверка уже проведена на уровне middleware
-            return Inertia::render('Сlient/Dashboard', [
+            return Inertia::render('Client/Dashboard', [
                 'rights' => $this->rights,
                 'user_auth' => $user_auth,
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -34,8 +35,7 @@ class TelegramController extends Controller
             $message = $update['message'];
             $chat = $message['chat'];
             $chatId = $chat['id'];
-            $firstName = $chat['first_name'] ?? '';
-            $username = $chat['username'] ?? '';
+
 
             if (isset($message['text']) && str_starts_with($message['text'], '/start')) {
                 $text = $message['text'];
@@ -52,19 +52,38 @@ class TelegramController extends Controller
                         // Преобразуем в query-форму для parse_str
                         parse_str(str_replace('|', '&', $decoded), $parsed);
 
-                        $userId = $parsed['user'] ?? null;
+                        $id = $parsed['id'] ?? null;
                         $orderId = $parsed['order'] ?? null;
                         $channel = $parsed['channel'] ?? null;
 
 
-                        Log::info("Пользователь пришёл с сайта: user=$userId, order=$orderId");
+                        // Разделяем строку по дефису
+                        $parts = explode('-', $id);
 
-                        $messageText = "<b>Добро пожаловать в наш канал - {$channel}!</b>\n\n"
+                        // Получаем вторую часть — это id проекта
+                        $progect_id = $parts[1];
+
+                        $project = Project::where('id', $progect_id)->first();
+
+
+
+                        Log::info("Пользователь пришёл с сайта: user=$id");
+
+                        /* $messageText = "<b>Добро пожаловать в наш канал - {$project->name}!</b>\n\n"
                             . "📌 Здесь вы найдёте:\n"
-                            . "Тест - {$orderId} {$orderId}\n"
                             . "• 🔥 Актуальные новости\n"
                             . "• 📈 Обновления сервиса\n"
                             . "• 🎁 Эксклюзивные предложения\n\n"
+                            . "👇 <b>Нажмите кнопку ниже, чтобы подписаться:</b>"; */
+
+
+                        $messageText = "<b>Добро пожаловать в наш канал — {$project->name}!</b>\n\n"
+                            . "📌 <b>Здесь вы найдёте:</b>\n"
+                            . "⠀\n" // отступ (U+2800 символ, выглядит как пустая строка)
+                            . "🔹 {$project->about}\n"
+                            . "⠀\n"
+                            /* . "🚀 <i>Подпишитесь, чтобы не пропустить самое интересное!</i>" */
+                            . "⠀\n"
                             . "👇 <b>Нажмите кнопку ниже, чтобы подписаться:</b>";
 
                         $this->telegramService->sendMessageWithKeyboard(
@@ -72,7 +91,7 @@ class TelegramController extends Controller
                             $messageText,
                             [
                                 [
-                                    ['text' => '📢 Подписаться на канал', 'url' => 'https://t.me/+GBRMKva5zohjNjMy']
+                                    ['text' => '📢 Подписаться на канал', 'url' => $project->link]
                                 ]
                             ],
                             'HTML' // ← Вот здесь ключ

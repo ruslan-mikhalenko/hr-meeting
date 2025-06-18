@@ -11,7 +11,7 @@ import {
   defineEmits,
 } from "vue";
 
-import AccordionItem from "@/Pages/Сlient/AccordionItem.vue";
+import AccordionItem from "@/Pages/Client/AccordionItem.vue";
 
 import { DatePicker, Radio } from "ant-design-vue";
 import { nextTick } from "vue";
@@ -54,6 +54,8 @@ Chart.register(
 import Modal from "@/Components/ModalCrud.vue";
 
 import Loader from "@/Components/Loader.vue"; // Импортируем компонент предзагрузчика
+
+const apiUrl = import.meta.env.VITE_API_URL;
 
 /** Экспорт в PDF */
 import html2pdf from "html2pdf.js";
@@ -147,7 +149,7 @@ const pagination = ref({
 /** Для таблицы лендингов */
 
 const localLandings = ref([...props.landings.data]);
-const pagination_langings = ref({
+const pagination_landings = ref({
   current_page: props.landings.current_page,
   last_page: props.landings.last_page,
   per_page: props.landings.per_page,
@@ -281,7 +283,7 @@ const fetchLandings = (
   searchTerm = null,
   sortField = null,
   sortOrder = null,
-  perPage = pagination_langings.value.per_page
+  perPage = pagination_landings.value.per_page
 ) => {
   isLoading.value = true;
 
@@ -297,11 +299,11 @@ const fetchLandings = (
     })
     .then((response) => {
       localLandings.value = response.data.landings;
-      pagination_langings.value = {
-        current_page: response.data.pagination_langings.current_page,
-        per_page: response.data.pagination_langings.per_page,
-        total: response.data.pagination_langings.total,
-        last_page: response.data.pagination_langings.last_page,
+      pagination_landings.value = {
+        current_page: response.data.pagination_landings.current_page,
+        per_page: response.data.pagination_landings.per_page,
+        total: response.data.pagination_landings.total,
+        last_page: response.data.pagination_landings.last_page,
       };
 
       if (
@@ -328,9 +330,9 @@ const fetchLandings = (
 // Поиск
 const onSearchLandings = () => {
   searchCompletelyLandings.value = searchTermLandings.value;
-  pagination_langings.value.current_page = 1;
+  pagination_landings.value.current_page = 1;
   fetchLandings(
-    pagination_langings.value.current_page,
+    pagination_landings.value.current_page,
     searchCompletelyLandings.value,
     sortFieldLandings.value,
     sortOrderLandings.value
@@ -347,8 +349,8 @@ const handlePageChangeLandings = (page) => {
 };
 
 const handlePageSizeChangeLandings = (currentPage, newPageSize) => {
-  pagination_langings.value.per_page = newPageSize;
-  pagination_langings.value.current_page = currentPage;
+  pagination_landings.value.per_page = newPageSize;
+  pagination_landings.value.current_page = currentPage;
   fetchLandings(
     currentPage,
     searchCompletelyLandings.value,
@@ -362,7 +364,7 @@ const handleTableChangeLandings = (pagination, filters, sorter) => {
   sortFieldLandings.value = sorter.columnKey;
   sortOrderLandings.value = sorter.order === "ascend" ? "asc" : "desc";
   fetchLandings(
-    pagination_langings.value.current_page,
+    pagination_landings.value.current_page,
     searchCompletelyLandings.value,
     sortFieldLandings.value,
     sortOrderLandings.value
@@ -518,7 +520,7 @@ onMounted(() => {
   );
 
   fetchLandings(
-    pagination_langings.value.current_page,
+    pagination_landings.value.current_page,
     "",
     sortField.value,
     sortOrder.value
@@ -1245,16 +1247,24 @@ const buildCumulativeChart = () => {
                     class="w-full overflow-x-auto mt-9 z-0"
                   >
                     <template #bodyCell="{ column, record }">
-                      <template v-if="column.key === 'updated_at'">
-                        {{ formatDate(record.updated_at) }}
+                      <template v-if="column.key === 'url'">
+                        <a
+                          :href="`${apiUrl}${record.project_link_clean}/${record.url}`"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {{ apiUrl }}{{ record.project_link_clean }}/{{
+                            record.url
+                          }}
+                        </a>
                       </template>
                     </template>
                   </a-table>
 
                   <a-pagination
-                    :current="pagination_langings.current_page"
-                    :pageSize="pagination_langings.per_page"
-                    :total="pagination_langings.total"
+                    :current="pagination_landings.current_page"
+                    :pageSize="pagination_landings.per_page"
+                    :total="pagination_landings.total"
                     @change="handlePageChangeLandings"
                     @showSizeChange="handlePageSizeChangeLandings"
                     style="margin-top: 20px"

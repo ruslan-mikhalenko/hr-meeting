@@ -383,7 +383,7 @@ class ProjectController extends Controller
 
 
         return Inertia::render(
-            'Сlient/Project',
+            'Client/Project',
             [
                 'project' => $project,
                 'user_auth' => $user_auth,

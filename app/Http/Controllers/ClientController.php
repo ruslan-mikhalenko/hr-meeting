@@ -111,7 +111,9 @@ class ClientController extends Controller
 
             /*  return redirect()->route('dashboard_client'); */
             // Возвращаем представление для всех ролей, так как проверка уже проведена на уровне middleware
-            return Inertia::render('Сlient/Dashboard', [
+
+
+            return Inertia::render('Client/Dashboard', [
                 'client_rights' => $client_rights,
                 'user_auth' => $user_auth,
                 'projects' => $projects
@@ -585,20 +587,21 @@ class ClientController extends Controller
         $search = $request->input('search', '');
         $perPage = $request->input('perPage', 10);
         $currentPage = $request->input('page', 1);
-        $sortField = $request->input('sortField', 'created_at');
+        $sortField = $request->input('sortField', 'landings.created_at');
         $sortOrder = $request->input('sortOrder', 'desc');
         $is_active = $request->input('is_active', 1);
         $projectId = $request->input('project_id');
 
-        $query = Landing::query()
-            ->where('project_id', $projectId)
-            ->where('is_active', $is_active);
+        // Строим запрос с JOIN на projects
+        $query = Landing::select('landings.*', 'projects.link as project_link')
+            ->join('projects', 'landings.project_id', '=', 'projects.id')
+            ->where('landings.project_id', $projectId)
+            ->where('landings.is_active', $is_active);
 
+        // Поиск
         if (!empty($search)) {
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
-                // Добавь другие поля при необходимости, например:
-                // ->orWhere('email', 'like', "%{$search}%");
+                $q->where('landings.name', 'like', "%{$search}%");
             });
         }
 
@@ -606,33 +609,38 @@ class ClientController extends Controller
         if (!empty($sortField) && !empty($sortOrder)) {
             $query->orderBy($sortField, $sortOrder);
         } else {
-            $query->orderByDesc('created_at');
+            $query->orderByDesc('landings.created_at');
         }
 
         // Пагинация
         $landings = $query->paginate($perPage, ['*'], 'page', $currentPage);
 
+        // Обработка project_link: транслитерация, удаление спецсимволов, нижний регистр
+        $landings->getCollection()->transform(function ($landing) {
+            $link = $landing->project_link ?? '';
 
+            // Удаление префикса https://t.me/
+            $link = str_replace('https://t.me/', '', $link);
 
-        /* $telegramService = new TelegramService();
+            // Преобразуем: транслитерация, удаление лишнего, нижний регистр
+            $link = Str::ascii($link); // Преобразование кириллицы в латиницу
+            $link = preg_replace('/[^A-Za-z0-9_]/', '', $link); // Удаление спецсимволов и - и +
+            $link = Str::lower($link); // Нижний регистр
 
-        // Получение основной информации о канале
-        $channelInfoOther = $telegramService->getChannelInfo($project->link);
+            $landing->project_link_clean = $link;
 
-        // dd($channelInfoOther);
-        $participants_count_from_channel = $channelInfoOther['participants_count']; */
+            return $landing;
+        });
 
 
         return response()->json([
             'landings' => $landings->items(),
-            'pagination_langings' => [
+            'pagination_landings' => [
                 'current_page' => $landings->currentPage(),
                 'last_page' => $landings->lastPage(),
                 'per_page' => $landings->perPage(),
                 'total' => $landings->total(),
             ],
-
-
         ]);
     }
 }

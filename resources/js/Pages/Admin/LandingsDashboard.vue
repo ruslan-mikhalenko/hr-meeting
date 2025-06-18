@@ -33,6 +33,8 @@ const props = defineProps({
   },
 });
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const localLandings = ref([...props.landings]); // Локальная копия массива пользователей
 const pagination = ref({ ...props.pagination }); // Инициализация локальной пагинации
 const searchTerm = ref(""); // Переменная для хранения текста поиска
@@ -204,6 +206,13 @@ const columns = ref([
     key: "id",
   },
 
+  {
+    title: "Клиент",
+    dataIndex: "client_name",
+    key: "client_name",
+    sorter: true,
+    /* width: "300px", */
+  },
   {
     title: "Проект",
     dataIndex: "project_name",
@@ -559,6 +568,7 @@ const formatDate = (dateString) => {
 // Состояние для видимости колонок
 // Состояние для видимости колонок
 const visibleColumns = ref({
+  client_name: true, // ID проекта
   project_name: true, // ID проекта
   name: true,
   url: true, // Название проекта
@@ -705,7 +715,7 @@ const selectItemProject = (item) => {
             </button>
 
             <a-input
-              placeholder="Введите название лендинга"
+              placeholder="Поиск по клиенту, проекту"
               v-model:value="searchTerm"
               @input="onSearch"
               style="margin-bottom: 16px"
@@ -740,6 +750,16 @@ const selectItemProject = (item) => {
               <template #bodyCell="{ column, record }">
                 <template v-if="column.key === 'name'">
                   <span>{{ record.name }}</span>
+                </template>
+
+                <template v-if="column.key === 'url'">
+                  <a
+                    :href="`${apiUrl}${record.project_link_clean}-${record.url}`"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {{ apiUrl }}{{ record.project_link_clean }}-{{ record.url }}
+                  </a>
                 </template>
 
                 <template v-if="column.key === 'created_at'">

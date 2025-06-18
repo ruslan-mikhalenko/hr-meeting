@@ -525,7 +525,7 @@ class TelegramService
     {
         // 1. Получение project_id и client_id из таблицы projects по $channelId
         $project = DB::table('projects')
-            ->select('id as project_id', 'user_id as client_id', 'channel_id', 'unsubscribe_goal_id')
+            ->select('id as project_id', 'user_id as client_id', 'channel_id')
             ->where('link', $channelId)
             ->first();
 
@@ -657,7 +657,7 @@ class TelegramService
                         ->where('telegram_user_id', $telegramUserId)
                         ->first();
 
-                    /* if ($existing && $existing->is_active != 0) {
+                    if ($existing && $existing->is_active != 0) {
                         DB::table('subscribers')
                             ->where('project_id', $projectId)
                             ->where('telegram_user_id', $telegramUserId)
@@ -677,39 +677,6 @@ class TelegramService
                                 'username' => $user['username'] ?? null,
                                 'url' => 'https://t.me/' . $project->channel_id,
                             ]);
-
-                            Log::info("Отправка события отписки в Метрику для пользователя: {$telegramUserId}, цель: {$goalId}");
-                        }
-                    } */
-
-                    if ($existing && $existing->is_active != 0) {
-                        // Обновляем статус подписчика на неактивный
-                        DB::table('subscribers')
-                            ->where('project_id', $projectId)
-                            ->where('telegram_user_id', $telegramUserId)
-                            ->update([
-                                'is_active' => 0,
-                                'updated_at' => now(),
-                            ]);
-                        $inactiveCount++;
-
-                        // Получаем данные из таблицы subscribers
-                        $subscriber = DB::table('subscribers')
-                            ->where('project_id', $projectId)
-                            ->where('telegram_user_id', $telegramUserId)
-                            ->first();
-
-                        Log::info("Цель отписки: {$goalId} - {$subscriber->first_name} - {$subscriber->username} - {$project->channel_id}");
-
-                        // Отправка события в Метрику
-                        if ($goalId && $subscriber) {
-                            $metrikaService->sendEvent($telegramUserId, $goalId, [
-                                'name' => $subscriber->first_name ?? null, // Предполагается, что поле существует
-                                'username' => $subscriber->username ?? null, // Предполагается, что поле существует
-                                'url' => 'https://t.me/' . $project->channel_id,
-                            ]);
-
-                            Log::info("Отправка события отписки в Метрику для пользователя: {$telegramUserId}, цель: {$goalId}");
                         }
                     }
                 }

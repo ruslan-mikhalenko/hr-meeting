@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
+use Illuminate\Support\Str;
+
 use App\Services\TelegramService;
 use Carbon\Carbon;
 
@@ -53,6 +55,25 @@ class ProjectController extends Controller
 
         // Пагинация
         $projects = $projects->paginate($perPage, ['*'], 'page', $currentPage);
+
+
+        // Обработка project_link: транслитерация, удаление спецсимволов, нижний регистр
+        $projects->getCollection()->transform(function ($landing) {
+            $link = $landing->link ?? '';
+
+            // Удаление префикса https://t.me/
+            $link = str_replace('https://t.me/', '', $link);
+
+            // Преобразуем: транслитерация, удаление лишнего, нижний регистр
+            $link = Str::ascii($link); // Преобразование кириллицы в латиницу
+            $link = preg_replace('/[^A-Za-z0-9_]/', '', $link); // Удаление спецсимволов и - и +
+            $link = Str::lower($link); // Нижний регистр
+
+            $landing->project_link_clean = $link;
+
+            return $landing;
+        });
+
 
         // Возвращаем данные на фронтенд с помощью Inertia
         return Inertia::render('Admin/ProjectsDashboard', [
@@ -97,12 +118,33 @@ class ProjectController extends Controller
             ->join('clients', 'projects.user_id', '=', 'clients.user_id') // Присоединяем клиентов
             ->when($search, function ($q) use ($search) {
                 $q->where('projects.name', 'LIKE', "%{$search}%")
-                    ->orWhere('link', 'LIKE', "%{$search}%");
+                    ->orWhere('clients.name', 'LIKE', "%{$search}%");
             })
             ->orderBy($sortField, $sortOrder);
 
         // Пагинация
         $projects = $query->paginate($perPage, ['*'], 'page', $currentPage);
+
+
+        // Обработка project_link: транслитерация, удаление спецсимволов, нижний регистр
+        $projects->getCollection()->transform(function ($landing) {
+            $link = $landing->link ?? '';
+
+            // Удаление префикса https://t.me/
+            $link = str_replace('https://t.me/', '', $link);
+
+            // Преобразуем: транслитерация, удаление лишнего, нижний регистр
+            $link = Str::ascii($link); // Преобразование кириллицы в латиницу
+            $link = preg_replace('/[^A-Za-z0-9_]/', '', $link); // Удаление спецсимволов и - и +
+            $link = Str::lower($link); // Нижний регистр
+
+            $landing->project_link_clean = $link;
+
+            return $landing;
+        });
+
+
+
 
         return response()->json([
             'projects' => $projects->items(),
@@ -124,10 +166,12 @@ class ProjectController extends Controller
         $validatedData = $request->validate([
             'user_id' => 'required',
             'name' => 'required|string|max:255',
-            'link' => 'nullable|max:255',
-            'yandex_metric_id' => 'nullable|string|max:255',
-            'goal_id' => 'nullable|string|max:255',
-            'measurement_protocol_token' => 'nullable|string|max:255',
+            'link' => 'required|max:255',
+            'yandex_metric_id' => 'required|string|max:255',
+            'goal_id' => 'required|string|max:255',
+            'unsubscribe_goal_id' => 'required|string|max:255',
+            'click_land_goal_id' => 'nullable|string|max:255',
+            'measurement_protocol_token' => 'required|string|max:255',
             'landing_url' => 'nullable|max:255',
         ]);
 
@@ -149,6 +193,9 @@ class ProjectController extends Controller
             'link' => $validatedData['link'],
             'yandex_metric_id' => $validatedData['yandex_metric_id'],
             'goal_id' => $validatedData['goal_id'],
+            'unsubscribe_goal_id' => $validatedData['unsubscribe_goal_id'],
+            'click_land_goal_id' => $validatedData['click_land_goal_id'],
+
             'measurement_protocol_token' => $validatedData['measurement_protocol_token'],
             'landing_url' => $validatedData['landing_url'],
 
@@ -219,10 +266,12 @@ class ProjectController extends Controller
         $validatedData = $request->validate([
             'user_id' => 'required|exists:clients,user_id', // user_id должен существовать в таблице clients
             'name' => 'required|string|max:255',
-            'link' => 'nullable|max:255',
-            'yandex_metric_id' => 'nullable|string|max:255',
-            'goal_id' => 'nullable|string|max:255',
-            'measurement_protocol_token' => 'nullable|string|max:255',
+            'link' => 'required|max:255',
+            'yandex_metric_id' => 'required|string|max:255',
+            'goal_id' => 'required|string|max:255',
+            'unsubscribe_goal_id' => 'required|string|max:255',
+            'click_land_goal_id' => 'nullable|string|max:255',
+            'measurement_protocol_token' => 'required|string|max:255',
             'landing_url' => 'nullable|max:255',
         ]);
 
@@ -240,6 +289,8 @@ class ProjectController extends Controller
         }
 
         $telegramService = new TelegramService();
+
+        /* dd($validatedData['link']); */
         // Получение информации о фото канала
         $channelInfo = $telegramService->getChannelPhoto($validatedData['link']) ?? [];
 
@@ -255,6 +306,8 @@ class ProjectController extends Controller
             'link' => $validatedData['link'],
             'yandex_metric_id' => $validatedData['yandex_metric_id'],
             'goal_id' => $validatedData['goal_id'],
+            'unsubscribe_goal_id' => $validatedData['unsubscribe_goal_id'],
+            'click_land_goal_id' => $validatedData['click_land_goal_id'],
             'measurement_protocol_token' => $validatedData['measurement_protocol_token'],
             'landing_url' => $validatedData['landing_url'],
 
@@ -362,12 +415,17 @@ class ProjectController extends Controller
         // Объединяем проекты с таблицей пользователей (по user_id)
         $project = DB::table('projects')
             ->join('users', 'projects.user_id', '=', 'users.id') // Объединение с таблицей users
+            ->where('projects.user_id', $user_auth->id) // Фильтр по ID проекта
             ->where('projects.id', $id) // Фильтр по ID проекта
             ->select(
                 'projects.*', // Все поля из таблицы projects
                 'users.is_active as user_active', // Активность клиента
             )
             ->first();
+
+        if (!$project) {
+            return redirect('/'); // Перенаправление на главную
+        }
 
         /* dd($subscriber->photo); */
 
@@ -396,7 +454,7 @@ class ProjectController extends Controller
 
 
         return Inertia::render(
-            'Сlient/Project',
+            'Client/Project',
             [
                 'project' => $project,
                 'user_auth' => $user_auth,
@@ -537,7 +595,7 @@ class ProjectController extends Controller
             ->where('project_id', $id)
             ->where('is_active', $is_active)
             ->whereBetween('updated_at', [$startDate, $endDate])
-            ->whereNotBetween('updated_at', ['2025-06-03 17:16:00', '2025-06-03 17:20:00']) // 🔥 исключаем участок - первые по парсингу из канала (не причисляем их к подписчикам)
+            ->whereNotBetween('updated_at', ['2025-06-12 22:36:55', '2025-06-12 22:39:55']) // 🔥 исключаем участок - первые по парсингу из канала (не причисляем их к подписчикам)
             ->groupBy('period')
             ->orderBy('period')
             ->get()
@@ -637,7 +695,7 @@ class ProjectController extends Controller
             ->where('project_id', $id)
             ->where('is_active', 1)
             ->whereBetween('updated_at', [$startDate, $endDate])
-            ->whereNotBetween('updated_at', ['2025-06-03 17:16:00', '2025-06-03 17:20:00'])
+            ->whereNotBetween('updated_at', ['2025-06-12 22:36:55', '2025-06-12 22:39:55'])
             ->groupBy('period')
             ->orderBy('period')
             ->get()

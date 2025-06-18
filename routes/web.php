@@ -44,6 +44,11 @@ Route::get('/', function () {
 })->middleware(['auth', 'verified'])->name('dashboard'); */
 
 
+Route::get('/{first}-{second}-{three}', [LandingController::class, 'show']);
+Route::get('/{first}-{second}', [LandingController::class, 'show']);
+
+
+
 Route::middleware(['auth'])->group(
     function () {
 
@@ -106,6 +111,8 @@ Route::middleware(['auth'])->group(
         /* Route::get('/dashboard_payment', [PaymentController::class, 'dashboard_payment'])->name('dashboard_payment'); */
     }
 );
+
+
 
 
 Route::middleware('auth')->group(function () {
@@ -318,6 +325,10 @@ Route::get('/send-bot-message', function () {
         return 'Ошибка при отправке сообщения: ' . $response->body();
     }
 });
+
+
+
+
 
 
 

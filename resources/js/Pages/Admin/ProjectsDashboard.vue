@@ -33,6 +33,8 @@ const props = defineProps({
   },
 });
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const localProjects = ref([...props.projects]); // Локальная копия массива пользователей
 const pagination = ref({ ...props.pagination }); // Инициализация локальной пагинации
 const searchTerm = ref(""); // Переменная для хранения текста поиска
@@ -265,6 +267,8 @@ const form = useForm({
   link: "", // Ссылка на проект
   yandex_metric_id: "", // ID Яндекс Метрики
   goal_id: "", // Целевой идентификатор
+  unsubscribe_goal_id: "", // Целевой идентификатор
+  click_land_goal_id: "", // Целевой идентификатор перехода по лендингу
   landing_url: "", // URL лендинга
   measurement_protocol_token: "",
   isActive: {},
@@ -278,6 +282,8 @@ const resetForm = () => {
   form.link = ""; // Сбрасываем ссылку на проект
   form.yandex_metric_id = ""; // Сбрасываем ID Яндекс Метрики
   form.goal_id = ""; // Сбрасываем ID цели
+  form.unsubscribe_goal_id = ""; // Сбрасываем ID цели
+  form.click_land_goal_id = "";
   form.landing_url = ""; // Сбрасываем URL лендинга
   form.measurement_protocol_token = "";
   errors.value = {}; // Очищаем ошибки
@@ -337,6 +343,8 @@ const submitAddForm = () => {
       yandex_metric_id: form.yandex_metric_id, // Идентификатор Яндекс Метрики
       measurement_protocol_token: form.measurement_protocol_token, // Идентификатор цели
       goal_id: form.goal_id, // Идентификатор цели
+      unsubscribe_goal_id: form.unsubscribe_goal_id, // Идентификатор цели
+      click_land_goal_id: form.click_land_goal_id,
       landing_url: form.landing_url, // URL лендинга
     })
     .then((response) => {
@@ -409,6 +417,8 @@ function openModalEdit(id) {
         form.link = project.link || ""; // Ссылка на проект
         form.yandex_metric_id = project.yandex_metric_id || ""; // Яндекс Метрика
         form.goal_id = project.goal_id || ""; // Целевая метрика
+        form.unsubscribe_goal_id = project.unsubscribe_goal_id || ""; // Целевая метрика
+        form.click_land_goal_id = project.click_land_goal_id || ""; // Целевая метрика
         form.landing_url = project.landing_url || ""; // URL лендинга
         form.measurement_protocol_token =
           project.measurement_protocol_token || "";
@@ -451,6 +461,8 @@ const submitEditForm = () => {
       link: form.link, // Ссылка на проект
       yandex_metric_id: form.yandex_metric_id, // Идентификатор метрики
       goal_id: form.goal_id, // Идентификатор цели
+      unsubscribe_goal_id: form.unsubscribe_goal_id, // Идентификатор цели
+      click_land_goal_id: form.click_land_goal_id,
       landing_url: form.landing_url, // URL лендинга
       measurement_protocol_token: form.measurement_protocol_token,
     })
@@ -733,7 +745,7 @@ const selectItemPeople = (item) => {
             </button>
 
             <a-input
-              placeholder="Введите название проекта, канал"
+              placeholder="Поиск по клиенту, проекту"
               v-model:value="searchTerm"
               @input="onSearch"
               style="margin-bottom: 16px"
@@ -768,6 +780,18 @@ const selectItemPeople = (item) => {
               <template #bodyCell="{ column, record }">
                 <template v-if="column.key === 'name'">
                   <span>{{ record.name }}</span>
+                </template>
+
+                <template v-if="column.key === 'landing_url'">
+                  <a
+                    :href="`${apiUrl}${record.project_link_clean}-land-${record.id}`"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {{ apiUrl }}{{ record.project_link_clean }}-land-{{
+                      record.id
+                    }}
+                  </a>
                 </template>
 
                 <template v-if="column.key === 'created_at'">
@@ -1059,6 +1083,52 @@ const selectItemPeople = (item) => {
                     }}</span>
                   </div>
 
+                  <!-- Идентификатор цели -->
+                  <div class="mb-4">
+                    <label
+                      for="unsubscribe_goal_id"
+                      class="block text-sm font-medium text-gray-700"
+                    >
+                      ID Цели (отписка):
+                    </label>
+                    <input
+                      type="text"
+                      id="unsubscribe_goal_id"
+                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+                      placeholder="Введите идентификатор цели"
+                      v-model="form.unsubscribe_goal_id"
+                      :class="{ 'border-red-500': errors.unsubscribe_goal_id }"
+                    />
+                    <span
+                      v-if="errors.unsubscribe_goal_id"
+                      class="text-red-500 err"
+                      >{{ errors.unsubscribe_goal_id[0] }}</span
+                    >
+                  </div>
+
+                  <!-- Идентификатор цели перхода по лендингу -->
+                  <div class="mb-4">
+                    <label
+                      for="click_land_goal_id"
+                      class="block text-sm font-medium text-gray-700"
+                    >
+                      ID Цели (перхода по лендингу):
+                    </label>
+                    <input
+                      type="text"
+                      id="click_land_goal_id"
+                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+                      placeholder="Введите идентификатор цели"
+                      v-model="form.click_land_goal_id"
+                      :class="{ 'border-red-500': errors.click_land_goal_id }"
+                    />
+                    <span
+                      v-if="errors.click_land_goal_id"
+                      class="text-red-500 err"
+                      >{{ errors.click_land_goal_id[0] }}</span
+                    >
+                  </div>
+
                   <!-- URL лендинга -->
                   <div class="mb-4">
                     <label
@@ -1265,7 +1335,7 @@ const selectItemPeople = (item) => {
                       for="goal_id"
                       class="block text-sm font-medium text-gray-700"
                     >
-                      ID Цели:
+                      ID Цели (подписка):
                     </label>
                     <input
                       type="text"
@@ -1278,6 +1348,52 @@ const selectItemPeople = (item) => {
                     <span v-if="errors.goal_id" class="text-red-500 err">{{
                       errors.goal_id[0]
                     }}</span>
+                  </div>
+
+                  <!-- Идентификатор цели -->
+                  <div class="mb-4">
+                    <label
+                      for="unsubscribe_goal_id"
+                      class="block text-sm font-medium text-gray-700"
+                    >
+                      ID Цели (отписка):
+                    </label>
+                    <input
+                      type="text"
+                      id="unsubscribe_goal_id"
+                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+                      placeholder="Введите идентификатор цели"
+                      v-model="form.unsubscribe_goal_id"
+                      :class="{ 'border-red-500': errors.unsubscribe_goal_id }"
+                    />
+                    <span
+                      v-if="errors.unsubscribe_goal_id"
+                      class="text-red-500 err"
+                      >{{ errors.unsubscribe_goal_id[0] }}</span
+                    >
+                  </div>
+
+                  <!-- Идентификатор цели перхода по лендингу -->
+                  <div class="mb-4">
+                    <label
+                      for="click_land_goal_id"
+                      class="block text-sm font-medium text-gray-700"
+                    >
+                      ID Цели (перхода по лендингу):
+                    </label>
+                    <input
+                      type="text"
+                      id="click_land_goal_id"
+                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+                      placeholder="Введите идентификатор цели"
+                      v-model="form.click_land_goal_id"
+                      :class="{ 'border-red-500': errors.click_land_goal_id }"
+                    />
+                    <span
+                      v-if="errors.click_land_goal_id"
+                      class="text-red-500 err"
+                      >{{ errors.click_land_goal_id[0] }}</span
+                    >
                   </div>
 
                   <!-- URL лендинга -->

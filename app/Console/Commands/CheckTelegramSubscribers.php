@@ -59,6 +59,9 @@ class CheckTelegramSubscribers extends Command
 
                 // Вызов метода отслеживания подписчиков
                 $this->telegramService->trackNewSubscribers($project->link);
+
+                // Пауза между обработкой проектов (например, 2 секунды)
+                sleep(5);
             } else {
                 $this->warn('Пропущено: проект с пустой ссылкой');
             }
